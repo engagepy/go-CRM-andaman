@@ -1,11 +1,11 @@
 {%extends 'gobasic/base.html' %}
 {% block content %}
-<h2>Hotel List </h2>
+<h2>Hotel List - {{object_list.count}}</h2>
 <p><a href="{% url 'hotel-create' %} "><button class="btn">Add Hotel</button></a></p>
 
 <ol>
     {% for h in object_list %}
-        <li><strong>Name:</strong> {{ h.hotel_name }} <strong>Location:</strong> {{h.location}} <strong>Rating:</strong> {{h.customer_rating}} <strong>Category:</strong> {{h.room_category}} <strong>CP Cost:</strong> {{h.cp_cost}} <a href="{%url 'hotel-edit' h.pk%}"><button class="btn">🖋️</button></a> <a href="{%url 'hotel-delete' h.pk%}"><button class="btn">❌</button></a></li> <br> 
+        <li><strong>🆔 </strong> {{ h.hotel_name }} <strong>📍 </strong> {{h.location}} <strong>⭐️ </strong> {{h.customer_rating}} <strong>Category:</strong> {{h.room_category}} <strong>CP Cost:</strong> {{h.cp}} <a href="{%url 'hotel-edit' h.pk%}"><button class="btn">🖋️</button></a> <a href="{%url 'hotel-delete' h.pk%}"><button class="btn">❌</button></a></li> <br> 
     {% empty %}
         <p>No Entries Detected Yet !</p>
     {% endfor %}

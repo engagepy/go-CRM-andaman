@@ -1,10 +1,10 @@
 {%extends 'gobasic/base.html' %}
 {% block content %}
-<h2>Trip List</h2>
+<h2>Trip List - {{object_list.count}}</h2> 
 <p><a href="{% url 'trip-create' %} "><button class="btn">Add Trip</button></a></p>
 <ol>
     {% for t in object_list %}
-        <li><strong>Guest:</strong> {{ t.customer.name}}<strong> PB:</strong> {{ t.hotel_pb.hotel_name }} <strong>HV:</strong> {{ t.hotel_hv.hotel_name }} <strong>NL:</strong> {{ t.hotel_nl.hotel_name }} <strong>PB Act:</strong> {{ t.activity_pb.activity_title }} <strong>HV Act:</strong> {{ t.activity_hv.activity_title }}<strong>NL Act:</strong>{{ t.activity_nl.activity_title }} <strong>Start:</strong>{{t.start_date}} <strong>End:</strong>{{t.end_date}} <strong>💰:</strong>{{t.total_cost}}  <strong>💸:</strong> {{t.balance_due}} <a href="{%url 'trip-update' t.pk%}"><button class="btn">🖋️</button></a> <a href="{%url 'trip-delete' t.pk%}"><button class="btn">❌</button></a></li>
+        <li><strong>🆔:</strong> {{ t.customer.name}}<strong> PB:</strong> {{ t.hotel_pb.hotel_name }} <strong>HV:</strong> {{ t.hotel_hv.hotel_name }} <strong>NL:</strong> {{ t.hotel_nl.hotel_name }} <strong>PB Act:</strong> {{ t.activity_pb.activity_title }} <strong>HV Act:</strong> {{ t.activity_hv.activity_title }} <strong>NL Act:</strong>{{ t.activity_nl.activity_title }} <strong>Start:</strong>{{t.start_date}} <strong>End:</strong>{{t.end_date}} <strong>💰:</strong>{{t.total_cost}}  <strong>💸:</strong> {{t.balance_due}} <a href="{%url 'trip-update' t.pk%}"><button class="btn">🖋️</button></a> <a href="{%url 'trip-delete' t.pk%}"><button class="btn">❌</button></a></li>
         <br> 
     {% empty %}
         <p>No Entries Detected Yet !</p>
