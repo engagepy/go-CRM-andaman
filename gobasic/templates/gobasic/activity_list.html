@@ -1,0 +1,33 @@
+{%extends 'gobasic/base.html' %}
+{% block content %}
+<h2>Activity List</h2>
+<p><a href="{% url 'activity-create' %} "><button class="btn">Add Activity</button></a></p>
+<ol>
+    {% for a in object_list %}
+        <li><strong>🆔:</strong> {{ a.activity_title }} <strong>Loc:</strong> {{a.activity_location}} <strong>Desc:</strong> {{a.description}} <strong>MRP:</strong> {{a.mrp_cost}} <strong>Margin:</strong> {{a.margin}} <a href="{%url 'activity-edit' a.pk%}"><button class="btn">🖋️</button></a> <a href="{%url 'activity-delete' a.pk%}"><button class="btn">❌</button></a> </li>
+        <br> 
+    {% empty %}
+        <p>No Entries Detected Yet !</p>    
+    {% endfor %}
+</ol>
+<div class="pagination">
+    <span class="step-links">
+        {% if page_obj.has_previous %}
+            <a href="?page=1">&laquo; first</a>
+            <a href="?page={{ page_obj.previous_page_number }}">previous</a>
+        {% endif %}
+
+        <span class="current">
+            Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
+        </span>
+
+        {% if page_obj.has_next %}
+            <a href="?page={{ page_obj.next_page_number }}">next</a>
+            <a href="?page={{ page_obj.paginator.num_pages }}">last &raquo;</a>
+        {% endif %}
+    </span>
+    
+</div>
+
+
+{% endblock %}

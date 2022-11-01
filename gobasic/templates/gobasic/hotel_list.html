@@ -1,0 +1,31 @@
+{%extends 'gobasic/base.html' %}
+{% block content %}
+<h2>Hotel List </h2>
+<p><a href="{% url 'hotel-create' %} "><button class="btn">Add Hotel</button></a></p>
+
+<ol>
+    {% for h in object_list %}
+        <li><strong>Name:</strong> {{ h.hotel_name }} <strong>Location:</strong> {{h.location}} <strong>Rating:</strong> {{h.customer_rating}} <strong>Category:</strong> {{h.room_category}} <strong>CP Cost:</strong> {{h.cp_cost}} <a href="{%url 'hotel-edit' h.pk%}"><button class="btn">🖋️</button></a> <a href="{%url 'hotel-delete' h.pk%}"><button class="btn">❌</button></a></li> <br> 
+    {% empty %}
+        <p>No Entries Detected Yet !</p>
+    {% endfor %}
+</ol>
+<div class="pagination">
+    <span class="step-links">
+        {% if page_obj.has_previous %}
+            <a href="?page=1">&laquo; first</a>
+            <a href="?page={{ page_obj.previous_page_number }}">previous</a>
+        {% endif %}
+
+        <span class="current">
+            Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
+        </span>
+
+        {% if page_obj.has_next %}
+            <a href="?page={{ page_obj.next_page_number }}">next</a>
+            <a href="?page={{ page_obj.paginator.num_pages }}">last &raquo;</a>
+        {% endif %}
+    </span>
+</div>
+
+{% endblock %}

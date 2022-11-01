@@ -1,0 +1,9 @@
+{%extends 'gobasic/base.html' %}
+{% block content %}
+
+<form method="post">{% csrf_token %}
+    <p><strong>Delete</strong> rental for bike <strong>{{ object.bike.registration }}</strong> customer <strong>{{object.customer.name}}</strong> ?</p>
+    <input type="submit" value="Confirm">
+ </form>
+
+ {% endblock %}

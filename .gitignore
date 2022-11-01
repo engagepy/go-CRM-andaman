@@ -1,0 +1,7 @@
+db.sqlite3
+.DS_Store
+gobasic/__pycache__/
+crm/__pycache__/
+venv
+crm/gobasic/migrations
+pagekite.py 

@@ -1,0 +1,15 @@
+{%extends 'gobasic/base.html' %}
+{% block content %}
+
+
+<form action="" method="POST">
+    {% csrf_token %}
+    <div>
+        {{ form.as_p }}
+        <input type="submit" value="Submit">
+    </div>
+</form>
+
+
+
+{% endblock %}
