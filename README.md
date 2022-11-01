@@ -4,8 +4,6 @@
 
 ## Pilot Test Date = 1 Jan, 2023
 
-Phase I
-
 ## Destination Specific Key Features: 
 
 ### Phase I
