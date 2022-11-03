@@ -1,4 +1,6 @@
 # Go CRM - Travel Operator Specific CRM©
+![Build Django](https://github.com/github/docs/actions/workflows/main.yml/badge.svg)
+
 
 ## Pilot Market = Andaman Islands
 
