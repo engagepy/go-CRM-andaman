@@ -4,7 +4,7 @@
 <p><a href="{% url 'customer-create' %} "><button class="btn">Add Customer</button></a></p>
 <ol>
     {% for c in object_list %}
-        <li><strong>🆔:</strong> {{ c.name }} <strong>📞:</strong> {{c.mobile}} <strong>Source:</strong> {{c.source}} <a href="{%url 'customer-update' c.pk%}"><button class="btn">🖋️</button></a> <a href="{%url 'customer-delete' c.pk%}"><button class="btn">❌</button></a> </li>
+        <li><strong>🆔:</strong> {{ c.name }} <strong>📞:</strong> {{c.mobile}} <strong>Pax:</strong> {{c.pax}} <strong>Source:</strong> {{c.source}} <a href="{%url 'customer-update' c.pk%}"><button class="btn">🖋️</button></a> <a href="{%url 'customer-delete' c.pk%}"><button class="btn">❌</button></a> </li>
         <br> 
     {% empty %}
         <p>No Entries Detected Yet !</p>    
