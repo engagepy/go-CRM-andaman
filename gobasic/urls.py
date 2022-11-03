@@ -1,8 +1,19 @@
-from django.urls import path
-from gobasic.views import IndexView, CustomerCreate, CustomerDelete, CustomerList, CustomerEdit,CustomerDetail, TripCreate, TripEdit, TripList, TripDelete, TripDetail, HotelCreate, HotelDelete, HotelDetail, HotelEdit, HotelList, ActivityCreate, ActivityDelete, ActivityEdit, ActivityList, ActivityDetail 
+from django.urls import path, include
+from rest_framework import routers
+from gobasic.views import IndexView, CustomerCreate, CustomerDelete, CustomerList, CustomerEdit,CustomerDetail, TripCreate, TripEdit, TripLists, TripDelete, TripDetail, HotelCreate, HotelDelete, HotelDetail, HotelEdit, HotelList, ActivityCreate, ActivityDelete, ActivityEdit, ActivityList, ActivityDetail, GroupViewSet, UserViewSet, TripViewSet 
+
+
+router = routers.DefaultRouter()
+router.register(r'users', UserViewSet)
+router.register(r'groups', GroupViewSet)
+router.register(r'trips', TripViewSet)
+
 
 urlpatterns = [
 
+
+    path('api/', include(router.urls)),
+    path('api-auth/', include('rest_framework.urls', namespace='rest_framework')),
     path('', IndexView.as_view(), name="index"),
 
     #Customer URLs
@@ -32,6 +43,6 @@ urlpatterns = [
     path('trip/detail/<int:pk>', TripDetail.as_view(), name="trip-detail"),
     path('trip/delete/<int:pk>', TripDelete.as_view(), name="trip-delete"),
     path('trip/update/<int:pk>', TripEdit.as_view(), name="trip-update"),
-    path('trip/list', TripList.as_view(), name="trip-list"),
+    path('trip/lists', TripLists.as_view(), name="trip-lists"),
     
 ]

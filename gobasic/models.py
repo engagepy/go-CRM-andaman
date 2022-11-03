@@ -76,8 +76,6 @@ class Activity(models.Model):
     entry_last_updated = models.DateTimeField(auto_now=True)
     entry_created = models.DateTimeField(auto_now_add=True)
     activity_status = models.BooleanField(default=False)
-
-    
     class Meta:
         ordering = ['-margin']
     
@@ -115,6 +113,7 @@ class Customer(models.Model):
     name = models.CharField(max_length = 30)
     mobile = models.CharField(max_length=12, unique=True, help_text= '<em>10 digits</em>')
     email = models.EmailField(blank=True)
+    pax = models.PositiveSmallIntegerField(default=1)
     source = models.CharField(max_length=10, choices=source_choices)
     entry_last_updated = models.DateTimeField(auto_now=True)
     entry_created = models.DateTimeField(auto_now_add=True, editable = False)
@@ -141,9 +140,10 @@ class Trip(models.Model):
     start_date = models.DateTimeField(default= timezone.now, help_text='yyyy-mm-dd,hh--mm')
     duration = models.PositiveSmallIntegerField(verbose_name='Trip Nights', default=0)
     end_date = models.DateTimeField(default = timezone.now)
-    activity_pb = models.ForeignKey(Activity, related_name='pb_activity_set', limit_choices_to={'activity_location': 'Pb'}, on_delete=models.PROTECT, blank=True, null=True)
-    activity_hv = models.ForeignKey(Activity, related_name='hv_activity_set', limit_choices_to={'activity_location': 'Hv'}, on_delete=models.PROTECT, blank=True, null=True)
-    activity_nl = models.ForeignKey(Activity, related_name='nl_activity_set', limit_choices_to={'activity_location': 'Nl'}, on_delete=models.PROTECT, blank=True, null=True)
+    activity = models.ManyToManyField(Activity)
+    # activity_pb = models.ForeignKey(Activity, related_name='pb_activity_set', limit_choices_to={'activity_location': 'Pb'}, on_delete=models.PROTECT, blank=True, null=True)
+    # activity_hv = models.ForeignKey(Activity, related_name='hv_activity_set', limit_choices_to={'activity_location': 'Hv'}, on_delete=models.PROTECT, blank=True, null=True)
+    # activity_nl = models.ForeignKey(Activity, related_name='nl_activity_set', limit_choices_to={'activity_location': 'Nl'}, on_delete=models.PROTECT, blank=True, null=True)
     total_cost = models.PositiveIntegerField(default=0)
     advance_paid = models.PositiveIntegerField(default=0)
     balance_due = models.PositiveIntegerField(default =0)
@@ -167,5 +167,5 @@ class Trip(models.Model):
 
 
     def get_absolute_url(self):
-        return reverse('trip-list')
+        return reverse('trip-lists')
 
