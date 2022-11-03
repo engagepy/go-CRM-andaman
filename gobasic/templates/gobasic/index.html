@@ -1,6 +1,10 @@
 {%extends 'gobasic/base.html' %}
 {% block content %}
-<h1> {{name}}<a href="https://astratechz.com" target="_blank"> ©</a></h1> 
+<div>
+
+<h1> {{name}}</h1><a href="https://astratechz.com" target="_blank">© Astra Techz</a>
+
+</div>
 <div>
     
         <p><a href="{% url 'customer-create' %} "><h3><button class="btn">Customer➕</button></h3></a><a href="{% url 'customer-list' %}"><h3><button class="btn">Customers📃</button></h3></a></p>

@@ -79,7 +79,7 @@ class Activity(models.Model):
 
     
     class Meta:
-        ordering = ['margin']
+        ordering = ['-margin']
     
     def __repr__(self):
         return f"Activity {self.activity_title}, Location {self.activity_location}, Duration {self.acitivity_duration}, Cost {self.mrp_cost}"
@@ -114,7 +114,7 @@ class Customer(models.Model):
 
     name = models.CharField(max_length = 30)
     mobile = models.CharField(max_length=12, unique=True, help_text= '<em>10 digits</em>')
-    email = models.EmailField(blank=True, unique=True)
+    email = models.EmailField(blank=True)
     source = models.CharField(max_length=10, choices=source_choices)
     entry_last_updated = models.DateTimeField(auto_now=True)
     entry_created = models.DateTimeField(auto_now_add=True, editable = False)
@@ -134,16 +134,16 @@ class Customer(models.Model):
 # Trip Model Here
 
 class Trip(models.Model):
-    hotel_pb = models.ForeignKey(Hotel, related_name='pb_hotel_set', on_delete=models.PROTECT, blank=True, null=True)
-    hotel_hv = models.ForeignKey(Hotel, related_name='hv_hotel_set', on_delete=models.PROTECT, blank=True, null=True)
-    hotel_nl = models.ForeignKey(Hotel, related_name='nl_hotel_set', on_delete=models.PROTECT, blank=True, null=True)
+    hotel_pb = models.ForeignKey(Hotel, related_name='pb_hotel_set', limit_choices_to={'location': 'Pb'}, on_delete=models.PROTECT, blank=True, null=True)
+    hotel_hv = models.ForeignKey(Hotel, related_name='hv_hotel_set', limit_choices_to={'location': 'Hv'}, on_delete=models.PROTECT, blank=True, null=True)
+    hotel_nl = models.ForeignKey(Hotel, related_name='nl_hotel_set', limit_choices_to={'location': 'Nl'}, on_delete=models.PROTECT, blank=True, null=True)
     customer = models.ForeignKey(Customer, on_delete=models.PROTECT)
     start_date = models.DateTimeField(default= timezone.now, help_text='yyyy-mm-dd,hh--mm')
     duration = models.PositiveSmallIntegerField(verbose_name='Trip Nights', default=0)
     end_date = models.DateTimeField(default = timezone.now)
-    activity_pb = models.ForeignKey(Activity, related_name='pb_activity_set', on_delete=models.PROTECT, blank=True, null=True)
-    activity_hv = models.ForeignKey(Activity, related_name='hv_activity_set', on_delete=models.PROTECT, blank=True, null=True)
-    activity_nl = models.ForeignKey(Activity, related_name='nl_activity_set', on_delete=models.PROTECT, blank=True, null=True)
+    activity_pb = models.ForeignKey(Activity, related_name='pb_activity_set', limit_choices_to={'activity_location': 'Pb'}, on_delete=models.PROTECT, blank=True, null=True)
+    activity_hv = models.ForeignKey(Activity, related_name='hv_activity_set', limit_choices_to={'activity_location': 'Hv'}, on_delete=models.PROTECT, blank=True, null=True)
+    activity_nl = models.ForeignKey(Activity, related_name='nl_activity_set', limit_choices_to={'activity_location': 'Nl'}, on_delete=models.PROTECT, blank=True, null=True)
     total_cost = models.PositiveIntegerField(default=0)
     advance_paid = models.PositiveIntegerField(default=0)
     balance_due = models.PositiveIntegerField(default =0)
@@ -163,8 +163,6 @@ class Trip(models.Model):
     def save(self, *args, **kwargs):
         self.end_date += datetime.timedelta(days=self.duration)
         self.balance_due = self.total_cost - self.advance_paid
-
-        #Not Working - Needs to be updated on rental, and re-updated on rental termination
         super(Trip, self).save(*args, **kwargs)
 
 
