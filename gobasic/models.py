@@ -150,13 +150,12 @@ class Trip(models.Model):
     duration = models.PositiveSmallIntegerField(verbose_name='Trip Nights', blank=True)
     end_date = models.DateTimeField(default = timezone.now)
     transfers = models.CharField(max_length=11, choices=transfer_choices, blank=True, null=True)
-    activity = models.ManyToManyField(Activity,blank=True, verbose_name='Activities', help_text='select multiple, note location tags')
-    # activity_pb = models.ForeignKey(Activity, related_name='pb_activity_set', limit_choices_to={'activity_location': 'Pb'}, on_delete=models.PROTECT, blank=True, null=True)
-    # activity_hv = models.ForeignKey(Activity, related_name='hv_activity_set', limit_choices_to={'activity_location': 'Hv'}, on_delete=models.PROTECT, blank=True, null=True)
-    # activity_nl = models.ForeignKey(Activity, related_name='nl_activity_set', limit_choices_to={'activity_location': 'Nl'}, on_delete=models.PROTECT, blank=True, null=True)
-    total_cost = models.PositiveIntegerField(default=0)
+    activity = models.ManyToManyField(Activity, related_name="activities", blank=True, verbose_name='Activities', help_text='select multiple, note location tags')
+    transfer_cost = models.PositiveIntegerField(default=0, blank = True, null=False)
+    hotel_cost = models.PositiveIntegerField(default=0, null=False)
     advance_paid = models.PositiveIntegerField(default=0)
-    balance_due = models.PositiveIntegerField(default =0)
+    activity_cost = models.PositiveIntegerField(default =0)
+    total_trip_cost = models.PositiveIntegerField(default=0)
     trip_completed = models.BooleanField(default=False)
     entry_last_updated = models.DateTimeField(auto_now=True)
     entry_created = models.DateTimeField(auto_now_add=True)
@@ -171,37 +170,34 @@ class Trip(models.Model):
         return f"{self.customer.name} - {self.duration} - {self.start_date} - {self.end_date}"
 
     def save(self, *args, **kwargs):
+
+        self.hotel_cost = 0
+        self.transfer_cost = 0
+
+        if self.transfers == 'PB-HV-PB':
+            self.transfer_cost += (7500 * self.customer.pax)
+        elif self.transfers == 'PB-HV-NL-PB':
+            self.transfer_cost += (12500 * self.customer.pax)
+
         self.duration = self.pb_nights + self.hv_nights + self.nl_nights
         self.end_date += datetime.timedelta(days=self.duration)
         if self.hv_nights and self.pb_nights and self.nl_nights > 0:
-            self.total_cost = self.hv_nights * (self.hotel_hv.cp * self.hv_rooms)
-            self.total_cost += self.pb_nights * (self.hotel_pb.cp * self.pb_rooms)
-            self.total_cost += self.nl_nights * (self.hotel_nl.cp * self.nl_rooms) 
+            self.hotel_cost += self.hv_nights * (self.hotel_hv.cp * self.hv_rooms)
+            self.hotel_cost += self.pb_nights * (self.hotel_pb.cp * self.pb_rooms)
+            self.hotel_cost += self.nl_nights * (self.hotel_nl.cp * self.nl_rooms) 
         elif self.hv_nights and self.pb_nights > 0:
-            self.total_cost = self.hv_nights * self.hotel_hv.cp 
-            self.total_cost += self.pb_nights * self.hotel_pb.cp
+            self.hotel_cost += self.hv_nights * self.hotel_hv.cp 
+            self.hotel_cost += self.pb_nights * self.hotel_pb.cp
         elif self.nl_nights and self.pb_nights > 0:
-            self.total_cost = self.nl_nights * self.hotel_nl.cp 
-            self.total_cost += self.pb_nights * self.hotel_pb.cp
+            self.hotel_cost += self.nl_nights * self.hotel_nl.cp 
+            self.hotel_cost += self.pb_nights * self.hotel_pb.cp
         elif self.nl_nights > 0:
-            self.total_cost += self.nl_nights * self.hotel_nl.cp 
+            self.hotel_cost += self.nl_nights * self.hotel_nl.cp 
         elif self.pb_nights > 0:
-            self.total_cost += self.pb_nights * self.hotel_pb.cp
+            self.hotel_cost += self.pb_nights * self.hotel_pb.cp
         elif self.hv_nights >0:
-            self.total_cost = self.hv_nights * self.hotel_hv.cp 
-        else:
-            pass
-
-        if self.transfers == 'PB-HV-PB':
-            self.total_cost += (7500 * self.customer.pax)
-        elif self.transfers == 'PB-HV-NL-PB':
-            self.total_cost += (12500 * self.customer.pax)
-
-            
-
-        self.balance_due = self.total_cost - self.advance_paid
+            self.hotel_cost += self.hv_nights * self.hotel_hv.cp 
         super(Trip, self).save(*args, **kwargs)
-
     
 
 

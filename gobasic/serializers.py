@@ -17,4 +17,4 @@ class GroupSerializer(serializers.HyperlinkedModelSerializer):
 class TripSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Trip
-        fields = ['customer', 'start_date', 'end_date', 'total_cost', 'balance_due']
+        fields = ['customer', 'start_date', 'end_date', 'hotel_cost', 'transfer_cost']

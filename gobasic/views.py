@@ -78,7 +78,35 @@ class TripLists(ListView):
     model = Trip
     template_name = 'gobasic/trip_list.html'
     paginate_by = 10 
-    pass
+
+    
+
+    # def get_context_data(self, **kwargs):
+    #     # Call the base implementation first to get a context
+    #     context = super().get_context_data(**kwargs)
+    #     # Add in extra QuerySets here
+    #     #context['book_list'] = Book.objects.all()
+    #     for t in self.object_list:
+    #         total=0
+    #         balance=0
+    #         for act in t.activity.all():
+    #             total += act.mrp_cost
+    #             balance += t.total_cost
+    #             balance += t.transfer_cost
+    #             balance += total
+
+    #     # for t in self.object_list:
+    #     #     real_balance=0
+    #     #     real_balance = self.total_cost
+    #     #     real_balance += total
+    #     #     for act in t.activity.all():
+    #     #         total += act.mrp_cost
+
+    #     context['activity_total_cost'] = total
+    #     context['real_balance'] = balance
+    #     return context    
+
+   
 class TripDetail(DetailView):
     model = Trip
     template_name = 'gobasic/trip_detail.html'   
