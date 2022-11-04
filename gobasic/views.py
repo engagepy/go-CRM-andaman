@@ -52,7 +52,7 @@ class CustomerDelete(DeleteView):
 class CustomerList(ListView):
     model = Customer
     template_name = 'gobasic/customer_list.html'
-    #paginate_by = 10 
+    paginate_by = 10 
 
 class CustomerDetail(DetailView):
     model = Customer
@@ -77,7 +77,7 @@ class TripDelete(DeleteView):
 class TripLists(ListView):
     model = Trip
     template_name = 'gobasic/trip_list.html'
-    # paginate_by = 10 
+    paginate_by = 10 
     pass
 class TripDetail(DetailView):
     model = Trip
@@ -102,7 +102,7 @@ class HotelDelete(DeleteView):
 class HotelList(ListView):
     model = Hotel
     template_name = 'gobasic/hotel_list_pb.html'
-    #paginate_by = 10 
+    paginate_by = 10 
 
 class HotelDetail(DetailView):
     model = Hotel
@@ -127,7 +127,7 @@ class ActivityDelete(DeleteView):
 class ActivityList(ListView):
     model = Activity
     template_name = 'wheelio/activity_list.html'
-    #paginate_by = 10 
+    paginate_by = 10 
  
 class ActivityDetail(DetailView):
     model = Activity

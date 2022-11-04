@@ -139,19 +139,22 @@ class Trip(models.Model):
     customer = models.ForeignKey(Customer, on_delete=models.PROTECT)
     start_date = models.DateTimeField(default= timezone.now, help_text='yyyy-mm-dd,hh--mm')
     hotel_pb = models.ForeignKey(Hotel, verbose_name='Hotel PB', related_name='pb_hotel_set', limit_choices_to={'location': 'Pb'}, on_delete=models.PROTECT, blank=True, null=True)
+    pb_rooms = models.PositiveSmallIntegerField(default=0, verbose_name='PB Rooms', help_text='Number of Rooms')
     pb_nights = models.PositiveSmallIntegerField(default=0, verbose_name='PB Nights', help_text='include return nights')
     hotel_hv = models.ForeignKey(Hotel, verbose_name='Hotel HV', related_name='hv_hotel_set', limit_choices_to={'location': 'Hv'}, on_delete=models.PROTECT, blank=True, null=True)
+    hv_rooms = models.PositiveSmallIntegerField(default=0, verbose_name='HV Rooms', help_text='Number of Rooms')
     hv_nights = models.PositiveSmallIntegerField(default=0, verbose_name='HV Nights')
     hotel_nl = models.ForeignKey(Hotel, verbose_name='Hotel NL', related_name='nl_hotel_set', limit_choices_to={'location': 'Nl'}, on_delete=models.PROTECT, blank=True, null=True)
+    nl_rooms = models.PositiveSmallIntegerField(default=0, verbose_name='NL Rooms', help_text='Number of Rooms')
     nl_nights = models.PositiveSmallIntegerField(default=0, verbose_name='NL Nights')
     duration = models.PositiveSmallIntegerField(verbose_name='Trip Nights', blank=True)
     end_date = models.DateTimeField(default = timezone.now)
     transfers = models.CharField(max_length=11, choices=transfer_choices, blank=True, null=True)
-    activity = models.ManyToManyField(Activity, verbose_name='Activities', help_text='select multiple, note location tags')
+    activity = models.ManyToManyField(Activity,blank=True, verbose_name='Activities', help_text='select multiple, note location tags')
     # activity_pb = models.ForeignKey(Activity, related_name='pb_activity_set', limit_choices_to={'activity_location': 'Pb'}, on_delete=models.PROTECT, blank=True, null=True)
     # activity_hv = models.ForeignKey(Activity, related_name='hv_activity_set', limit_choices_to={'activity_location': 'Hv'}, on_delete=models.PROTECT, blank=True, null=True)
     # activity_nl = models.ForeignKey(Activity, related_name='nl_activity_set', limit_choices_to={'activity_location': 'Nl'}, on_delete=models.PROTECT, blank=True, null=True)
-    total_cost = models.PositiveIntegerField(default=1000)
+    total_cost = models.PositiveIntegerField(default=0)
     advance_paid = models.PositiveIntegerField(default=0)
     balance_due = models.PositiveIntegerField(default =0)
     trip_completed = models.BooleanField(default=False)
@@ -170,6 +173,32 @@ class Trip(models.Model):
     def save(self, *args, **kwargs):
         self.duration = self.pb_nights + self.hv_nights + self.nl_nights
         self.end_date += datetime.timedelta(days=self.duration)
+        if self.hv_nights and self.pb_nights and self.nl_nights > 0:
+            self.total_cost = self.hv_nights * (self.hotel_hv.cp * self.hv_rooms)
+            self.total_cost += self.pb_nights * (self.hotel_pb.cp * self.pb_rooms)
+            self.total_cost += self.nl_nights * (self.hotel_nl.cp * self.nl_rooms) 
+        elif self.hv_nights and self.pb_nights > 0:
+            self.total_cost = self.hv_nights * self.hotel_hv.cp 
+            self.total_cost += self.pb_nights * self.hotel_pb.cp
+        elif self.nl_nights and self.pb_nights > 0:
+            self.total_cost = self.nl_nights * self.hotel_nl.cp 
+            self.total_cost += self.pb_nights * self.hotel_pb.cp
+        elif self.nl_nights > 0:
+            self.total_cost += self.nl_nights * self.hotel_nl.cp 
+        elif self.pb_nights > 0:
+            self.total_cost += self.pb_nights * self.hotel_pb.cp
+        elif self.hv_nights >0:
+            self.total_cost = self.hv_nights * self.hotel_hv.cp 
+        else:
+            pass
+
+        if self.transfers == 'PB-HV-PB':
+            self.total_cost += (7500 * self.customer.pax)
+        elif self.transfers == 'PB-HV-NL-PB':
+            self.total_cost += (12500 * self.customer.pax)
+
+            
+
         self.balance_due = self.total_cost - self.advance_paid
         super(Trip, self).save(*args, **kwargs)
 
