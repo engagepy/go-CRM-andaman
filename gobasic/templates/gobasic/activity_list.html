@@ -4,7 +4,7 @@
 <p><a href="{% url 'activity-create' %} "><button class="btn">Add Activity</button></a></p>
 <ol>
     {% for a in object_list %}
-        <li><strong>🆔:</strong> {{ a.activity_title }} <strong>Loc:</strong> {{a.activity_location}} <strong>Desc:</strong> {{a.description}} <strong>MRP:</strong> {{a.mrp_cost}} <strong>Margin:</strong> {{a.margin}} <a href="{%url 'activity-edit' a.pk%}"><button class="btn">🖋️</button></a> <a href="{%url 'activity-delete' a.pk%}"><button class="btn">❌</button></a> </li>
+        <li><strong>🆔:</strong> {{ a.activity_title }} <strong>Loc:</strong> {{a.activity_location}} <strong>Desc:</strong> {{a.description}} <strong>MRP:</strong> {{a.mrp_cost}} <strong>Margin:</strong> {{a.margin}} <a href="{%url 'activity-edit' a.pk%}"><button class="btn">🖋️</button></a> </li>
         <br> 
     {% empty %}
         <p>No Entries Detected Yet !</p>    

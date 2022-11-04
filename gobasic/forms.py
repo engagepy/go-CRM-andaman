@@ -22,5 +22,5 @@ class TripCreateForm(forms.ModelForm):
     class Meta:
         model = Trip
         fields = '__all__'
-        exclude = ['balance_due', 'end_date','trip_completed']      
+        exclude = ['balance_due', 'end_date','trip_completed', 'duration']      
 

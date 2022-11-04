@@ -25,15 +25,12 @@ class Hotel(models.Model):
     customer_rating = models.CharField(max_length=1, choices = ratings, default='1' )
     room_category = models.CharField(max_length=15)
     location = models.CharField(max_length=2, choices=hotel_location , default='Pb')
-    ep = models.PositiveIntegerField(validators=[MaxValueValidator(100000),  MinValueValidator(0)], verbose_name ='EP', default=0, help_text = 'Per Day for 2pax')
     cp = models.PositiveIntegerField(validators=[MaxValueValidator(100000),  MinValueValidator(0)], verbose_name ='CP', default=0, help_text = 'Per Day for 2pax')
     map = models.PositiveIntegerField(validators=[MaxValueValidator(100000),  MinValueValidator(0)], verbose_name ='MAP', default=0, help_text = 'Per Day for 2pax')
-    ap = models.PositiveIntegerField(validators=[MaxValueValidator(100000),  MinValueValidator(0)], verbose_name ='AP', default=0, help_text = 'Per Day for 2pax')
-    ep_kid = models.PositiveIntegerField(validators=[MaxValueValidator(100000),  MinValueValidator(0)], verbose_name ='EP Kid', default=0, help_text = 'Per Day for 1pax')
+
     cp_kid = models.PositiveIntegerField(validators=[MaxValueValidator(100000),  MinValueValidator(0)], verbose_name ='CP Kid', default=0, help_text = 'Per Day for 1pax')
     map_kid = models.PositiveIntegerField(validators=[MaxValueValidator(100000),  MinValueValidator(0)],verbose_name ='MAP Kid', default=0, help_text = 'Per Day for 1pax')
-    ap_kid = models.PositiveIntegerField(validators=[MaxValueValidator(100000),  MinValueValidator(0)], verbose_name ='AP Kid', default=0, help_text = 'Per Day for 1pax')
-
+   
     entry_last_updated = models.DateTimeField(auto_now=True, editable = False)
     entry_created = models.DateTimeField(auto_now_add=True, editable = False)
 
@@ -133,18 +130,28 @@ class Customer(models.Model):
 # Trip Model Here
 
 class Trip(models.Model):
-    hotel_pb = models.ForeignKey(Hotel, related_name='pb_hotel_set', limit_choices_to={'location': 'Pb'}, on_delete=models.PROTECT, blank=True, null=True)
-    hotel_hv = models.ForeignKey(Hotel, related_name='hv_hotel_set', limit_choices_to={'location': 'Hv'}, on_delete=models.PROTECT, blank=True, null=True)
-    hotel_nl = models.ForeignKey(Hotel, related_name='nl_hotel_set', limit_choices_to={'location': 'Nl'}, on_delete=models.PROTECT, blank=True, null=True)
+
+    transfer_choices = [
+    ('PB-HV-PB', 'Havelock Round Trip'),
+    ('PB-HV-NL-PB', 'Havelock-Neil Round Trip'),
+
+]
     customer = models.ForeignKey(Customer, on_delete=models.PROTECT)
     start_date = models.DateTimeField(default= timezone.now, help_text='yyyy-mm-dd,hh--mm')
-    duration = models.PositiveSmallIntegerField(verbose_name='Trip Nights', default=0)
+    hotel_pb = models.ForeignKey(Hotel, verbose_name='Hotel PB', related_name='pb_hotel_set', limit_choices_to={'location': 'Pb'}, on_delete=models.PROTECT, blank=True, null=True)
+    pb_nights = models.PositiveSmallIntegerField(default=0, verbose_name='PB Nights', help_text='include return nights')
+    hotel_hv = models.ForeignKey(Hotel, verbose_name='Hotel HV', related_name='hv_hotel_set', limit_choices_to={'location': 'Hv'}, on_delete=models.PROTECT, blank=True, null=True)
+    hv_nights = models.PositiveSmallIntegerField(default=0, verbose_name='HV Nights')
+    hotel_nl = models.ForeignKey(Hotel, verbose_name='Hotel NL', related_name='nl_hotel_set', limit_choices_to={'location': 'Nl'}, on_delete=models.PROTECT, blank=True, null=True)
+    nl_nights = models.PositiveSmallIntegerField(default=0, verbose_name='NL Nights')
+    duration = models.PositiveSmallIntegerField(verbose_name='Trip Nights', blank=True)
     end_date = models.DateTimeField(default = timezone.now)
-    activity = models.ManyToManyField(Activity)
+    transfers = models.CharField(max_length=11, choices=transfer_choices, blank=True, null=True)
+    activity = models.ManyToManyField(Activity, verbose_name='Activities', help_text='select multiple, note location tags')
     # activity_pb = models.ForeignKey(Activity, related_name='pb_activity_set', limit_choices_to={'activity_location': 'Pb'}, on_delete=models.PROTECT, blank=True, null=True)
     # activity_hv = models.ForeignKey(Activity, related_name='hv_activity_set', limit_choices_to={'activity_location': 'Hv'}, on_delete=models.PROTECT, blank=True, null=True)
     # activity_nl = models.ForeignKey(Activity, related_name='nl_activity_set', limit_choices_to={'activity_location': 'Nl'}, on_delete=models.PROTECT, blank=True, null=True)
-    total_cost = models.PositiveIntegerField(default=0)
+    total_cost = models.PositiveIntegerField(default=1000)
     advance_paid = models.PositiveIntegerField(default=0)
     balance_due = models.PositiveIntegerField(default =0)
     trip_completed = models.BooleanField(default=False)
@@ -161,9 +168,12 @@ class Trip(models.Model):
         return f"{self.customer.name} - {self.duration} - {self.start_date} - {self.end_date}"
 
     def save(self, *args, **kwargs):
+        self.duration = self.pb_nights + self.hv_nights + self.nl_nights
         self.end_date += datetime.timedelta(days=self.duration)
         self.balance_due = self.total_cost - self.advance_paid
         super(Trip, self).save(*args, **kwargs)
+
+    
 
 
     def get_absolute_url(self):

@@ -4,7 +4,7 @@
 <p><a href="{% url 'trip-create' %} "><button class="btn">Add Trip</button></a></p>
 <ol>
     {% for t in object_list %}
-        <li><strong>🆔:</strong> {{ t.customer.name}}<strong> PB:</strong> {{ t.hotel_pb.hotel_name }} <strong>HV:</strong> {{ t.hotel_hv.hotel_name }} <strong>NL:</strong> {{ t.hotel_nl.hotel_name }} <strong>Activities:</strong> {% for activity in t.activity.all %} {{ activity.activity_title}}, {% endfor %}{{ activity.activity_title}} <strong>Start:</strong>{{t.start_date.date}} <strong>End:</strong>{{t.end_date.date}} <strong>💰:</strong>{{t.total_cost}}  <strong>💸:</strong> {{t.balance_due}} <a href="{%url 'trip-update' t.pk%}"><button class="btn">🖋️</button></a> <a href="{%url 'trip-delete' t.pk%}"><button class="btn">❌</button></a></li>
+        <li><strong>🆔:</strong> {{ t.customer.name}}<strong> PB:</strong> {{ t.hotel_pb.hotel_name }} <strong>HV:</strong> {{ t.hotel_hv.hotel_name }} <strong>NL:</strong> {{ t.hotel_nl.hotel_name }} <strong>Activities:</strong> {% for activity in t.activity.all %} {{ activity.activity_title}}, {% endfor %}{{ activity.activity_title}} <strong>Start:</strong>{{t.start_date.date}} <strong>End:</strong>{{t.end_date.date}} <strong>💰:</strong>{{t.total_cost}}  <strong>💸:</strong> {{t.balance_due}} <a href="{%url 'trip-update' t.pk%}"><button class="btn">🖋️</button></a> </li>
         <br> 
     {% empty %}
         <p>No Entries Detected Yet !</p>
