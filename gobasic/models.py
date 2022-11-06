@@ -38,10 +38,10 @@ class Hotel(models.Model):
         ordering = ['customer_rating']
     
     def __repr__(self):
-        return f"Hotel {self.hotel}, Location {self.location}, Rating {self.customer_rating}, Room {self.room_category}"
+        return f"Hotel {self.hotel}, Location {self.location}, Room {self.room_category}"
     
     def __str__(self):
-        return f"{self.hotel_name} - {self.location} - {self.room_category} - {self.customer_rating}"
+        return f"{self.hotel_name} - {self.location} - {self.room_category}"
 
     def get_absolute_url(self):
         return reverse('hotel-list')
@@ -122,7 +122,7 @@ class Customer(models.Model):
         return self.name
 
     def __str__(self):
-        return f"{self.name} - {self.mobile}"
+        return f"{self.name} - {self.pax}"
 
     def get_absolute_url(self):
         return reverse('customer-list')
@@ -136,6 +136,7 @@ class Trip(models.Model):
     ('PB-HV-NL-PB', 'Havelock-Neil Round Trip'),
 
 ]
+
     customer = models.ForeignKey(Customer, on_delete=models.PROTECT)
     start_date = models.DateTimeField(default= timezone.now, help_text='yyyy-mm-dd,hh--mm')
     hotel_pb = models.ForeignKey(Hotel, verbose_name='Hotel PB', related_name='pb_hotel_set', limit_choices_to={'location': 'Pb'}, on_delete=models.PROTECT, blank=True, null=True)
@@ -161,7 +162,7 @@ class Trip(models.Model):
     entry_created = models.DateTimeField(auto_now_add=True)
 
     class Meta:
-        ordering = ['start_date']
+        ordering = ['-entry_created']
 
     def __repr__(self):
         return f'{self.customer.name} for {self.duration} day/s'
@@ -180,7 +181,7 @@ class Trip(models.Model):
             self.transfer_cost += (12500 * self.customer.pax)
 
         self.duration = self.pb_nights + self.hv_nights + self.nl_nights
-        self.end_date += datetime.timedelta(days=self.duration)
+        self.end_date = self.start_date + datetime.timedelta(days=self.duration)
         if self.hv_nights and self.pb_nights and self.nl_nights > 0:
             self.hotel_cost += self.hv_nights * (self.hotel_hv.cp * self.hv_rooms)
             self.hotel_cost += self.pb_nights * (self.hotel_pb.cp * self.pb_rooms)
@@ -196,9 +197,13 @@ class Trip(models.Model):
         elif self.pb_nights > 0:
             self.hotel_cost += self.pb_nights * self.hotel_pb.cp
         elif self.hv_nights >0:
-            self.hotel_cost += self.hv_nights * self.hotel_hv.cp 
+            self.hotel_cost += self.hv_nights * self.hotel_hv.cp
         super(Trip, self).save(*args, **kwargs)
-    
+
+        
+        super(Trip, self).save(*args, **kwargs)
+
+        
 
 
     def get_absolute_url(self):

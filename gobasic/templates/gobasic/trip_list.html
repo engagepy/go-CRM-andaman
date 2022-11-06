@@ -1,6 +1,6 @@
 {%extends 'gobasic/base.html' %}
 {% block content %}
-<h2>Trip List - {{object_list.count}}</h2>
+<h2>Trip List - {{total_trips}}</h2>
 <p><a href="{% url 'trip-create' %} "><button class="btn">Add Trip</button></a></p>
 <ol>
     {% for t in object_list %}

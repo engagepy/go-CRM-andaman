@@ -1,19 +1,18 @@
 from django.urls import path, include
 from rest_framework import routers
-from gobasic.views import IndexView, CustomerCreate, CustomerDelete, CustomerList, CustomerEdit,CustomerDetail, TripCreate, TripEdit, TripLists, TripDelete, TripDetail, HotelCreate, HotelDelete, HotelDetail, HotelEdit, HotelList, ActivityCreate, ActivityDelete, ActivityEdit, ActivityList, ActivityDetail, GroupViewSet, UserViewSet, TripViewSet 
+from gobasic.views import IndexView, SignUp, logoutUser, CustomerCreate, CustomerDelete, CustomerList, CustomerEdit,CustomerDetail, TripCreate, TripEdit, TripLists, TripDelete, TripDetail, HotelCreate, HotelDelete, HotelDetail, HotelEdit, HotelList, ActivityCreate, ActivityDelete, ActivityEdit, ActivityList, ActivityDetail,  loginPage 
 
 
-router = routers.DefaultRouter()
-router.register(r'users', UserViewSet)
-router.register(r'groups', GroupViewSet)
-router.register(r'trips', TripViewSet)
+
 
 
 urlpatterns = [
 
+    path('signup/', SignUp.as_view(), name="signup"),
+    path('login/', loginPage, name="login"),
+    path('logout/', logoutUser, name="logout"),
 
-    path('api/', include(router.urls)),
-    path('api-auth/', include('rest_framework.urls', namespace='rest_framework')),
+
     path('', IndexView.as_view(), name="index"),
 
     #Customer URLs
