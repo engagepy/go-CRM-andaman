@@ -4,6 +4,27 @@ from django.urls import reverse
 import datetime
 
 from django.core.validators import MaxValueValidator, MinValueValidator
+from django.core.mail import send_mail
+from django.conf import settings
+import asyncio
+from threading import Thread
+import datetime
+
+
+
+def send(email):
+    #Calculating Time, and limiting decimals
+    x = datetime.datetime.now()
+    s = x.strftime('%Y-%m-%d %H:%M:%S.%f')
+    s = s[:-3]
+    y = f'Your trip interest has been registed at {s} ? Please respond to this email, or give us sometime. Our team will connect with you shortly, thanks.'
+    #using the send_mail import below
+    send_mail(
+        subject='GoAndamans - Best Andaman Experiences',
+        message=y,
+        from_email=settings.EMAIL_HOST_USER,
+        recipient_list=[email]
+        )
 
 # Base Models Here.
 
@@ -113,6 +134,11 @@ class Customer(models.Model):
     source = models.CharField(max_length=10, choices=source_choices)
     entry_last_updated = models.DateTimeField(auto_now=True)
     entry_created = models.DateTimeField(auto_now_add=True, editable = False)
+    def save(self, *args, **kwargs):
+        email= self.email
+        Thread(target=send, args=(email,)).start()      
+        
+        super(Customer, self).save(*args, **kwargs)
 
     class Meta:
         ordering = ['entry_created']
