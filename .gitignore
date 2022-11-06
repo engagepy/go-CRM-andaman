@@ -5,3 +5,4 @@ crm/__pycache__/
 venv
 crm/gobasic/migrations
 pagekite.py 
+.env

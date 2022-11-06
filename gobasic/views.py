@@ -1,6 +1,5 @@
+#django imports
 from django.shortcuts import render, redirect
-
-# Create your views here.
 from django.shortcuts import render, HttpResponse
 from django.views.generic.base import TemplateView
 from django.views.generic.list import ListView 
@@ -11,14 +10,32 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib import messages
-
+#import from within the app
 from .forms import CustomerCreateForm, TripCreateForm, HotelCreateForm,  ActivityCreateForm
 from .models import  Trip, Customer, Hotel, Activity
-
 from django.contrib.auth.models import User, Group
+#imported for send mail
+from django.core.mail import send_mail
+from django.conf import settings
+import asyncio
+from threading import Thread
+import datetime
 
 
 
+def send(email):
+    #Calculating Time, and limiting decimals
+    x = datetime.datetime.now()
+    s = x.strftime('%Y-%m-%d %H:%M:%S.%f')
+    s = s[:-3]
+    y = f'Did you login at {s} ? If not, please report the incident, thanks.'
+    #using the send_mail import below
+    send_mail(
+        subject='GoAndamans - Login Update',
+        message=y,
+        from_email=settings.EMAIL_HOST_USER,
+        recipient_list=[email]
+        )
 
 # Create your views here, leave global variables below.
 def loginPage(request):
@@ -40,12 +57,16 @@ def loginPage(request):
 
         if user is not None:
             login(request, user)
+            #threaded function for async email sending
+            email= user.email
+            Thread(target=send, args=(email,)).start()
             return redirect('index')
         else:
             messages.error(request, 'Some detail is incorrect, retry!')
 
     loginPage_data = {'page':page}
-    return render(request, 'gobasic/login.html', loginPage_data )
+    return render(request, 'gobasic/login.html', loginPage_data)  
+    
 
 def logoutUser(request):
     logout(request)
