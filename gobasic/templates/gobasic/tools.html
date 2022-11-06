@@ -1,0 +1,35 @@
+{%extends 'gobasic/base.html' %}
+{% block content %}
+<div>
+
+<h1> {{name}}</h1><a href="https://astratechz.com" target="_blank">© Astra Techz</a>
+
+</div>
+<p><a href="{% url 'logout' %} "><h3><button class="btn">Logout</button></h3></a></p>
+
+<div>
+    
+        <p><a href="{% url 'customer-create' %} "><h3><button class="btn">Customer➕</button></h3></a><a href="{% url 'customer-list' %}"><h3><button class="btn">Customers📃</button></h3></a></p>
+        <br>
+        <p><a href="{% url 'hotel-create' %} "><h3><button class="btn">Hotel➕</button></h3></a><a href="{% url 'hotel-list' %}"><h3><button class="btn">Hotels📃</button></h3></a></p>
+        <br>             
+        <p><a href="{% url 'activity-create' %} "><h3><button class="btn">Activity➕</button></h3></a><a href="{% url 'activity-list' %}"><h3><button class="btn">Activities📃</button></h3></a></p>
+        <br>
+        <p><a href="{% url 'trip-create' %} "><h3><button class="btn">Trip➕</button></h3></a><a href="{% url 'trip-lists' %}"><h3><button class="btn">Trips📃</button></h3></a></p>    
+
+</div>
+
+
+<!-- <div align=center> 
+    <a class="twitter-timeline" data-width="400" data-height="450" data-dnt="true" data-theme="dark" href="https://twitter.com/AstraTechZ?ref_src=twsrc%5Etfw">Tweets by AstraTechZ</a> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+</div>
+    <br>
+    <br>
+<div>
+    <h2 align="center"> MVP Target Region</h2>
+
+    <iframe src={{long_link}} width='400' height='450' style='border:0;' allowfullscreen='' loading='lazy' referrerpolicy='no-referrer-when-downgrade'> 
+    </iframe> 
+</div> -->
+
+{% endblock %}

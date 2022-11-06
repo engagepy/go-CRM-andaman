@@ -33,7 +33,7 @@
 			<h2>Navigate</h2>
 			<nav>
 					<li>
-						<a href="{% url 'tools' %}"><i class="fa fa-home"></i> Tools</a>
+						<a href="#middlesection"><i class="fa fa-home"></i> Tools</a>
 					</li>
 					<li>
 						<a href="{% url 'customer-create' %}"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-person-circle" viewBox="0 0 16 16">
@@ -90,8 +90,10 @@
   <body>
     {% block content %}
 
+
     {% endblock %}
   </body>
+ 
   <script src="{% static 'gobasic/js/jquery-2.1.3.min.js' %}"></script>
   <script src="{% static 'static/js/jquery-migrate-1.2.1.min.js' %}"></script>
   <script src="{% static 'gobasic/js/bootstrap.min.js' %}"></script>

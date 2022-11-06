@@ -45,11 +45,11 @@ def loginPage(request):
             messages.error(request, 'Some detail is incorrect, retry!')
 
     loginPage_data = {'page':page}
-    return render(request, 'gobasic/login_register.html', loginPage_data )
+    return render(request, 'gobasic/login.html', loginPage_data )
 
 def logoutUser(request):
     logout(request)
-    return redirect('signup')
+    return redirect('login')
 
  
 class IndexView(LoginRequiredMixin, TemplateView):
@@ -78,8 +78,7 @@ class ToolsView(LoginRequiredMixin, TemplateView):
         context['name'] = "Go CRM"
         return context
 
-class SignUp(TemplateView):
-    template_name = "gobasic/signup.html"
+
 
 
 # Customer Views Below
@@ -89,7 +88,7 @@ class CustomerCreate(LoginRequiredMixin, CreateView):
     redirect_field_name = 'index'
     model = Customer
     form_class = CustomerCreateForm
-    template_name = 'gobasic/customer_create_form.html'
+    template_name = 'gobasic/create_form.html'
 
 
 class CustomerEdit(LoginRequiredMixin, UpdateView):
@@ -97,7 +96,7 @@ class CustomerEdit(LoginRequiredMixin, UpdateView):
     redirect_field_name = 'index'
     model = Customer
     form_class = CustomerCreateForm
-    template_name = 'gobasic/customer_create_form.html'
+    template_name = 'gobasic/create_form.html'
 
 
 class CustomerDelete(LoginRequiredMixin, DeleteView):
@@ -130,7 +129,7 @@ class TripCreate(LoginRequiredMixin, CreateView):
     redirect_field_name = 'index'
     model = Trip
     form_class = TripCreateForm
-    template_name = 'gobasic/trip_create_form.html'
+    template_name = 'gobasic/create_form.html'
 
 
 class TripEdit(LoginRequiredMixin, UpdateView):
@@ -138,7 +137,7 @@ class TripEdit(LoginRequiredMixin, UpdateView):
     redirect_field_name = 'index'
     model = Trip
     form_class = TripCreateForm
-    template_name = 'gobasic/trip_create_form.html'
+    template_name = 'gobasic/create_form.html'
 
 
 class TripDelete(LoginRequiredMixin, DeleteView):
@@ -181,7 +180,7 @@ class HotelCreate(LoginRequiredMixin, CreateView):
     redirect_field_name = 'index'
     model = Hotel
     form_class = HotelCreateForm
-    template_name = 'gobasic/hotel_create_form.html'
+    template_name = 'gobasic/create_form.html'
   
 
 class HotelEdit(LoginRequiredMixin, UpdateView):
@@ -221,7 +220,7 @@ class ActivityCreate(LoginRequiredMixin, CreateView):
     redirect_field_name = 'index'
     model = Activity
     form_class = ActivityCreateForm
-    template_name = 'gobasic/activity_create_form.html'
+    template_name = 'gobasic/create_form.html'
 
 
 class ActivityEdit(LoginRequiredMixin, UpdateView):

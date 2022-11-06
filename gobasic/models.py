@@ -25,11 +25,11 @@ class Hotel(models.Model):
     customer_rating = models.CharField(max_length=1, choices = ratings, default='1' )
     room_category = models.CharField(max_length=15)
     location = models.CharField(max_length=2, choices=hotel_location , default='Pb')
-    cp = models.PositiveIntegerField(validators=[MaxValueValidator(100000),  MinValueValidator(0)], verbose_name ='CP', default=0, help_text = 'Per Day for 2pax')
-    map = models.PositiveIntegerField(validators=[MaxValueValidator(100000),  MinValueValidator(0)], verbose_name ='MAP', default=0, help_text = 'Per Day for 2pax')
+    net_cp = models.PositiveIntegerField(validators=[MaxValueValidator(100000),  MinValueValidator(0)], verbose_name ='CP', default=0, help_text = 'Per Day for 2pax')
+    net_map = models.PositiveIntegerField(validators=[MaxValueValidator(100000),  MinValueValidator(0)], verbose_name ='MAP', default=0, help_text = 'Per Day for 2pax')
 
-    cp_kid = models.PositiveIntegerField(validators=[MaxValueValidator(100000),  MinValueValidator(0)], verbose_name ='CP Kid', default=0, help_text = 'Per Day for 1pax')
-    map_kid = models.PositiveIntegerField(validators=[MaxValueValidator(100000),  MinValueValidator(0)],verbose_name ='MAP Kid', default=0, help_text = 'Per Day for 1pax')
+    net_cp_kid = models.PositiveIntegerField(validators=[MaxValueValidator(100000),  MinValueValidator(0)], verbose_name ='CP Kid', default=0, help_text = 'Per Day for 1pax')
+    net_map_kid = models.PositiveIntegerField(validators=[MaxValueValidator(100000),  MinValueValidator(0)],verbose_name ='MAP Kid', default=0, help_text = 'Per Day for 1pax')
    
     entry_last_updated = models.DateTimeField(auto_now=True, editable = False)
     entry_created = models.DateTimeField(auto_now_add=True, editable = False)
@@ -44,7 +44,7 @@ class Hotel(models.Model):
         return f"{self.hotel_name} - {self.location} - {self.room_category}"
 
     def get_absolute_url(self):
-        return reverse('hotel-list')
+        return reverse('hotels-list')
         #, kwargs={'pk' : self.pk})
 
 class Activity(models.Model):
@@ -67,7 +67,6 @@ class Activity(models.Model):
     acitivity_duration = models.CharField(max_length=2, choices = acitivity_duration )
     activity_location = models.CharField(max_length=2, choices = activity_location, default="Pb")
     description = models.CharField(max_length=250)
-    mrp_cost = models.PositiveIntegerField(validators=[MaxValueValidator(100000), MinValueValidator(0)], default=0)
     net_cost = models.PositiveIntegerField(validators=[MaxValueValidator(100000), MinValueValidator(0)], default=0)
     margin = models.PositiveIntegerField(default = 0)
     entry_last_updated = models.DateTimeField(auto_now=True)
@@ -80,10 +79,10 @@ class Activity(models.Model):
         return f"Activity {self.activity_title}, Location {self.activity_location}, Duration {self.acitivity_duration}, Cost {self.mrp_cost}"
     
     def __str__(self):
-        return f"{self.activity_title} - {self.activity_location} - {self.mrp_cost}"
+        return f"{self.activity_title} - {self.activity_location} - {self.net_cost}"
 
     def get_absolute_url(self):
-        return reverse('activity-list')
+        return reverse('activitys-list')
         #, kwargs={'pk' : self.pk})
     
     def save(self, *args, **kwargs):

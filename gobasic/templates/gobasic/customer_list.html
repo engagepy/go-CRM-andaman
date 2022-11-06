@@ -3,7 +3,9 @@
 <br>
 <br>
 <h2>Customer List - {{object_list.count}}</h2>
-<p><a href="{% url 'customer-create' %} "><button class="btn">Add Customer</button></a></p>
+<p><a href="{% url 'customer-create' %} "><button type="button" class="btn btn-info">Add Customer</button></a> 
+    <a href="{% url 'index' %}"> <button type="button" class="btn btn-info">Home</button>
+</a></p>
 <ol>
     {% for c in object_list %}
         <li><strong>🆔:</strong> {{ c.name }} <strong>📞:</strong> {{c.mobile}} <strong>Pax:</strong> {{c.pax}} <strong>Source:</strong> {{c.source}} <a href="{%url 'customer-update' c.pk%}"><button class="btn">🖋️</button></a> </li>

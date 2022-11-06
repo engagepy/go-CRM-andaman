@@ -3,8 +3,9 @@
 <br>
 <br>
 <h2>Hotel List - {{object_list.count}}</h2>
-<p><a href="{% url 'hotel-create' %} "><button class="btn">Add Hotel</button></a></p>
-
+<p><a href="{% url 'hotel-create' %} "><button type="button" class="btn btn-info">Add Hotels</button></a> 
+    <a href="{% url 'index' %}"> <button type="button" class="btn btn-info">Home</button>
+</a></p>
 <ol>
     {% for h in object_list %}
         <li><strong>🆔 </strong> {{ h.hotel_name }} <strong>📍 </strong> {{h.location}} <strong>⭐️ </strong> {{h.customer_rating}} <strong>Category:</strong> {{h.room_category}} <strong>CP Cost:</strong> {{h.cp}} <a href="{%url 'hotel-edit' h.pk%}"><button class="btn">🖋️</button></a> </li> <br> 

@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'gobasic',
     'rest_framework',
+    'widget_tweaks',
 ]
 
 MIDDLEWARE = [

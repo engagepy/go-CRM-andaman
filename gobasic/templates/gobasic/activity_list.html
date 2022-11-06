@@ -3,7 +3,9 @@
 <br>
 <br>
 <h2>Activity List - {{object_list.count}}</h2>
-<p><a href="{% url 'activity-create' %} "><button class="btn">Add Activity</button></a></p>
+<p><a href="{% url 'activity-create' %} "><button type="button" class="btn btn-info">Add Activity</button></a> 
+    <a href="{% url 'index' %}"> <button type="button" class="btn btn-info">Home</button>
+</a></p>
 <ol>
     {% for a in object_list %}
         <li><strong>🆔:</strong> {{ a.activity_title }} <strong>Loc:</strong> {{a.activity_location}} <strong>Desc:</strong> {{a.description}} <strong>MRP:</strong> {{a.mrp_cost}} <strong>Margin:</strong> {{a.margin}} <a href="{%url 'activity-edit' a.pk%}"><button class="btn">🖋️</button></a> </li>
