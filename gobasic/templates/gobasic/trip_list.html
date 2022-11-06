@@ -1,5 +1,8 @@
 {%extends 'gobasic/base.html' %}
 {% block content %}
+{% load static %}
+<br>
+<br>
 <h2>Trip List - {{total_trips}}</h2>
 <p><a href="{% url 'trip-create' %} "><button class="btn">Add Trip</button></a></p>
 <ol>

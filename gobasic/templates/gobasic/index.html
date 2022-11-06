@@ -1,35 +1,138 @@
-{%extends 'gobasic/base.html' %}
+{% extends 'gobasic/base.html' %}
 {% block content %}
-<div>
+{% load static %}
+	<body>
+		
 
-<h1> {{name}}</h1><a href="https://astratechz.com" target="_blank">© Astra Techz</a>
+		<div id="wrapper">
+			
+			<div id="header" class="content-block header-wrapper">
+				<div class="header-wrapper-inner">
+					<section class="top clearfix">
+						<div class="pull-left">
+							<h1><a class="logo" href="{% url 'index' %}">GO▶CRM</a></h1>
+						</div>
+						<div class="pull-right">
+							<a class="toggleDrawer" href="#"><i class="fa fa-bars fa-2x"></i></a>
+						</div>
+					</section>
+					<section class="center">
+						<div class="slogan">
+							GO▶CRM <i class="fa fa-cog fa-spin fa-1x fa-fw"></i>
+						</div>
+						<div class="secondary-slogan">
+							Sales is Key
+						</div>
+					</section>
+					<section class="bottom">
+						<a id="scrollToContent" href="#tools">
+							<img src="{% static 'gobasic/images/arrow_down.png' %}">
+						</a>
+					</section>
+				</div>
+			</div><!-- header -->
 
-</div>
-<p><a href="{% url 'logout' %} "><h3><button class="btn">Logout</button></h3></a></p>
+			
+			<div class="content-block" id="portfolio">
+				<div class="container">
+					<header class="block-heading cleafix">
+						<h1 align="center">CRM Tools</h1>
+						<p align="center">Use Tools, Drive Sales</p>
+					</header>
+					<section class="block-body" >
+						<div class="row" >
+							<div class="col-sm-4" id="tools">
+								<a href="{% url 'customer-create' %}" class="recent-work" style="background-image:url(static/gobasic/images/customer.jpg)">
+									<span class="btn btn-o-white">Create Customer</span>
+								</a>
+							</div>
+							<div class="col-sm-4">
+								<a href="{% url 'hotel-create' %}" class="recent-work" style="background-image:url(static/gobasic/images/hotel.jpg)">
+									<span class="btn btn-o-white">Create Hotel</span>
+								</a>
+							</div>
+							<div class="col-sm-4">
+								<a href="{% url 'activity-create' %}" class="recent-work" style="background-image:url(static/gobasic/images/activity.jpg)">
+									<span class="btn btn-o-white">Create Activity</span>
+								</a>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-sm-4">
+								<a href="{% url 'trip-create' %}" class="recent-work" style="background-image:url(static/gobasic/images/trip.jpg)">
+									<span class="btn btn-o-white">Create Trip</span>
+								</a>
+							</div>
 
-<div>
-    
-        <p><a href="{% url 'customer-create' %} "><h3><button class="btn">Customer➕</button></h3></a><a href="{% url 'customer-list' %}"><h3><button class="btn">Customers📃</button></h3></a></p>
-        <br>
-        <p><a href="{% url 'hotel-create' %} "><h3><button class="btn">Hotel➕</button></h3></a><a href="{% url 'hotel-list' %}"><h3><button class="btn">Hotels📃</button></h3></a></p>
-        <br>             
-        <p><a href="{% url 'activity-create' %} "><h3><button class="btn">Activity➕</button></h3></a><a href="{% url 'activity-list' %}"><h3><button class="btn">Activities📃</button></h3></a></p>
-        <br>
-        <p><a href="{% url 'trip-create' %} "><h3><button class="btn">Trip➕</button></h3></a><a href="{% url 'trip-lists' %}"><h3><button class="btn">Trips📃</button></h3></a></p>    
+							<div class="col-sm-4">
+								<a href="{% url 'hotel-list' %}" class="recent-work" style="background-image:url(static/gobasic/images/hotel1.jpg)">
+									<span class="btn btn-o-white">Hotel List</span>
+								</a>
+							</div>
+							<div class="col-sm-4">
+								<a href="{% url 'activity-list' %}" class="recent-work" style="background-image:url(static/gobasic/images/activity1.jpg)">
+									<span class="btn btn-o-white">Activity List</span>
+								</a>
+							</div>
+							<div class="col-sm-4">
+								<a href="{% url 'customer-list' %}" class="recent-work" style="background-image:url(static/gobasic/images/customer1.jpg)">
+									<span class="btn btn-o-white">Customer List</span>
+								</a>
+							</div>
+							<div class="col-sm-4">
+								<a href="{% url 'trip-lists' %}" class="recent-work" style="background-image:url(static/gobasic/images/flat_icons_thumb.jpg)">
+									<span class="btn btn-o-white">Trip List</span>
+								</a>
+							</div>
+						</div>
+					</section>
+				</div>
+			</div><!-- #portfolio -->
 
-</div>
+			<div class="content-block parallax" id="services">
+				<div class="container text-center">
+					<header class="block-heading cleafix">
+						<h1>Our Goals</h1>
+						
+					</header>
+					<section class="block-body">
+						<div class="row">
+							<div class="col-md-4">
+								<div class="service">
+									<i class="fa fa-send-o"></i>
+									<h2>Customer Service First</h2>
+								</div>
+							</div>
+							<div class="col-md-4">
+								<div class="service">
+									<i class="fa fa-heart-o"></i>
+									<h2>Accurate Plans</h2>
+								</div>
+							</div>
+							<div class="col-md-4">
+								<div class="service">
+									<i class="fa fa-camera-retro"></i>
+									<h2>Best Execution</h2>
+								</div>
+							</div>
+						</div>
+					</section>
+				</div>
+			</div><!-- #services -->
+	
+
+			<div class="content-block" id="footer">
+				<div class="container">
+					<div class="row">
+						<div class="col-xs-6">&copy; Copyright ASTRA TECHZ 2022</div>
+						<div class="col-xs-6 text-right">Tech by <a href="https://astratechz.com/" target="_blank">AstraTechZ</a></div>
+					</div>
+				</div>
+			</div><!-- #footer -->
 
 
-<!-- <div align=center> 
-    <a class="twitter-timeline" data-width="400" data-height="450" data-dnt="true" data-theme="dark" href="https://twitter.com/AstraTechZ?ref_src=twsrc%5Etfw">Tweets by AstraTechZ</a> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
-</div>
-    <br>
-    <br>
-<div>
-    <h2 align="center"> MVP Target Region</h2>
+		</div><!--/#wrapper-->
 
-    <iframe src={{long_link}} width='400' height='450' style='border:0;' allowfullscreen='' loading='lazy' referrerpolicy='no-referrer-when-downgrade'> 
-    </iframe> 
-</div> -->
+	</body>
 
 {% endblock %}

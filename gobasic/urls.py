@@ -1,6 +1,6 @@
 from django.urls import path, include
 from rest_framework import routers
-from gobasic.views import IndexView, SignUp, logoutUser, CustomerCreate, CustomerDelete, CustomerList, CustomerEdit,CustomerDetail, TripCreate, TripEdit, TripLists, TripDelete, TripDetail, HotelCreate, HotelDelete, HotelDetail, HotelEdit, HotelList, ActivityCreate, ActivityDelete, ActivityEdit, ActivityList, ActivityDetail,  loginPage 
+from gobasic.views import IndexView, ToolsView, SignUp, logoutUser, CustomerCreate, CustomerDelete, CustomerList, CustomerEdit,CustomerDetail, TripCreate, TripEdit, TripLists, TripDelete, TripDetail, HotelCreate, HotelDelete, HotelDetail, HotelEdit, HotelList, ActivityCreate, ActivityDelete, ActivityEdit, ActivityList, ActivityDetail,  loginPage 
 
 
 
@@ -14,6 +14,7 @@ urlpatterns = [
 
 
     path('', IndexView.as_view(), name="index"),
+    path('tools/', ToolsView.as_view(), name="tools"),
 
     #Customer URLs
     path('customer/create', CustomerCreate.as_view(), name="customer-create"),

@@ -55,7 +55,20 @@ def logoutUser(request):
 class IndexView(LoginRequiredMixin, TemplateView):
     login_url = 'login/'
     redirect_field_name = 'index'
-    template_name = "gobasic/prodindex.html"
+    template_name = "gobasic/index.html"
+
+    def get_context_data(self, **kwargs):
+        # Call the base implementation first to get a context
+        context = super().get_context_data(**kwargs)
+        # Add in extra QuerySets here
+        #context['book_list'] = Book.objects.all()
+        context['name'] = "Go CRM"
+        return context
+
+class ToolsView(LoginRequiredMixin, TemplateView):
+    login_url = 'login/'
+    redirect_field_name = 'tools'
+    template_name = "gobasic/tools.html"
 
     def get_context_data(self, **kwargs):
         # Call the base implementation first to get a context
