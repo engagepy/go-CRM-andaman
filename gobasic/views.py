@@ -209,7 +209,7 @@ class HotelEdit(LoginRequiredMixin, UpdateView):
     redirect_field_name = 'index'
     model = Hotel
     form_class = HotelCreateForm
-    template_name = 'gobasic/hotel_create_form.html'
+    template_name = 'gobasic/create_form.html'
 
 
 class HotelDelete(LoginRequiredMixin, DeleteView):

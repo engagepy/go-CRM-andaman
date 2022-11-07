@@ -22,10 +22,10 @@ class TripSerializer(serializers.HyperlinkedModelSerializer):
 class HotelSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Hotel
-        fields = ['hotel_name',  'location', 'cp']
+        fields = ['hotel_name',  'location', 'net_cp']
 
 class ActivitySerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Activity
-        fields = ['activity_title',  'activity_location', 'mrp_cost']
+        fields = ['activity_title',  'activity_location', 'net_cost']
        

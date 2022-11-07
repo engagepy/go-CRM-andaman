@@ -8,7 +8,7 @@
 </a></p>
 <ol>
     {% for h in object_list %}
-        <li><strong>🆔 </strong> {{ h.hotel_name }} <strong>📍 </strong> {{h.location}} <strong>⭐️ </strong> {{h.customer_rating}} <strong>Category:</strong> {{h.room_category}} <strong>CP Cost:</strong> {{h.cp}} <a href="{%url 'hotel-edit' h.pk%}"><button class="btn">🖋️</button></a> </li> <br> 
+        <li><strong>🆔 </strong> {{ h.hotel_name }} <strong>📍 </strong> {{h.location}} <strong>⭐️ </strong> {{h.customer_rating}} <strong>Category:</strong> {{h.room_category}} <strong>CP Cost:</strong> {{h.net_cp}} <a href="{%url 'hotel-edit' h.pk%}"><button class="btn">🖋️</button></a> </li> <br> 
     {% empty %}
         <p>No Entries Detected Yet !</p>
     {% endfor %}
