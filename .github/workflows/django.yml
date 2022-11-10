@@ -31,3 +31,5 @@ jobs:
 
 env:
   APP_PASSWORD: ${{ secrets.APP_PASSWORD }}
+  gmail_host: ${{ secrets.gmail_host }}
+  gmail_password: ${{ secrets.gmail_password }}
