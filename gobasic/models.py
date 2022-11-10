@@ -89,7 +89,6 @@ class Activity(models.Model):
     activity_location = models.CharField(max_length=2, choices = activity_location, default="Pb")
     description = models.CharField(max_length=250)
     net_cost = models.PositiveIntegerField(validators=[MaxValueValidator(100000), MinValueValidator(0)], default=0)
-    margin = models.PositiveIntegerField(default = 0)
     entry_last_updated = models.DateTimeField(auto_now=True)
     entry_created = models.DateTimeField(auto_now_add=True)
     activity_status = models.BooleanField(default=False)
@@ -97,18 +96,14 @@ class Activity(models.Model):
         ordering = ['-margin']
     
     def __repr__(self):
-        return f"Activity {self.activity_title}, Location {self.activity_location}, Duration {self.acitivity_duration}, Cost {self.mrp_cost}"
-    
-    def __str__(self):
         return f"{self.activity_title} - {self.activity_location} - {self.net_cost}"
+        
+    def __str__(self):
+        return f"Activity {self.activity_title}, Location {self.activity_location}, Duration {self.acitivity_duration}, Cost {self.net_cost}"
 
     def get_absolute_url(self):
         return reverse('activitys-list')
         #, kwargs={'pk' : self.pk})
-    
-    def save(self, *args, **kwargs):
-        self.margin = self.net_cost - self.net_cost
-        super(Activity, self).save(*args, **kwargs)
 
 
 
@@ -212,20 +207,17 @@ class Trip(models.Model):
             self.hotel_cost += self.pb_nights * (self.hotel_pb.net_cp * self.pb_rooms)
             self.hotel_cost += self.nl_nights * (self.hotel_nl.net_cp * self.nl_rooms) 
         elif self.hv_nights and self.pb_nights > 0:
-            self.hotel_cost += self.hv_nights * self.hotel_hv.net_cp 
-            self.hotel_cost += self.pb_nights * self.hotel_pb.net_cp
+            self.hotel_cost += self.hv_nights * (self.hotel_hv.net_cp * self.hv_rooms) 
+            self.hotel_cost += self.pb_nights * (self.hotel_pb.net_cp * self.pb_rooms)
         elif self.nl_nights and self.pb_nights > 0:
-            self.hotel_cost += self.nl_nights * self.hotel_nl.net_cp 
-            self.hotel_cost += self.pb_nights * self.hotel_pb.net_cp
+            self.hotel_cost += self.nl_nights * (self.hotel_nl.net_cp * self.nl_rooms) 
+            self.hotel_cost += self.pb_nights * (self.hotel_pb.net_cp * self.pb_rooms)
         elif self.nl_nights > 0:
-            self.hotel_cost += self.nl_nights * self.hotel_nl.net_cp 
+            self.hotel_cost += self.nl_nights * (self.hotel_nl.net_cp * self.nl_rooms) 
         elif self.pb_nights > 0:
-            self.hotel_cost += self.pb_nights * self.hotel_pb.net_cp
+            self.hotel_cost += self.pb_nights * (self.hotel_pb.net_cp * self.pb_rooms)
         elif self.hv_nights >0:
-            self.hotel_cost += self.hv_nights * self.hotel_hv.net_cp
-        super(Trip, self).save(*args, **kwargs)
-
-        
+            self.hotel_cost += self.hv_nights * (self.hotel_hv.net_cp * self.hv_rooms)
         super(Trip, self).save(*args, **kwargs)
 
         

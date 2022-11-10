@@ -182,6 +182,7 @@ class TripLists(LoginRequiredMixin, ListView):
         # Call the base implementation first to get a context
         context = super().get_context_data(**kwargs)
         # Add in extra QuerySets here
+       
         context['total_trips'] = Trip.objects.all().count()
 
         return context    
