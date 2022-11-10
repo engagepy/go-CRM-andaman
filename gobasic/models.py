@@ -93,7 +93,7 @@ class Activity(models.Model):
     entry_created = models.DateTimeField(auto_now_add=True)
     activity_status = models.BooleanField(default=False)
     class Meta:
-        ordering = ['-margin']
+        ordering = ['activity_title']
     
     def __repr__(self):
         return f"{self.activity_title} - {self.activity_location} - {self.net_cost}"
