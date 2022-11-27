@@ -37,7 +37,7 @@ def send(email):
         recipient_list=[email]
         )
 
-# Create your views here, leave global variables below.
+# Create your views here.
 def loginPage(request):
     page = 'login'
 
