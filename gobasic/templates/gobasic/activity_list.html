@@ -11,7 +11,7 @@
         <li><strong>🆔:</strong> {{ a.activity_title }} <strong>Location:</strong> {{a.activity_location}} <strong>Description:</strong> {{a.description}} <strong>Net:</strong> {{a.net_cost}}  <a href="{%url 'activity-edit' a.pk%}"><button class="btn">🖋️</button></a> </li>
         <br> 
     {% empty %}
-        <p>No Entries Detected Yet !</p>    
+        <p>No Entries Detected !</p>    
     {% endfor %}
 </ol>
 <div class="pagination">
