@@ -7,9 +7,6 @@ from gobasic.models import  Trip, Customer, Hotel, Activity
 
 ###API VIEWS
 
-
-
-
 class TripViewSet(viewsets.ModelViewSet):
     """
     API endpoint that allows users to be viewed or edited.

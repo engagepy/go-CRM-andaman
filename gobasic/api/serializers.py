@@ -12,20 +12,20 @@ class UserSerializer(serializers.HyperlinkedModelSerializer):
 class GroupSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Group
-        fields = ['url', 'name']
+        fields = '__all__'
 
 class TripSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Trip
-        fields = ['customer', 'start_date', 'end_date', 'hotel_cost', 'transfer_cost']
+        fields = '__all__'#['customer', 'start_date', 'end_date', 'hotel_cost', 'transfer_cost']
 
 class HotelSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Hotel
-        fields = ['hotel_name',  'location', 'net_cp']
+        fields = '__all__'
 
 class ActivitySerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Activity
-        fields = ['activity_title',  'activity_location', 'net_cost']
+        fields = '__all__'
        
