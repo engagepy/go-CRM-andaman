@@ -10,8 +10,7 @@ import asyncio
 from threading import Thread
 import datetime
 
-
-
+# Send mail function is defined below to assist with outgoing email communication. t
 def send(email):
     #Calculating Time, and limiting decimals
     x = datetime.datetime.now()
@@ -29,6 +28,12 @@ def send(email):
 # Base Models Here.
 
 class Hotel(models.Model):
+
+    '''
+    This class aims to accumulate all required hotel/resort room data, meals plans and other stay related add-ons. This includes
+    net rates and exclusive features that must be gaurded, and integration fields.
+    '''
+
     ratings = [
     ('1', '1'),
     ('2', '2'),
@@ -66,9 +71,13 @@ class Hotel(models.Model):
 
     def get_absolute_url(self):
         return reverse('hotels-list')
-        #, kwargs={'pk' : self.pk})
 
 class Activity(models.Model):
+
+    '''
+    This class aims to accumulate all activity data that can be offered as add-on during trip creation. Adventure sport specific validation, form and communication must follow. 
+    '''
+
     activity_location = [
     ('Pb', 'Port Blair'),
     ('Hv', 'Havelock'),
@@ -110,6 +119,10 @@ class Activity(models.Model):
 # Customer Model Here
 
 class Customer(models.Model):
+    '''
+    This class aims to accumulate all required data for a customer. This includes
+    personal information that must be gaurded, and integration fields.
+    '''
     
     source_choices = [
     ('whatsapp', 'WhatsApp'),
@@ -150,6 +163,10 @@ class Customer(models.Model):
 # Trip Model Here
 
 class Trip(models.Model):
+    '''
+    This class aims to perform all functions and calculations required to book a customer. This includes
+    itinerary generation, cost calculation and communication functions. 
+    '''
 
     transfer_choices = [
     ('PB-HV-PB', 'Havelock Round Trip'),
@@ -157,27 +174,47 @@ class Trip(models.Model):
 
 ]
 
+    lead_status = [
+    ('Enquiry', 'Enquiry'),
+    ('Proposal', 'Proposal'),
+    ('Confirmed', 'Confirmed'),
+
+]
+
     customer = models.ForeignKey(Customer, on_delete=models.PROTECT)
+    lead = models.CharField(max_length=11, choices=lead_status, blank=True, null=True)
     start_date = models.DateTimeField(default= timezone.now, help_text='yyyy-mm-dd,hh--mm')
+    end_date = models.DateTimeField(default = timezone.now)
+
+    #destination 1 hotels related fields below
     hotel_pb = models.ForeignKey(Hotel, verbose_name='Hotel PB', related_name='pb_hotel_set', limit_choices_to={'location': 'Pb'}, on_delete=models.PROTECT, blank=True, null=True)
     pb_rooms = models.PositiveSmallIntegerField(default=0, verbose_name='PB Rooms', help_text='Number of Rooms')
     pb_nights = models.PositiveSmallIntegerField(default=0, verbose_name='PB Nights', help_text='include return nights')
+
+    #destination 2 hotel related fields below
     hotel_hv = models.ForeignKey(Hotel, verbose_name='Hotel HV', related_name='hv_hotel_set', limit_choices_to={'location': 'Hv'}, on_delete=models.PROTECT, blank=True, null=True)
     hv_rooms = models.PositiveSmallIntegerField(default=0, verbose_name='HV Rooms', help_text='Number of Rooms')
     hv_nights = models.PositiveSmallIntegerField(default=0, verbose_name='HV Nights')
+
+    #destination 3 hotel related fields below
     hotel_nl = models.ForeignKey(Hotel, verbose_name='Hotel NL', related_name='nl_hotel_set', limit_choices_to={'location': 'Nl'}, on_delete=models.PROTECT, blank=True, null=True)
     nl_rooms = models.PositiveSmallIntegerField(default=0, verbose_name='NL Rooms', help_text='Number of Rooms')
     nl_nights = models.PositiveSmallIntegerField(default=0, verbose_name='NL Nights')
+
+    #duration and add-ons below
     duration = models.PositiveSmallIntegerField(verbose_name='Trip Nights', blank=True)
-    end_date = models.DateTimeField(default = timezone.now)
-    transfers = models.CharField(max_length=11, choices=transfer_choices, blank=True, null=True)
+    trip_completed = models.BooleanField(default=False)
     activity = models.ManyToManyField(Activity, related_name="activities", blank=True, verbose_name='Activities', help_text='select multiple, note location tags')
+    transfers = models.CharField(max_length=11, choices=transfer_choices, blank=True, null=True)
+
+    #fiscal fields below
     transfer_cost = models.PositiveIntegerField(default=0, blank = True, null=False)
     hotel_cost = models.PositiveIntegerField(default=0, null=False)
     advance_paid = models.PositiveIntegerField(default=0)
     activity_cost = models.PositiveIntegerField(default =0)
     total_trip_cost = models.PositiveIntegerField(default=0)
-    trip_completed = models.BooleanField(default=False)
+    
+    #admin fields below
     entry_last_updated = models.DateTimeField(auto_now=True)
     entry_created = models.DateTimeField(auto_now_add=True)
 
@@ -219,9 +256,6 @@ class Trip(models.Model):
         elif self.hv_nights >0:
             self.hotel_cost += self.hv_nights * (self.hotel_hv.net_cp * self.hv_rooms)
         super(Trip, self).save(*args, **kwargs)
-
-        
-
 
     def get_absolute_url(self):
         return reverse('trip-lists')
