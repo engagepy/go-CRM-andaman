@@ -184,6 +184,10 @@ class TripLists(LoginRequiredMixin, ListView):
         # Add in extra QuerySets here
        
         context['total_trips'] = Trip.objects.all().count()
+        activity = Trip.objects.order_by('activity')
+        
+    
+            
 
         return context    
 
