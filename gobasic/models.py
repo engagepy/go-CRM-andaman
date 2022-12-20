@@ -169,16 +169,20 @@ class Trip(models.Model):
     '''
 
     transfer_choices = [
-    ('PB-HV-PB', 'Havelock Round Trip'),
-    ('PB-HV-NL-PB', 'Havelock-Neil Round Trip'),
-
+    ('PB-HV-PB', 'PB-HV Round Trip Transfers'),
+    ('PB-HV-NL-PB', 'PB-HV-NL Round Trip Transfers'),
+    ('Ferry-Only-PB-HV', 'Ferry-Only-PB-HV'),
+    ('Ferry-Only-PB-HV-NL', 'Ferry-Only-PB-HV-NL'),
 ]
 
     lead_status = [
     ('Enquiry', 'Enquiry'),
     ('Proposal', 'Proposal'),
     ('Confirmed', 'Confirmed'),
-
+    ('Passed', 'Passed'),
+    ('VIP', 'VIP'),
+    ('Defense', 'Defense'),
+    ('F-n-F', 'Founders Friends n Family'),
 ]
 
     customer = models.ForeignKey(Customer, on_delete=models.PROTECT)
