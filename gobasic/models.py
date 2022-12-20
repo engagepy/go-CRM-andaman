@@ -114,8 +114,6 @@ class Activity(models.Model):
         return reverse('activitys-list')
         #, kwargs={'pk' : self.pk})
 
-
-
 # Customer Model Here
 
 class Customer(models.Model):
@@ -169,10 +167,12 @@ class Trip(models.Model):
     '''
 
     transfer_choices = [
-    ('PB-HV-PB', 'PB-HV Round Trip Transfers'),
-    ('PB-HV-NL-PB', 'PB-HV-NL Round Trip Transfers'),
-    ('Ferry-Only-PB-HV', 'Ferry-Only-PB-HV'),
-    ('Ferry-Only-PB-HV-NL', 'Ferry-Only-PB-HV-NL'),
+    ('PB-HV-PB-ALL', 'PB-HV AI'),
+    ('PB-HV-NL-PB-ALL', 'PB-HV-NL AI'),
+    ('PB-HV-PB-PnD', 'PB-HV P-n-D'),
+    ('PB-HV-NL-PB-PnD', 'PB-HV-NL P-n-D'),
+    ('PB-HV-Ferry', 'Ferry-Only-PB-HV'),
+    ('PB-HV-NL-Ferry', 'Ferry-Only-PB-HV-NL'),
 ]
 
     lead_status = [
@@ -182,7 +182,7 @@ class Trip(models.Model):
     ('Passed', 'Passed'),
     ('VIP', 'VIP'),
     ('Defense', 'Defense'),
-    ('F-n-F', 'Founders Friends n Family'),
+    ('F-n-F', 'F-n-F'),
 ]
 
     customer = models.ForeignKey(Customer, on_delete=models.PROTECT)
@@ -209,7 +209,7 @@ class Trip(models.Model):
     duration = models.PositiveSmallIntegerField(verbose_name='Trip Nights', blank=True)
     trip_completed = models.BooleanField(default=False)
     activity = models.ManyToManyField(Activity, related_name="activities", blank=True, verbose_name='Activities', help_text='select multiple, note location tags')
-    transfers = models.CharField(max_length=11, choices=transfer_choices, blank=True, null=True)
+    transfers = models.CharField(max_length=21, choices=transfer_choices, blank=True, null=True)
 
     #fiscal fields below
     transfer_cost = models.PositiveIntegerField(default=0, blank = True, null=False)
@@ -236,10 +236,18 @@ class Trip(models.Model):
         self.hotel_cost = 0
         self.transfer_cost = 0
 
-        if self.transfers == 'PB-HV-PB':
-            self.transfer_cost += (7500 * self.customer.pax)
-        elif self.transfers == 'PB-HV-NL-PB':
+        if self.transfers == 'PB-HV-PB-ALL':
+            self.transfer_cost += (10500 * self.customer.pax)
+        elif self.transfers == 'PB-HV-NL-PB-ALL':
+            self.transfer_cost += (15000 * self.customer.pax)
+        elif self.transfers == 'PB-HV-PB-PnD':
+            self.transfer_cost += (8000 * self.customer.pax)
+        elif self.transfers == 'PB-HV-NL-PB-PnD':
             self.transfer_cost += (12500 * self.customer.pax)
+        elif self.transfers == 'PB-HV-Ferry':
+            self.transfer_cost += (4000 * self.customer.pax)
+        elif self.transfers == 'PB-HV-NL-Ferry':
+            self.transfer_cost += (6000 * self.customer.pax)
 
         self.duration = self.pb_nights + self.hv_nights + self.nl_nights
         self.end_date = self.start_date + datetime.timedelta(days=self.duration)
