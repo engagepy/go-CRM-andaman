@@ -100,8 +100,6 @@ class ToolsView(LoginRequiredMixin, TemplateView):
         return context
 
 
-
-
 # Customer Views Below
 
 class CustomerCreate(LoginRequiredMixin, CreateView):
