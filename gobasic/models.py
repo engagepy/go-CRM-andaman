@@ -208,7 +208,7 @@ class Trip(models.Model):
     #duration and add-ons below
     duration = models.PositiveSmallIntegerField(verbose_name='Trip Nights', blank=True)
     trip_completed = models.BooleanField(default=False)
-    activity = models.ManyToManyField(Activity, related_name="activities", blank=True, verbose_name='Activities', help_text='select multiple, note location tags')
+    activities = models.ManyToManyField(Activity, related_name="activities", blank=True, help_text='select multiple, note locations')
     transfers = models.CharField(max_length=21, choices=transfer_choices, blank=True, null=True)
 
     #fiscal fields below
