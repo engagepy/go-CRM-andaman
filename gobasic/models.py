@@ -1,7 +1,6 @@
 from django.db import models
 from django.utils import timezone
 from django.urls import reverse
-import datetime
 
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.core.mail import send_mail
@@ -230,44 +229,6 @@ class Trip(models.Model):
 
     def __str__(self):
         return f"{self.customer.name} - {self.duration} - {self.start_date} - {self.end_date}"
-
-    def save(self, *args, **kwargs):
-
-        self.hotel_cost = 0
-        self.transfer_cost = 0
-
-        if self.transfers == 'PB-HV-PB-ALL':
-            self.transfer_cost += (10500 * self.customer.pax)
-        elif self.transfers == 'PB-HV-NL-PB-ALL':
-            self.transfer_cost += (15000 * self.customer.pax)
-        elif self.transfers == 'PB-HV-PB-PnD':
-            self.transfer_cost += (8000 * self.customer.pax)
-        elif self.transfers == 'PB-HV-NL-PB-PnD':
-            self.transfer_cost += (12500 * self.customer.pax)
-        elif self.transfers == 'PB-HV-Ferry':
-            self.transfer_cost += (4000 * self.customer.pax)
-        elif self.transfers == 'PB-HV-NL-Ferry':
-            self.transfer_cost += (6000 * self.customer.pax)
-
-        self.duration = self.pb_nights + self.hv_nights + self.nl_nights
-        self.end_date = self.start_date + datetime.timedelta(days=self.duration)
-        if self.hv_nights and self.pb_nights and self.nl_nights > 0:
-            self.hotel_cost += self.hv_nights * (self.hotel_hv.net_cp * self.hv_rooms)
-            self.hotel_cost += self.pb_nights * (self.hotel_pb.net_cp * self.pb_rooms)
-            self.hotel_cost += self.nl_nights * (self.hotel_nl.net_cp * self.nl_rooms) 
-        elif self.hv_nights and self.pb_nights > 0:
-            self.hotel_cost += self.hv_nights * (self.hotel_hv.net_cp * self.hv_rooms) 
-            self.hotel_cost += self.pb_nights * (self.hotel_pb.net_cp * self.pb_rooms)
-        elif self.nl_nights and self.pb_nights > 0:
-            self.hotel_cost += self.nl_nights * (self.hotel_nl.net_cp * self.nl_rooms) 
-            self.hotel_cost += self.pb_nights * (self.hotel_pb.net_cp * self.pb_rooms)
-        elif self.nl_nights > 0:
-            self.hotel_cost += self.nl_nights * (self.hotel_nl.net_cp * self.nl_rooms) 
-        elif self.pb_nights > 0:
-            self.hotel_cost += self.pb_nights * (self.hotel_pb.net_cp * self.pb_rooms)
-        elif self.hv_nights >0:
-            self.hotel_cost += self.hv_nights * (self.hotel_hv.net_cp * self.hv_rooms)
-        super(Trip, self).save(*args, **kwargs)
 
     def get_absolute_url(self):
         return reverse('trip-lists')
