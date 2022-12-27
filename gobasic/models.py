@@ -30,7 +30,7 @@ class Hotel(models.Model):
 
     '''
     This class aims to accumulate all required hotel/resort room data, meals plans and other stay related add-ons. This includes
-    net rates and exclusive features that must be gaurded, and integration fields.
+    net rates and exclusive feature that must be gaurded, and integration fields.
     '''
 
     ratings = [
@@ -161,7 +161,8 @@ class Customer(models.Model):
 
 class Trip(models.Model):
     '''
-    This class aims to perform all functions and calculations required to book a customer. This includes
+    -->  will host all fields required to book the final travel prodcut. 
+    --> constitutes sub products and services. --> data will facilitate 
     itinerary generation, cost calculation and communication functions. 
     '''
 

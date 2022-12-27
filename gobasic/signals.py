@@ -1,9 +1,18 @@
+'''
+This document contains signal functions, attached via 
+@decorator. 
+'''
+
 from django.db.models.signals import pre_save, post_save, m2m_changed
 from django.dispatch import receiver
 from .models import Trip
 import datetime
 
-
+'''
+Trip.Model 'pre-save' call --> def 'trip_final_cal'
+Objective: Aims to perform all neccessary logic to arrive at the
+travel product total. 
+'''
 
 @receiver(pre_save, sender=Trip)
 def trip_final_cal(sender, instance, *args, **kwargs):
@@ -52,6 +61,13 @@ def trip_final_cal(sender, instance, *args, **kwargs):
     elif instance.hv_nights >0:
         instance.hotel_cost += instance.hv_nights * (instance.hotel_hv.net_cp * instance.hv_rooms) 
     instance.total_trip_cost = instance.activity_cost + instance.hotel_cost + instance.transfer_cost 
+
+
+'''
+Trip.Model 'm2m_changed' call --> def 'activity_final_cal'
+Objective: Aims to perform all neccessary logic to arrive at the
+activity total, which is a 'm2m' field in Trip.Model. 
+'''
 
 @receiver(m2m_changed, sender=Trip.activities.through)
 def activity_final_cal(sender, instance, action,model,pk_set, *args, **kwargs):
