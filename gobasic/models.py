@@ -15,7 +15,7 @@ def send(email):
     x = datetime.datetime.now()
     s = x.strftime('%Y-%m-%d %H:%M:%S.%f')
     s = s[:-3]
-    y = f'Your trip interest has been registed at {s} ? Please respond to this email, or give us sometime. Our team will connect with you shortly, thanks.'
+    y = f'Your trip interest has been registed at {s} ? You can reply to this email, while our team is preparing your itinerary options, thanks.'
     #using the send_mail import below
     send_mail(
         subject='GoAndamans - Best Andaman Experiences',
