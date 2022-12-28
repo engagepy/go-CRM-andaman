@@ -9,7 +9,10 @@ import asyncio
 from threading import Thread
 import datetime
 
-# Send mail function is defined below to assist with outgoing email communication. t
+'''
+Send mail function is defined below to assist with outgoing email communication. t
+'''
+
 def send(email):
     #Calculating Time, and limiting decimals
     x = datetime.datetime.now()
