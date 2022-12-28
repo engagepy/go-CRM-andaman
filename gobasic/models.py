@@ -10,7 +10,7 @@ from threading import Thread
 import datetime
 
 '''
-Send mail function is defined below to assist with outgoing email communication. t
+Send mail function is defined below to assist with outgoing email communication. 
 '''
 
 def send(email):
@@ -77,7 +77,9 @@ class Hotel(models.Model):
 class Activity(models.Model):
 
     '''
-    This class aims to accumulate all activity data that can be offered as add-on during trip creation. Adventure sport specific validation, form and communication must follow. 
+    This class aims to accumulate all activity data that can be 
+    offered as add-on during trip creation. 
+    Adventure sport specific validation, form and communication must follow. 
     '''
 
     activity_location = [
@@ -120,8 +122,9 @@ class Activity(models.Model):
 
 class Customer(models.Model):
     '''
-    This class aims to accumulate all required data for a customer. This includes
-    personal information that must be gaurded, and integration fields.
+    This class aims to accumulate all required data for a customer. 
+    This includes personal information that must be gaurded, 
+    and integration fields.
     '''
     
     source_choices = [
@@ -164,9 +167,10 @@ class Customer(models.Model):
 
 class Trip(models.Model):
     '''
-    -->  will host all fields required to book the final travel prodcut. 
-    --> constitutes sub products and services. --> data will facilitate 
-    itinerary generation, cost calculation and communication functions. 
+    -->  will host all fields required to book the final travel product 
+    --> constitutes sub products and services 
+    --> data will facilitate itinerary generation, cost calculation and 
+    communication functions
     '''
 
     transfer_choices = [
