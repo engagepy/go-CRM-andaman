@@ -8,6 +8,8 @@
 
 ## Phases -> Features: 
 
+### Refer to .pdf for more details
+
 ### Phase I
 
 ```
