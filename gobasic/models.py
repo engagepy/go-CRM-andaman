@@ -1,6 +1,7 @@
 from django.db import models
 from django.utils import timezone
 from django.urls import reverse
+from django.contrib.auth.models import AbstractUser
 
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.core.mail import send_mail
@@ -28,6 +29,13 @@ def send(email):
         )
 
 # Base Models Here.
+# class User(AbstractUser):
+#     business = models.CharField(max_length=200, null=True)
+#     type = models.CharField(max_length=200, null=True)
+#     address = models.CharField(max_length=200, null=True)
+#     gstin = models.CharField(max_length=200, null=True)
+#     REQUIRED_FIELDS = ['username']
+
 
 class Hotel(models.Model):
 
