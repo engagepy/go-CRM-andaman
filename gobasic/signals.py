@@ -65,7 +65,9 @@ def activity_final_cal(sender, instance, action,model,pk_set, *args, **kwargs):
     activity_selected = instance.activities.all()
     for i in activity_selected:
         print('via m2m ' + str(i))
-        total += i.net_cost
+
+# Import to note that activity_cost is a product of net_cost * customer.pax, at times maybe invalid on all pax
+        total += i.net_cost * instance.customer.pax
     print(total)
     instance.activity_cost = total
     instance.save()

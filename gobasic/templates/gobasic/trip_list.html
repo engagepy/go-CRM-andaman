@@ -10,7 +10,7 @@
 
 <ol>
     {% for t in object_list %}
-        <li><strong>🆔:</strong> {{ t.customer.name}}<strong> PB:</strong> {{ t.hotel_pb.hotel_name }} <strong>HV:</strong> {{ t.hotel_hv.hotel_name }} <strong>NL:</strong> {{ t.hotel_nl.hotel_name }} <strong>Activities:</strong> {% for activity in t.activities.all %} {{ activity.activity_title}}, {% endfor %} <strong>Start:</strong>{{t.start_date}} <strong>End:</strong>{{t.end_date}} | <strong>🏨:</strong>{{t.hotel_cost}} 🚕 {{t.transfer_cost}}  🤿 Activity {{t.activity_cost}} | <strong> Total= {{t.total_trip_cost}} </strong><!--{{t.hotel_cost |add:t.transfer_cost | add:t.activity_cost}}-->  <a href="{%url 'trip-update' t.pk%}"><button class="btn">🖋️</button></a> </li>
+        <li>{{ t.customer.name}} <strong>Pax:</strong> {{t.customer.pax}}<strong> PB:</strong> {{ t.hotel_pb.hotel_name }} <strong>HV:</strong> {{ t.hotel_hv.hotel_name }} <strong>NL:</strong> {{ t.hotel_nl.hotel_name }} <!--<strong>Activities:</strong> {% for activity in t.activities.all %} {{ activity.activity_title}}, {% endfor %}--> <strong>Start:</strong>{{t.start_date}} <strong>Nights:{{t.duration}}</strong>| <strong>🏨:</strong>{{t.hotel_cost}} 🚕 {{t.transfer_cost}}  🤿 {{t.activity_cost}} | <strong> Total = {{t.total_trip_cost}} </strong> <a href="{%url 'trip-update' t.pk%}"><button class="btn">🖋️</button></a> </li>
         <br>
     {% empty %}
         <p>No Entries Detected Yet !</p>

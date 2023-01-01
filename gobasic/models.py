@@ -99,12 +99,6 @@ class Activity(models.Model):
     Adventure sport specific validation, form and communication must follow. 
     '''
 
-    activity_location = [
-    ('Pb', 'Port Blair'),
-    ('Hv', 'Havelock'),
-    ('Nl', 'Neil'),
-] 
-
     acitivity_duration = [
     ('1H', '1 hour'),
     ('2H', '2 hour'),
@@ -118,7 +112,7 @@ class Activity(models.Model):
     acitivity_duration = models.CharField(max_length=2, choices = acitivity_duration )
     activity_location = models.ForeignKey(Locations, on_delete=models.PROTECT)
     description = models.CharField(max_length=250)
-    net_cost = models.PositiveIntegerField(validators=[MaxValueValidator(100000), MinValueValidator(0)], default=0)
+    net_cost = models.PositiveIntegerField(validators=[MaxValueValidator(100000), MinValueValidator(1)], default=0)
     #timestamp = models.ForeignKey(TimeStamps, on_delete=models.PROTECT)
     activity_status = models.BooleanField(default=False)
     class Meta:

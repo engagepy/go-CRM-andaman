@@ -1,6 +1,10 @@
 # Go CRM - Travel Operator Specific CRM©
 ![Build Django](https://github.com/astratechz/travelco_crm/actions/workflows/django.yml/badge.svg)
 
+# Please create `.env` in your root project directory
+- Initialise 
+
+        APP_PASSWORD = '<your-random-development-insecure-password>'
 
 ## Pilot Market = Andaman Islands
 
