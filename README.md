@@ -8,7 +8,7 @@
         gmail_password = <your-gmail-app-password> 
         gmail_host= <your@gmail.com>
         
-![Gmail App Password](https://support.google.com/mail/answer/185833?hl=en-GB) 
+[Gmail App Password Support](https://support.google.com/mail/answer/185833?hl=en-GB) 
 ## Pilot Market = Andaman Islands
 
 ## Pilot Test Date = 1 Jan, 2023
