@@ -44,22 +44,12 @@ def trip_final_cal(sender, instance, *args, **kwargs):
 
     instance.duration = instance.pb_nights + instance.hv_nights + instance.nl_nights
     instance.end_date = instance.start_date + datetime.timedelta(days=instance.duration)
-    if instance.hv_nights and instance.pb_nights and instance.nl_nights > 0:
-        instance.hotel_cost += instance.hv_nights * (instance.hotel_hv.net_cp * instance.hv_rooms)
-        instance.hotel_cost += instance.pb_nights * (instance.hotel_pb.net_cp * instance.pb_rooms)
-        instance.hotel_cost += instance.nl_nights * (instance.hotel_nl.net_cp * instance.nl_rooms) 
-    elif instance.hv_nights and instance.pb_nights > 0:
-        instance.hotel_cost += instance.hv_nights * (instance.hotel_hv.net_cp * instance.hv_rooms) 
-        instance.hotel_cost += instance.pb_nights * (instance.hotel_pb.net_cp * instance.pb_rooms)
-    elif instance.nl_nights and instance.pb_nights > 0:
-        instance.hotel_cost += instance.nl_nights * (instance.hotel_nl.net_cp * instance.nl_rooms) 
-        instance.hotel_cost += instance.pb_nights * (instance.hotel_pb.net_cp * instance.pb_rooms)
-    elif instance.nl_nights > 0:
-        instance.hotel_cost += instance.nl_nights * (instance.hotel_nl.net_cp * instance.nl_rooms) 
-    elif instance.pb_nights > 0:
-        instance.hotel_cost += instance.pb_nights * (instance.hotel_pb.net_cp * instance.pb_rooms)
-    elif instance.hv_nights >0:
-        instance.hotel_cost += instance.hv_nights * (instance.hotel_hv.net_cp * instance.hv_rooms) 
+    if instance.hv_nights or instance.pb_nights or instance.nl_nights > 0:
+        
+            instance.hotel_cost += instance.hv_nights * (instance.hotel_hv.net_cp * instance.hv_rooms)
+            instance.hotel_cost += instance.pb_nights * (instance.hotel_pb.net_cp * instance.pb_rooms)
+            instance.hotel_cost += instance.nl_nights * (instance.hotel_nl.net_cp * instance.nl_rooms) 
+
     instance.total_trip_cost = instance.activity_cost + instance.hotel_cost + instance.transfer_cost 
 
 

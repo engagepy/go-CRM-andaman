@@ -36,7 +36,23 @@ def send(email):
 #     gstin = models.CharField(max_length=200, null=True)
 #     REQUIRED_FIELDS = ['username']
 
+class Locations(models.Model):
 
+    location = models.CharField(max_length=30, unique=True)
+
+    def __repr__(self):
+        return f"{self.location}"
+
+    def __str__(self):
+        return f"{self.location}"
+
+    def get_absolute_url(self):
+        return reverse('index')
+
+# class TimeStamps(models.Model):
+
+#     entry_last_updated = models.DateTimeField(auto_now=True)
+#     entry_created = models.DateTimeField(auto_now_add=True)
 class Hotel(models.Model):
 
     '''
@@ -52,23 +68,16 @@ class Hotel(models.Model):
     ('5', '5'),
 ] 
 
-    hotel_location = [
-    ('Pb', 'Port Blair'),
-    ('Hv', 'Havelock'),
-    ('Nl', 'Neil'),
-] 
+
     hotel_name = models.CharField(max_length=25, unique=True)
     customer_rating = models.CharField(max_length=1, choices = ratings, default='1' )
     room_category = models.CharField(max_length=15)
-    location = models.CharField(max_length=2, choices=hotel_location , default='Pb')
+    location = models.ForeignKey(Locations, on_delete=models.PROTECT)
     net_cp = models.PositiveIntegerField(validators=[MaxValueValidator(100000),  MinValueValidator(0)], verbose_name ='CP', default=0, help_text = 'Per Day for 2pax')
     net_map = models.PositiveIntegerField(validators=[MaxValueValidator(100000),  MinValueValidator(0)], verbose_name ='MAP', default=0, help_text = 'Per Day for 2pax')
-
     net_cp_kid = models.PositiveIntegerField(validators=[MaxValueValidator(100000),  MinValueValidator(0)], verbose_name ='CP Kid', default=0, help_text = 'Per Day for 1pax')
     net_map_kid = models.PositiveIntegerField(validators=[MaxValueValidator(100000),  MinValueValidator(0)],verbose_name ='MAP Kid', default=0, help_text = 'Per Day for 1pax')
-   
-    entry_last_updated = models.DateTimeField(auto_now=True, editable = False)
-    entry_created = models.DateTimeField(auto_now_add=True, editable = False)
+    #timestamp = models.ForeignKey(TimeStamps, on_delete=models.PROTECT)
 
     class Meta:
         ordering = ['customer_rating']
@@ -107,11 +116,10 @@ class Activity(models.Model):
 ] 
     activity_title = models.CharField(max_length=20, unique=True)
     acitivity_duration = models.CharField(max_length=2, choices = acitivity_duration )
-    activity_location = models.CharField(max_length=2, choices = activity_location, default="Pb")
+    activity_location = models.ForeignKey(Locations, on_delete=models.PROTECT)
     description = models.CharField(max_length=250)
     net_cost = models.PositiveIntegerField(validators=[MaxValueValidator(100000), MinValueValidator(0)], default=0)
-    entry_last_updated = models.DateTimeField(auto_now=True)
-    entry_created = models.DateTimeField(auto_now_add=True)
+    #timestamp = models.ForeignKey(TimeStamps, on_delete=models.PROTECT)
     activity_status = models.BooleanField(default=False)
     class Meta:
         ordering = ['activity_title']
@@ -151,8 +159,8 @@ class Customer(models.Model):
     email = models.EmailField(blank=True, unique=True)
     pax = models.PositiveSmallIntegerField(default=1)
     source = models.CharField(max_length=10, choices=source_choices)
-    entry_last_updated = models.DateTimeField(auto_now=True)
-    entry_created = models.DateTimeField(auto_now_add=True, editable = False)
+    #timestamp = models.ForeignKey(TimeStamps, on_delete=models.PROTECT)
+
     def save(self, *args, **kwargs):
         email= self.email
         Thread(target=send, args=(email,)).start()      
@@ -160,7 +168,7 @@ class Customer(models.Model):
         super(Customer, self).save(*args, **kwargs)
 
     class Meta:
-        ordering = ['-entry_created']
+        ordering = []
 
     def __repr__(self):
         return self.name
@@ -206,17 +214,17 @@ class Trip(models.Model):
     end_date = models.DateTimeField(default = timezone.now)
 
     #destination 1 hotels related fields below
-    hotel_pb = models.ForeignKey(Hotel, verbose_name='Hotel PB', related_name='pb_hotel_set', limit_choices_to={'location': 'Pb'}, on_delete=models.PROTECT, blank=True, null=True)
+    hotel_pb = models.ForeignKey(Hotel, verbose_name='Hotel PB', related_name='pb_hotel_set',  on_delete=models.PROTECT, blank=True, null=True)
     pb_rooms = models.PositiveSmallIntegerField(default=0, verbose_name='PB Rooms', help_text='Number of Rooms')
     pb_nights = models.PositiveSmallIntegerField(default=0, verbose_name='PB Nights', help_text='include return nights')
 
     #destination 2 hotel related fields below
-    hotel_hv = models.ForeignKey(Hotel, verbose_name='Hotel HV', related_name='hv_hotel_set', limit_choices_to={'location': 'Hv'}, on_delete=models.PROTECT, blank=True, null=True)
+    hotel_hv = models.ForeignKey(Hotel, verbose_name='Hotel HV', related_name='hv_hotel_set',  on_delete=models.PROTECT, blank=True, null=True)
     hv_rooms = models.PositiveSmallIntegerField(default=0, verbose_name='HV Rooms', help_text='Number of Rooms')
     hv_nights = models.PositiveSmallIntegerField(default=0, verbose_name='HV Nights')
 
     #destination 3 hotel related fields below
-    hotel_nl = models.ForeignKey(Hotel, verbose_name='Hotel NL', related_name='nl_hotel_set', limit_choices_to={'location': 'Nl'}, on_delete=models.PROTECT, blank=True, null=True)
+    hotel_nl = models.ForeignKey(Hotel, verbose_name='Hotel NL', related_name='nl_hotel_set',  on_delete=models.PROTECT, blank=True, null=True)
     nl_rooms = models.PositiveSmallIntegerField(default=0, verbose_name='NL Rooms', help_text='Number of Rooms')
     nl_nights = models.PositiveSmallIntegerField(default=0, verbose_name='NL Nights')
 
@@ -234,11 +242,10 @@ class Trip(models.Model):
     total_trip_cost = models.PositiveIntegerField(default=0)
     
     #admin fields below
-    entry_last_updated = models.DateTimeField(auto_now=True)
-    entry_created = models.DateTimeField(auto_now_add=True)
+    #timestamp = models.ForeignKey(TimeStamps, on_delete=models.PROTECT)
 
     class Meta:
-        ordering = ['-entry_created']
+        ordering = []
 
     def __repr__(self):
         return f'{self.customer.name} for {self.duration} day/s'
