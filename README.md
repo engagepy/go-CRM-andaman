@@ -4,8 +4,11 @@
 # Please create `.env` in your root project directory
 - Initialise 
 
-        APP_PASSWORD = '<your-random-development-insecure-password>'
-
+        APP_PASSWORD = <your-random-development-insecure-password>
+        gmail_password = <your-gmail-app-password> 
+        gmail_host= <your@gmail.com>
+        
+![Gmail App Password](https://support.google.com/mail/answer/185833?hl=en-GB) 
 ## Pilot Market = Andaman Islands
 
 ## Pilot Test Date = 1 Jan, 2023
