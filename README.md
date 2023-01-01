@@ -15,7 +15,7 @@
 
 ## Phases -> Features: 
 
-### Refer to .pdf for more details
+[Refer to .pdf for more details] (https://github.com/AstraTechz/travelco_CRM/blob/main/gocrm.pdf)
 
 ### Phase I
 
