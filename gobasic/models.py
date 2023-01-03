@@ -29,7 +29,8 @@ def send(email):
         )
 
 # Base Models Here.
-# class User(AbstractUser):
+
+# class ShopOwner(AbstractUser):
 #     business = models.CharField(max_length=200, null=True)
 #     type = models.CharField(max_length=200, null=True)
 #     address = models.CharField(max_length=200, null=True)
@@ -49,8 +50,6 @@ class Locations(models.Model):
     def get_absolute_url(self):
         return reverse('index')
 
-# class TimeStamps(models.Model):
-
 #     entry_last_updated = models.DateTimeField(auto_now=True)
 #     entry_created = models.DateTimeField(auto_now_add=True)
 class Hotel(models.Model):
@@ -68,25 +67,33 @@ class Hotel(models.Model):
     ('5', '5'),
 ] 
 
+    room_categories = [
+    ('1', 'Budget'),
+    ('2', 'Premium'),
+    ('3', 'Deluxe'),
+    ('4', 'Luxury'),
+    ('5', 'Ultra Luxury'),
+] 
 
     hotel_name = models.CharField(max_length=25, unique=True)
     customer_rating = models.CharField(max_length=1, choices = ratings, default='1' )
-    room_category = models.CharField(max_length=15)
+    room_name = models.CharField(max_length=15)
+    room_categories = models.CharField(max_length=1, choices=room_categories, default='1')
     location = models.ForeignKey(Locations, on_delete=models.PROTECT)
     net_cp = models.PositiveIntegerField(validators=[MaxValueValidator(100000),  MinValueValidator(0)], verbose_name ='CP', default=0, help_text = 'Per Day for 2pax')
     net_map = models.PositiveIntegerField(validators=[MaxValueValidator(100000),  MinValueValidator(0)], verbose_name ='MAP', default=0, help_text = 'Per Day for 2pax')
     net_cp_kid = models.PositiveIntegerField(validators=[MaxValueValidator(100000),  MinValueValidator(0)], verbose_name ='CP Kid', default=0, help_text = 'Per Day for 1pax')
     net_map_kid = models.PositiveIntegerField(validators=[MaxValueValidator(100000),  MinValueValidator(0)],verbose_name ='MAP Kid', default=0, help_text = 'Per Day for 1pax')
-    #timestamp = models.ForeignKey(TimeStamps, on_delete=models.PROTECT)
+
 
     class Meta:
         ordering = ['customer_rating']
     
     def __repr__(self):
-        return f"Hotel {self.hotel}, Location {self.location}, Room {self.room_category}"
+        return f"Hotel {self.hotel}, Location {self.location}, Room {self.room_categories}"
     
     def __str__(self):
-        return f"{self.hotel_name} - {self.location} - {self.room_category}"
+        return f"{self.hotel_name} - {self.location} - {self.room_categories}"
 
     def get_absolute_url(self):
         return reverse('hotels-list')
@@ -113,7 +120,6 @@ class Activity(models.Model):
     activity_location = models.ForeignKey(Locations, on_delete=models.PROTECT)
     description = models.CharField(max_length=250)
     net_cost = models.PositiveIntegerField(validators=[MaxValueValidator(100000), MinValueValidator(1)], default=0)
-    #timestamp = models.ForeignKey(TimeStamps, on_delete=models.PROTECT)
     activity_status = models.BooleanField(default=False)
     class Meta:
         ordering = ['activity_title']
@@ -153,7 +159,6 @@ class Customer(models.Model):
     email = models.EmailField(blank=True, unique=True)
     pax = models.PositiveSmallIntegerField(default=1)
     source = models.CharField(max_length=10, choices=source_choices)
-    #timestamp = models.ForeignKey(TimeStamps, on_delete=models.PROTECT)
 
     def save(self, *args, **kwargs):
         email= self.email
@@ -180,7 +185,7 @@ class Trip(models.Model):
     -->  will host all fields required to book the final travel product 
     --> constitutes sub products and services 
     --> data will facilitate itinerary generation, cost calculation and 
-    communication functions
+    communication functions.
     '''
 
     transfer_choices = [
@@ -234,9 +239,6 @@ class Trip(models.Model):
     advance_paid = models.PositiveIntegerField(default=0)
     activity_cost = models.PositiveIntegerField(default =0)
     total_trip_cost = models.PositiveIntegerField(default=0)
-    
-    #admin fields below
-    #timestamp = models.ForeignKey(TimeStamps, on_delete=models.PROTECT)
 
     class Meta:
         ordering = []
@@ -249,6 +251,3 @@ class Trip(models.Model):
 
     def get_absolute_url(self):
         return reverse('trip-lists')
-
-
-# post save django signal 
