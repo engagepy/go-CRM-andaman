@@ -50,8 +50,7 @@ class Locations(models.Model):
     def get_absolute_url(self):
         return reverse('index')
 
-#     entry_last_updated = models.DateTimeField(auto_now=True)
-#     entry_created = models.DateTimeField(auto_now_add=True)
+
 class Hotel(models.Model):
 
     '''
@@ -84,7 +83,8 @@ class Hotel(models.Model):
     net_map = models.PositiveIntegerField(validators=[MaxValueValidator(100000),  MinValueValidator(0)], verbose_name ='MAP', default=0, help_text = 'Per Day for 2pax')
     net_cp_kid = models.PositiveIntegerField(validators=[MaxValueValidator(100000),  MinValueValidator(0)], verbose_name ='CP Kid', default=0, help_text = 'Per Day for 1pax')
     net_map_kid = models.PositiveIntegerField(validators=[MaxValueValidator(100000),  MinValueValidator(0)],verbose_name ='MAP Kid', default=0, help_text = 'Per Day for 1pax')
-
+    entry_last_updated = models.DateTimeField(auto_now=True, editable=False)
+    entry_created = models.DateTimeField(auto_now_add=True, editable=False)
 
     class Meta:
         ordering = ['customer_rating']
@@ -121,6 +121,8 @@ class Activity(models.Model):
     description = models.CharField(max_length=250)
     net_cost = models.PositiveIntegerField(validators=[MaxValueValidator(100000), MinValueValidator(1)], default=0)
     activity_status = models.BooleanField(default=False)
+    entry_last_updated = models.DateTimeField(auto_now=True, editable=False)
+    entry_created = models.DateTimeField(auto_now_add=True, editable=False)
     class Meta:
         ordering = ['activity_title']
     
@@ -159,6 +161,8 @@ class Customer(models.Model):
     email = models.EmailField(blank=True, unique=True)
     pax = models.PositiveSmallIntegerField(default=1)
     source = models.CharField(max_length=10, choices=source_choices)
+    entry_last_updated = models.DateTimeField(auto_now=True, editable=False)
+    entry_created = models.DateTimeField(auto_now_add=True, editable=False)    
 
     def save(self, *args, **kwargs):
         email= self.email
@@ -239,7 +243,8 @@ class Trip(models.Model):
     advance_paid = models.PositiveIntegerField(default=0)
     activity_cost = models.PositiveIntegerField(default =0)
     total_trip_cost = models.PositiveIntegerField(default=0)
-
+    entry_last_updated = models.DateTimeField(auto_now=True, editable=False)
+    entry_created = models.DateTimeField(auto_now_add=True, editable=False)
     class Meta:
         ordering = []
 
