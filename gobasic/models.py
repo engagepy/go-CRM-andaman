@@ -154,7 +154,7 @@ class Customer(models.Model):
     ('web', 'Website'),
     ('other', 'Other'),
 ] 
-    #Create function to auto list next 10 years into choice tuples
+    
 
     name = models.CharField(max_length = 30)
     mobile = models.CharField(max_length=12, unique=True, help_text= '<em>10 digits</em>')

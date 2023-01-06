@@ -44,14 +44,18 @@ def trip_final_cal(sender, instance, *args, **kwargs):
 
     instance.duration = instance.pb_nights + instance.hv_nights + instance.nl_nights
     instance.end_date = instance.start_date + datetime.timedelta(days=instance.duration)
-    if instance.hv_nights or instance.pb_nights or instance.nl_nights > 0:
         
-        if instance.hv_nights > 0 and instance.hv_rooms > 0:
-            instance.hotel_cost += instance.hv_nights * (instance.hotel_hv.net_cp * instance.hv_rooms)
-        if instance.pb_nights > 0 and instance.pb_rooms > 0:
-            instance.hotel_cost += instance.pb_nights * (instance.hotel_pb.net_cp * instance.pb_rooms)
-        if instance.nl_nights > 0 and instance.nl_rooms > 0:
-            instance.hotel_cost += instance.nl_nights * (instance.hotel_nl.net_cp * instance.nl_rooms) 
+    '''
+    Checks & Logic for "hotel room * nights = hotel_cost". 
+    Ensure no null/zero value gets processed.
+    '''
+
+    if instance.hv_nights > 0 and instance.hv_rooms > 0:
+        instance.hotel_cost += instance.hv_nights * (instance.hotel_hv.net_cp * instance.hv_rooms)
+    if instance.pb_nights > 0 and instance.pb_rooms > 0:
+        instance.hotel_cost += instance.pb_nights * (instance.hotel_pb.net_cp * instance.pb_rooms)
+    if instance.nl_nights > 0 and instance.nl_rooms > 0:
+        instance.hotel_cost += instance.nl_nights * (instance.hotel_nl.net_cp * instance.nl_rooms) 
 
     instance.total_trip_cost = instance.activity_cost + instance.hotel_cost + instance.transfer_cost 
 
