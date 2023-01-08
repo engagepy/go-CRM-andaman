@@ -16,18 +16,34 @@ travel product total.
 
 @receiver(pre_save, sender=Trip)
 def trip_final_cal(sender, instance, *args, **kwargs):
+    '''
+    if statements below, represent error checking of incomplete hotel data.
+    Example if hotel is selected, nights are not. Or nights and rooms are but,
+    hotel is not selected. Such input if calculated would lead to incorrect
+    product cost. This part is critical, important to note when refining. 
+    '''
 
     instance.hotel_cost = 0
     instance.transfer_cost = 0
-    if not instance.hotel_pb:
+    if not instance.hotel_pb or instance.pb_rooms == 0 or instance.pb_nights == 0:
         instance.pb_rooms = 0
         instance.pb_nights = 0
-    if not instance.hotel_hv:
+        instance.hotel_pb = None
+    if not instance.hotel_hv or instance.hv_rooms == 0 or instance.hv_nights == 0:
         instance.hv_rooms = 0
         instance.hv_nights = 0
-    if not instance.hotel_nl:
+        instance.hotel_hv = None
+    if not instance.hotel_nl or instance.nl_rooms == 0 or instance.nl_nights == 0:
         instance.nl_rooms = 0
         instance.nl_nights = 0
+        instance.hotel_nl = None
+
+
+    '''
+    if and elif statements below represent transfer selection and appropriate
+    integer assignment. Hard codes product values are a strict No. To be 
+    improved shortly. 
+    '''
 
     if instance.transfers == 'PB-HV-PB-ALL':
         instance.transfer_cost += (10500 * instance.customer.pax)
@@ -52,9 +68,9 @@ def trip_final_cal(sender, instance, *args, **kwargs):
 
     if instance.hv_nights > 0 and instance.hv_rooms > 0:
         instance.hotel_cost += instance.hv_nights * (instance.hotel_hv.net_cp * instance.hv_rooms)
-    elif instance.pb_nights > 0 and instance.pb_rooms > 0:
+    if instance.pb_nights > 0 and instance.pb_rooms > 0:
         instance.hotel_cost += instance.pb_nights * (instance.hotel_pb.net_cp * instance.pb_rooms)
-    elif instance.nl_nights > 0 and instance.nl_rooms > 0:
+    if instance.nl_nights > 0 and instance.nl_rooms > 0:
         instance.hotel_cost += instance.nl_nights * (instance.hotel_nl.net_cp * instance.nl_rooms) 
     print(instance.activity_cost + instance.hotel_cost + instance.transfer_cost)
     instance.total_trip_cost = instance.activity_cost + instance.hotel_cost + instance.transfer_cost
