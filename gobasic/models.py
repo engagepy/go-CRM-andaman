@@ -28,15 +28,18 @@ def send(email):
         recipient_list=[email]
         )
 
-# Base Models Here.
+# Base User Models Here.
 
-# class ShopOwner(AbstractUser):
-#     business = models.CharField(max_length=200, null=True)
-#     type = models.CharField(max_length=200, null=True)
-#     address = models.CharField(max_length=200, null=True)
-#     gstin = models.CharField(max_length=200, null=True)
-#     REQUIRED_FIELDS = ['username']
+class User(AbstractUser):
+    is_owner = models.BooleanField(verbose_name='Is Owner ?', default=False)
+    is_manager = models.BooleanField(verbose_name='Is Manager ?', default=False)
+    is_employee = models.BooleanField(verbose_name='Is Employee ?', default=False)
+    is_intern = models.BooleanField(verbose_name='Is Intern ?', default=False)
+    is_customer = models.BooleanField(verbose_name='Is Customer ?', default=False)
 
+
+
+#Base Data Models Here.
 class Locations(models.Model):
 
     location = models.CharField(max_length=30, unique=True)
@@ -217,17 +220,17 @@ class Trip(models.Model):
     end_date = models.DateTimeField(default = timezone.now)
 
     #destination 1 hotels related fields below
-    hotel_pb = models.ForeignKey(Hotel, verbose_name='Hotel PB', related_name='pb_hotel_set',  on_delete=models.PROTECT, blank=True, null=True)
+    hotel_pb = models.ForeignKey(Hotel, verbose_name='Hotel PB', related_name='pb_hotel_set', limit_choices_to={'location_id': 1}, on_delete=models.PROTECT, blank=True, null=True)
     pb_rooms = models.PositiveSmallIntegerField(default=0, verbose_name='PB Rooms', help_text='Number of Rooms')
     pb_nights = models.PositiveSmallIntegerField(default=0, verbose_name='PB Nights', help_text='include return nights')
 
     #destination 2 hotel related fields below
-    hotel_hv = models.ForeignKey(Hotel, verbose_name='Hotel HV', related_name='hv_hotel_set',  on_delete=models.PROTECT, blank=True, null=True)
+    hotel_hv = models.ForeignKey(Hotel, verbose_name='Hotel HV', related_name='hv_hotel_set',limit_choices_to={'location_id': 2},  on_delete=models.PROTECT, blank=True, null=True)
     hv_rooms = models.PositiveSmallIntegerField(default=0, verbose_name='HV Rooms', help_text='Number of Rooms')
     hv_nights = models.PositiveSmallIntegerField(default=0, verbose_name='HV Nights')
 
     #destination 3 hotel related fields below
-    hotel_nl = models.ForeignKey(Hotel, verbose_name='Hotel NL', related_name='nl_hotel_set',  on_delete=models.PROTECT, blank=True, null=True)
+    hotel_nl = models.ForeignKey(Hotel, verbose_name='Hotel NL', related_name='nl_hotel_set',limit_choices_to={'location_id': 3},  on_delete=models.PROTECT, blank=True, null=True)
     nl_rooms = models.PositiveSmallIntegerField(default=0, verbose_name='NL Rooms', help_text='Number of Rooms')
     nl_nights = models.PositiveSmallIntegerField(default=0, verbose_name='NL Nights')
 
@@ -243,6 +246,11 @@ class Trip(models.Model):
     advance_paid = models.PositiveIntegerField(default=0)
     activity_cost = models.PositiveIntegerField(default =0)
     total_trip_cost = models.PositiveIntegerField(default=0)
+    profit = models.PositiveBigIntegerField(default=0)
+    tax = models.PositiveBigIntegerField(default=0)
+
+    booked = models.BooleanField(default=False)
+
     entry_last_updated = models.DateTimeField(auto_now=True, editable=False)
     entry_created = models.DateTimeField(auto_now_add=True, editable=False)
     class Meta:

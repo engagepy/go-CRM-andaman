@@ -1,8 +1,8 @@
 from rest_framework import viewsets
 from rest_framework import permissions
 from .serializers import UserSerializer, GroupSerializer, TripSerializer, HotelSerializer, ActivitySerializer
-from django.contrib.auth.models import User, Group
-from gobasic.models import  Trip, Customer, Hotel, Activity
+#from django.contrib.auth.models import User, Group
+from gobasic.models import  Trip, Customer, Hotel, Activity, User
 
 
 ###API VIEWS
@@ -40,11 +40,11 @@ class UserViewSet(viewsets.ModelViewSet):
     permission_classes = [permissions.IsAuthenticated]
 
 
-class GroupViewSet(viewsets.ModelViewSet):
-    """
-    API endpoint that allows groups to be viewed or edited.
-    """
-    queryset = Group.objects.all()
-    serializer_class = GroupSerializer
-    permission_classes = [permissions.IsAuthenticated]
+# class GroupViewSet(viewsets.ModelViewSet):
+#     """
+#     API endpoint that allows groups to be viewed or edited.
+#     """
+#     queryset = Group.objects.all()
+#     serializer_class = GroupSerializer
+#     permission_classes = [permissions.IsAuthenticated]
    
