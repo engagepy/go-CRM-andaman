@@ -70,17 +70,17 @@ class Hotel(models.Model):
 ] 
 
     room_categories = [
-    ('1', 'Budget'),
-    ('2', 'Premium'),
-    ('3', 'Deluxe'),
-    ('4', 'Luxury'),
-    ('5', 'Ultra Luxury'),
+    ('Budget', 'Budget'),
+    ('Premium', 'Premium'),
+    ('Deluxe', 'Deluxe'),
+    ('Luxury', 'Luxury'),
+    ('Ultra Luxury', 'Ultra Luxury'),
 ] 
 
-    hotel_name = models.CharField(max_length=25, unique=True)
+    hotel_name = models.CharField(max_length=25)
     customer_rating = models.CharField(max_length=1, choices = ratings, default='1' )
     room_name = models.CharField(max_length=15)
-    room_categories = models.CharField(max_length=1, choices=room_categories, default='1')
+    room_categories = models.CharField(max_length=12, choices=room_categories, default='1')
     location = models.ForeignKey(Locations, on_delete=models.PROTECT)
     net_cp = models.PositiveIntegerField(validators=[MaxValueValidator(100000),  MinValueValidator(0)], verbose_name ='CP', default=0, help_text = 'Per Day for 2pax')
     net_map = models.PositiveIntegerField(validators=[MaxValueValidator(100000),  MinValueValidator(0)], verbose_name ='MAP', default=0, help_text = 'Per Day for 2pax')
@@ -93,10 +93,10 @@ class Hotel(models.Model):
         ordering = ['customer_rating']
     
     def __repr__(self):
-        return f"Hotel {self.hotel}, Location {self.location}, Room {self.room_categories}"
+        return f"Hotel {self.hotel}, Location {self.location}, Room {self.room_categories} - {self.room.name}"
     
     def __str__(self):
-        return f"{self.hotel_name} - {self.location} - {self.room_categories}"
+        return f"{self.hotel_name} - {self.location} - {self.room_categories} - {self.room_name}"
 
     def get_absolute_url(self):
         return reverse('hotels-list')
