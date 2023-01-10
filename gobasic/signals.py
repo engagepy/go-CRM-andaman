@@ -69,19 +69,19 @@ def trip_final_cal(sender, instance, *args, **kwargs):
     if instance.hv_nights > 0 and instance.hv_rooms > 0:
         if instance.plan_hv == 'net_cp':
             instance.hotel_cost += instance.hv_nights * (instance.hotel_hv.net_cp * instance.hv_rooms)
-        if instance.plan_hv == 'net_map':
+        elif instance.plan_hv == 'net_map':
             instance.hotel_cost += instance.hv_nights * (instance.hotel_hv.net_map * instance.hv_rooms)
     if instance.pb_nights > 0 and instance.pb_rooms > 0:
         if instance.plan_pb == 'net_cp':
             instance.hotel_cost += instance.pb_nights * (instance.hotel_pb.net_cp * instance.pb_rooms)
-        if instance.plan_pb == 'net_map':
+        elif instance.plan_pb == 'net_map':
             instance.hotel_cost += instance.pb_nights * (instance.hotel_pb.net_map * instance.pb_rooms)
     if instance.nl_nights > 0 and instance.nl_rooms > 0:
         if instance.plan_nl == 'net_cp':
             instance.hotel_cost += instance.nl_nights * (instance.hotel_nl.net_cp * instance.nl_rooms) 
-        if instance.plan_nl == 'net_map':
+        elif instance.plan_nl == 'net_map':
             instance.hotel_cost += instance.nl_nights * (instance.hotel_nl.net_map * instance.nl_rooms) 
-                        
+
     print(instance.activity_cost + instance.hotel_cost + instance.transfer_cost)
     instance.total_trip_cost = instance.activity_cost + instance.hotel_cost + instance.transfer_cost
     instance.profit = (instance.total_trip_cost * 1.1) - instance.total_trip_cost
