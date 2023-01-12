@@ -82,10 +82,10 @@ class Hotel(models.Model):
     room_name = models.CharField(max_length=15)
     room_categories = models.CharField(max_length=12, choices=room_categories, default='1')
     location = models.ForeignKey(Locations, on_delete=models.PROTECT)
-    net_cp = models.PositiveIntegerField(validators=[MaxValueValidator(100000),  MinValueValidator(1)], verbose_name ='CP', default=0, help_text = 'Per Day for 2pax')
-    net_map = models.PositiveIntegerField(validators=[MaxValueValidator(100000),  MinValueValidator(1)], verbose_name ='MAP', default=0, help_text = 'Per Day for 2pax')
-    net_cp_kid = models.PositiveIntegerField(validators=[MaxValueValidator(100000),  MinValueValidator(1)], verbose_name ='CP Kid', default=0, help_text = 'Per Day for 1pax')
-    net_map_kid = models.PositiveIntegerField(validators=[MaxValueValidator(100000),  MinValueValidator(1)],verbose_name ='MAP Kid', default=0, help_text = 'Per Day for 1pax')
+    net_cp = models.PositiveIntegerField(validators=[MaxValueValidator(1000000),  MinValueValidator(1)], verbose_name ='CP', default=0, help_text = 'Per Day for 2pax')
+    net_map = models.PositiveIntegerField(validators=[MaxValueValidator(1000000),  MinValueValidator(1)], verbose_name ='MAP', default=0, help_text = 'Per Day for 2pax')
+    net_cp_kid = models.PositiveIntegerField(validators=[MaxValueValidator(1000000),  MinValueValidator(1)], verbose_name ='CP Kid', default=0, help_text = 'Per Day for 1pax')
+    net_map_kid = models.PositiveIntegerField(validators=[MaxValueValidator(1000000),  MinValueValidator(1)],verbose_name ='MAP Kid', default=0, help_text = 'Per Day for 1pax')
     entry_last_updated = models.DateTimeField(auto_now=True, editable=False)
     entry_created = models.DateTimeField(auto_now_add=True, editable=False)
 
@@ -158,7 +158,6 @@ class Customer(models.Model):
     ('other', 'Other'),
 ] 
     
-
     name = models.CharField(max_length = 30)
     mobile = models.CharField(max_length=12, unique=True, help_text= '<em>10 digits</em>')
     email = models.EmailField(blank=True, unique=True)
@@ -231,18 +230,21 @@ class Trip(models.Model):
     plan_pb = models.CharField(max_length=11, verbose_name='Meal Plan', default='CP', choices=meal_plan)
     pb_rooms = models.PositiveSmallIntegerField(validators=[MaxValueValidator(30), MinValueValidator(0)],default=0, verbose_name='Port Blair Rooms', help_text='Number of Rooms')
     pb_nights = models.PositiveSmallIntegerField(validators=[MaxValueValidator(10), MinValueValidator(0)],default=0, verbose_name='Port Blair Nights', help_text='Port Blair Nights')
+    pb_add_on = models.PositiveBigIntegerField(validators=[MaxValueValidator(100000), MinValueValidator(0)],default=0, verbose_name='Port Blair Add-On', help_text='Port Blair Hotel Add On')
 
     #destination 2 hotel related fields below
     hotel_hv = models.ForeignKey(Hotel, verbose_name='Hotel Havelock', related_name='hv_hotel_set',limit_choices_to={'location_id': 2},  on_delete=models.PROTECT, blank=True, null=True)
     plan_hv = models.CharField(max_length=11, verbose_name='Meal Plan', default='CP', choices=meal_plan)
     hv_rooms = models.PositiveSmallIntegerField(validators=[MaxValueValidator(30), MinValueValidator(0)],default=0, verbose_name='Havelock Rooms', help_text='Number of Rooms')
     hv_nights = models.PositiveSmallIntegerField(validators=[MaxValueValidator(10), MinValueValidator(0)],default=0, verbose_name='Havelock Nights')
+    hv_add_on = models.PositiveBigIntegerField(validators=[MaxValueValidator(100000), MinValueValidator(0)],default=0, verbose_name='Havelock Hotel Add-On', help_text='Havelock Hotel Add On')
 
     #destination 3 hotel related fields below
     hotel_nl = models.ForeignKey(Hotel, verbose_name='Hotel Neil', related_name='nl_hotel_set',limit_choices_to={'location_id': 3},  on_delete=models.PROTECT, blank=True, null=True)
     plan_nl = models.CharField(max_length=11, verbose_name='Meal Plan', default='CP', choices=meal_plan)
     nl_rooms = models.PositiveSmallIntegerField(validators=[MaxValueValidator(30), MinValueValidator(0)],default=0, verbose_name='Neil Rooms', help_text='Number of Rooms')
     nl_nights = models.PositiveSmallIntegerField(validators=[MaxValueValidator(10), MinValueValidator(0)],default=0, verbose_name='Neil Nights')
+    nl_add_on = models.PositiveBigIntegerField(validators=[MaxValueValidator(100000), MinValueValidator(0)],default=0, verbose_name='Neil Hotel Add-On', help_text='Neil Hotel Add On')
 
     #duration and add-ons below
     duration = models.PositiveSmallIntegerField(verbose_name='Trip Nights', blank=True)
