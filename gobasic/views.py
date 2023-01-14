@@ -29,12 +29,13 @@ def send(email):
     s = s[:-3]
     y = f'Did you login at {s} ? If not, please report the incident, thanks.'
     #using the send_mail import below
-    send_mail(
-        subject='GoAndamans - Login Update',
-        message=y,
-        from_email=settings.EMAIL_HOST_USER,
-        recipient_list=[email]
-        )
+    # send_mail(
+    #     subject='GoAndamans - Login Update',
+    #     message=y,
+    #     from_email=settings.EMAIL_HOST_USER,
+    #     recipient_list=[email]
+    #     )
+    pass
 
 # Create your views here.
 def loginPage(request):
@@ -57,8 +58,8 @@ def loginPage(request):
         if user is not None:
             login(request, user)
             #threaded function for async email sending
-            email= user.email
-            Thread(target=send, args=(email,)).start()
+            # email= user.email
+            # Thread(target=send, args=(email,)).start()
             return redirect('index')
         else:
             messages.error(request, 'Some detail is incorrect, retry!')
@@ -71,7 +72,7 @@ def logoutUser(request):
     logout(request)
     return redirect('login')
 
- 
+
 class IndexView(LoginRequiredMixin, TemplateView):
     login_url = 'login/'
     redirect_field_name = 'index'
@@ -173,18 +174,16 @@ class TripLists(LoginRequiredMixin, ListView):
     template_name = 'gobasic/trip_list.html'
     paginate_by = 10 
 
-    
 
     def get_context_data(self, **kwargs):
         # Call the base implementation first to get a context
         context = super().get_context_data(**kwargs)
         # Add in extra QuerySets here
-       
         context['total_trips'] = Trip.objects.all().count()
         #activity = Trip.objects.order_by('activity')
         return context    
 
-   
+
 
 class TripDetail(LoginRequiredMixin, DetailView):
     login_url = '/login/'
@@ -207,7 +206,7 @@ class LocationCreate(LoginRequiredMixin, CreateView):
     model = Locations
     form_class = LocationCreateForm
     template_name = 'gobasic/create_form.html'
-  
+
 
 class HotelEdit(LoginRequiredMixin, UpdateView):
     login_url = '/login/'
@@ -223,7 +222,7 @@ class HotelDelete(LoginRequiredMixin, DeleteView):
     model = Hotel
     template_name = 'gobasic/hotel_delete.html'
     success_url = reverse_lazy("index")
- 
+
 
 class HotelList(LoginRequiredMixin, ListView):
     login_url = '/login/'
@@ -275,7 +274,3 @@ class ActivityDetail(LoginRequiredMixin, DetailView):
     redirect_field_name = 'index'   
     model = Activity
     template_name = 'gobasic/acitivity_detail.html'
-
-
-
-   
