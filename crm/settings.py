@@ -147,9 +147,9 @@ CSRF_TRUSTED_ORIGINS = ['https://astratechz.pagekite.me']
 #         'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly'
 #     ]
 # }
-EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_PORT = 587
-EMAIL_USE_TLS = True
-EMAIL_HOST_USER = os.environ['gmail_host']
-EMAIL_HOST_PASSWORD = os.environ['gmail_password']
+# EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+# EMAIL_HOST = 'smtp.gmail.com'
+# EMAIL_PORT = 587
+# EMAIL_USE_TLS = True
+# EMAIL_HOST_USER = os.environ['gmail_host']
+# EMAIL_HOST_PASSWORD = os.environ['gmail_password']
