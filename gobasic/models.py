@@ -38,7 +38,6 @@ class User(AbstractUser):
     is_customer = models.BooleanField(verbose_name='Is Customer ?', default=False)
 
 
-
 #Base Data Models Here.
 class Locations(models.Model):
 
@@ -52,7 +51,6 @@ class Locations(models.Model):
 
     def get_absolute_url(self):
         return reverse('index')
-
 
 class Hotel(models.Model):
 
