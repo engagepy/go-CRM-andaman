@@ -208,6 +208,19 @@ class LocationCreate(LoginRequiredMixin, CreateView):
     form_class = LocationCreateForm
     template_name = 'gobasic/create_form.html'
 
+class LocationList(LoginRequiredMixin, ListView):
+    login_url = '/login/'
+    redirect_field_name = 'index'
+    model = Locations
+    template_name = 'gobasic/location_list.html'
+    paginate_by = 10 
+
+class LocationEdit(LoginRequiredMixin, UpdateView):
+    login_url = '/login/'
+    redirect_field_name = 'index'
+    model = Locations
+    form_class = LocationCreateForm
+    template_name = 'gobasic/create_form.html'
 
 class HotelEdit(LoginRequiredMixin, UpdateView):
     login_url = '/login/'

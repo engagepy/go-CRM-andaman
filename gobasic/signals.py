@@ -5,8 +5,12 @@ This document contains signal functions, attached via
 
 from django.db.models.signals import pre_save, post_save, m2m_changed
 from django.dispatch import receiver
-from .models import Trip
+from .models import Trip, Customer
 import datetime
+
+
+
+
 
 '''
 Trip.Model 'pre-save' call --> def 'trip_final_cal'
@@ -82,7 +86,6 @@ def trip_final_cal(sender, instance, *args, **kwargs):
         elif instance.plan_nl == 'net_map':
             instance.hotel_cost += instance.nl_nights * (instance.hotel_nl.net_map * instance.nl_rooms) + instance.nl_add_on 
 
-    print(instance.activity_cost + instance.hotel_cost + instance.transfer_cost)
     instance.total_trip_cost = instance.activity_cost + instance.hotel_cost + instance.transfer_cost
     instance.profit = (instance.total_trip_cost * 1.1) - instance.total_trip_cost
     instance.tax = (instance.profit * 1.18) - instance.profit
@@ -100,10 +103,21 @@ def activity_final_cal(sender, instance, action,model,pk_set, *args, **kwargs):
     total = 0
     activity_selected = instance.activities.all()
     for i in activity_selected:
-        print('via m2m ' + str(i))
+        print('m2m Update Occurred: ' + str(i))
 
 # Activity_cost is a product of net_cost * customer.pax, at times maybe invalid on all pax
         total += i.net_cost * instance.customer.pax
-    print(total)
+    print(f"Activity Total Updated: {total}")
     instance.activity_cost = total
     instance.save()
+
+'''
+Need to add signal that factors -> Customer.pax changed during or post trip creation.
+Should auto-recalculate trip cost, when customer.pax is udpated/edited. 
+'''
+
+
+# @receiver(pre_save, sender=Customer)
+# def customer_final_cal(sender, instance, *args, **kwargs):
+#     activity_final_cal(sender, instance, action,model,pk_set, *args, **kwargs)
+    

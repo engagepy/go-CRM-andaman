@@ -2,7 +2,7 @@
 {% block content %}
 {% load static %}
 <div class="d-sm-flex align-items-center justify-content-between mb-4">
-    <h1 class="h3 mb-0 text-gray-800">Trip List - {{total_trips}}</h1>
+    <h1 class="h3 mb-0 text-gray-800">Total: {{total_trips}}</h1>
     <a href="{% url 'trip-create' %} ">
         <button type="button" class="btn btn-primary">Add Trip</button>
     </a>
@@ -19,7 +19,6 @@
         <th scope="col">NL</th>
         <th scope="col">Start</th>
         <th scope="col">Nights</th>
-        <th scope="col">🏨</th>
         <th>Total</th>
         <th>Profit</th>
         <th>Tax</th>
@@ -32,12 +31,10 @@
             <th scope="row">{{t.customer.name}}</th>
             <td>{{t.customer.pax}}</td>
             <td>{{t.hotel_pb.hotel_name}}</td>
-            <td>{{h.room_categories}}</td>
             <td>{{t.hotel_hv.hotel_name}}</td>
             <td>{{t.hotel_nl.hotel_name}}</td>
             <td>{{t.start_date}}</td>
             <td>{{t.duration}}</td>
-            <td>{{t.hotel_cost}} 🚕 {{t.transfer_cost}}  🤿 {{t.activity_cost}}</td>
             <td>{{t.total_trip_cost}}</td>
             <td>{{t.profit}}</td>
             <td>{{t.tax}}</td>

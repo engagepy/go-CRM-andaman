@@ -50,7 +50,7 @@ class Locations(models.Model):
         return f"{self.location}"
 
     def get_absolute_url(self):
-        return reverse('index')
+        return reverse('location-list')
 
 class Hotel(models.Model):
 
@@ -218,7 +218,7 @@ class Trip(models.Model):
     # ('net_map_kid', 'Child Breakfast + 1 Meal'),
 ]
 
-    customer = models.ForeignKey(Customer, on_delete=models.PROTECT)
+    customer = models.ForeignKey(Customer, on_delete=models.PROTECT, editable=False)
     lead = models.CharField(max_length=11, choices=lead_status, blank=True, null=True)
     start_date = models.DateTimeField(default= timezone.now, help_text='yyyy-mm-dd,hh--mm')
     end_date = models.DateTimeField(default = timezone.now)

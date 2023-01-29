@@ -55,15 +55,15 @@
 						<a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo"
 								aria-expanded="true" aria-controls="collapseTwo">
 								<i class="fas fa-fw fa-cog"></i>
-								<span>Create Pages</span>
+								<span>Create New</span>
 						</a>
 						<div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
 								<div class="bg-white py-2 collapse-inner rounded">
 										<a class="collapse-item" href="{% url 'trip-create' %}">Create Trip</a>
 										<a class="collapse-item" href="{% url 'customer-create' %}">Create Customers</a>
 										<a class="collapse-item" href="{% url 'hotel-create' %}">Create Hotel</a>
-										<a class="collapse-item" href="{% url 'location-create' %}">Create Location</a>
 										<a class="collapse-item" href="{% url 'activity-create' %}">Create Activity</a>
+										<a class="collapse-item" href="{% url 'location-create' %}">Create Location</a>
 								</div>
 						</div>
 				</li>
@@ -72,15 +72,16 @@
 						<a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseOtherUtilities"
 						aria-expanded="true" aria-controls="collapseOtherUtilities">
 							<i class="fas fal fa-tools"></i>
-							<span>List Pages</span>
+							<span>Update Existing</span>
 						</a>
 					<div id="collapseOtherUtilities" class="collapse" aria-labelledby="headingUtilities"
 							data-parent="#accordionSidebar">
 							<div class="bg-white py-2 collapse-inner rounded">
-									<a class="collapse-item" href="{% url 'hotels-list' %}">Hotel</a>
 									<a class="collapse-item" href="{% url 'trip-lists' %}">Trips</a>
 									<a class="collapse-item" href="{% url 'customer-list' %}">Customers</a>
+									<a class="collapse-item" href="{% url 'hotels-list' %}">Hotel</a>
 									<a class="collapse-item" href="{% url 'activitys-list' %}">Activities</a>
+									<a class="collapse-item" href="{% url 'location-list' %}">Locations</a>
 							</div>
 					</div>
 				</li>
@@ -102,7 +103,7 @@
 
 				<!-- Nav Item - Insta -->
 				<li class="nav-item">
-						<a class="nav-link" href="https://instagram.com/goandamans" target="_blank" rel="noopener noreferrer">
+						<a class="nav-link" href="https://instagram.com/goandamans.in" target="_blank" rel="noopener noreferrer">
 							<i class="fa fa-brands fa-instagram"></i>
 							<span>Instagram</span>
 						</a>

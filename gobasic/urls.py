@@ -1,6 +1,6 @@
 from django.urls import path, include
 from rest_framework import routers
-from gobasic.views import IndexView, ToolsView, logoutUser, CustomerCreate, LocationCreate, CustomerDelete, CustomerList, CustomerEdit,CustomerDetail, TripCreate, TripEdit, TripLists, TripDelete, TripDetail, HotelCreate, HotelDelete, HotelDetail, HotelEdit, HotelList, ActivityCreate, ActivityDelete, ActivityEdit, ActivityList, ActivityDetail,  loginPage 
+from gobasic.views import IndexView, ToolsView, logoutUser, CustomerCreate, LocationCreate, LocationEdit, LocationList, CustomerDelete, CustomerList, CustomerEdit,CustomerDetail, TripCreate, TripEdit, TripLists, TripDelete, TripDetail, HotelCreate, HotelDelete, HotelDetail, HotelEdit, HotelList, ActivityCreate, ActivityDelete, ActivityEdit, ActivityList, ActivityDetail,  loginPage 
 
 
 urlpatterns = [
@@ -13,7 +13,6 @@ urlpatterns = [
 
     #Customer URLs
     path('customer/create', CustomerCreate.as_view(), name="customer-create"),
-    path('location/create', LocationCreate.as_view(), name="location-create"),
     path('customer/update/<int:pk>', CustomerEdit.as_view(), name="customer-update"),
     path('customer/delete/<int:pk>', CustomerDelete.as_view(), name="customer-delete"),
     path('customer/list', CustomerList.as_view(), name="customer-list"),
@@ -40,5 +39,10 @@ urlpatterns = [
     path('trip/delete/<int:pk>', TripDelete.as_view(), name="trip-delete"),
     path('trip/update/<int:pk>', TripEdit.as_view(), name="trip-update"),
     path('trip/lists', TripLists.as_view(), name="trip-lists"),
-    
+
+    #Location URLs
+
+    path('location/create', LocationCreate.as_view(), name="location-create"),
+    path('location/list', LocationList.as_view(), name="location-list"),
+    path('location/update/<int:pk>', LocationEdit.as_view(), name="location-update"),
 ]

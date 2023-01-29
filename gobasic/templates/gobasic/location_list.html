@@ -1,10 +1,9 @@
-{% extends 'gobasic/base.html' %}
-{% load static %}
+{%extends 'gobasic/base.html' %}
 {% block content %}
 <div class="d-sm-flex align-items-center justify-content-between mb-4">
     <h1 class="h3 mb-0 text-gray-800">Total: {{object_list.count}}</h1>
-    <a href="{% url 'hotel-create' %} ">
-        <button type="button" class="btn btn-primary">Add Hotels</button>
+    <a href="{% url 'location-create' %} ">
+        <button type="button" class="btn btn-primary">Add Location</button>
     </a>
 </div>
 
@@ -13,22 +12,16 @@
     <thead>
       <tr>
         <th scope="col"><strong>Name 🆔</strong></th>
-        <th scope="col"><strong>Location 📍</strong></th>
-        <th scope="col">Customer Rating ⭐️</th>
-        <th scope="col">Category</th>
-        <th scope="col">CP Cost</th>
         <th scope="col">Edit</th>
+
       </tr>
     </thead>
     <tbody>
-    {% for h in object_list %}
+    {% for c in object_list %}
         <tr>
-            <th scope="row">{{ h.hotel_name }}</th>
-            <td>{{h.location}}</td>
-            <td>{{h.customer_rating}}</td>
-            <td>{{h.room_categories}}</td>
-            <td>{{h.net_cp}}</td>
-            <td><a href="{%url 'hotel-edit' h.pk%}"><button class="btn">🖋️</button></a></td>
+            <th scope="row">{{c.location}}</th>
+            <td><a href="{%url 'location-update' c.pk%}"><button class="btn">🖋️</button></a></td>
+
         </tr>
     {% endfor %}
     </tbody>
@@ -36,6 +29,8 @@
 {% else %}
     <p>No Entries Detected Yet !</p>
 {% endif %}
+
+
 
 <div class="pagination">
     <span class="step-links">
@@ -53,6 +48,8 @@
             <a href="?page={{ page_obj.paginator.num_pages }}">last &raquo;</a>
         {% endif %}
     </span>
+    
 </div>
+
 
 {% endblock %}
