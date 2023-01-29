@@ -20,7 +20,7 @@
     {% for c in object_list %}
         <tr>
             <th scope="row">{{c.location}}</th>
-            <td><a href="{%url 'location-update' c.pk%}"><button class="btn">🖋️</button></a></td>
+            <td><a href="{% url 'location-update' c.slug %}"><button class="btn">🖋️</button></a></td>
 
         </tr>
     {% endfor %}

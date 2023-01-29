@@ -25,7 +25,7 @@
             <td>{{c.mobile}}</td>
             <td>{{c.pax}}</td>
             <td>{{c.source}}</td>
-            <td><a href="{%url 'customer-update' c.pk%}"><button class="btn">🖋️</button></a></td>
+            <td><a href="{%url 'customer-update' c.slug%}"><button class="btn">🖋️</button></a></td>
         </tr>
     {% endfor %}
     </tbody>

@@ -12,8 +12,8 @@
 <table class="table">
     <thead>
       <tr>
-        <th scope="col"><strong>Name 🆔</strong></th>
-        <th scope="col"><strong>Location 📍</strong></th>
+        <th scope="col"><strong>Name </strong></th>
+        <th scope="col"><strong>Location </strong></th>
         <th scope="col">Customer Rating ⭐️</th>
         <th scope="col">Category</th>
         <th scope="col">CP Cost</th>
@@ -28,7 +28,7 @@
             <td>{{h.customer_rating}}</td>
             <td>{{h.room_categories}}</td>
             <td>{{h.net_cp}}</td>
-            <td><a href="{%url 'hotel-edit' h.pk%}"><button class="btn">🖋️</button></a></td>
+            <td><a href="{%url 'hotel-edit' h.slug%}"><button class="btn">🖋️</button></a></td>
         </tr>
     {% endfor %}
     </tbody>

@@ -13,36 +13,36 @@ urlpatterns = [
 
     #Customer URLs
     path('customer/create', CustomerCreate.as_view(), name="customer-create"),
-    path('customer/update/<int:pk>', CustomerEdit.as_view(), name="customer-update"),
-    path('customer/delete/<int:pk>', CustomerDelete.as_view(), name="customer-delete"),
+    path('customer/update/<slug:slug>', CustomerEdit.as_view(), name="customer-update"),
+    path('customer/delete/<slug:slug>', CustomerDelete.as_view(), name="customer-delete"),
     path('customer/list', CustomerList.as_view(), name="customer-list"),
-    path('customer/detail/<int:pk>', CustomerDetail.as_view(), name="customer-detail"),
+    path('customer/detail/<slug:slug>', CustomerDetail.as_view(), name="customer-detail"),
     
     # Hotel URLs
     path('hotel/create', HotelCreate.as_view(), name="hotel-create"),
-    path('hotel/update/<int:pk>', HotelEdit.as_view(), name="hotel-edit"),
-    path('hotel/delete/<int:pk>', HotelDelete.as_view(), name="hotel-delete"),
+    path('hotel/update/<slug:slug>', HotelEdit.as_view(), name="hotel-edit"),
+    path('hotel/delete/<slug:slug>', HotelDelete.as_view(), name="hotel-delete"),
     path('hotels/list', HotelList.as_view(), name="hotels-list"),
-    path('hotel/detail/<int:pk>', HotelDetail.as_view(), name="hotel-detail-pb"),
+    path('hotel/detail/<slug:slug>', HotelDetail.as_view(), name="hotel-detail-pb"),
 
     #Activity URLs
     path('activity/create', ActivityCreate.as_view(), name="activity-create"),
-    path('activity/update/<int:pk>', ActivityEdit.as_view(), name="activity-edit"),
-    path('activity/delete/<int:pk>', ActivityDelete.as_view(), name="activity-delete"),
+    path('activity/update/<slug:slug>', ActivityEdit.as_view(), name="activity-edit"),
+    path('activity/delete/<slug:slug>', ActivityDelete.as_view(), name="activity-delete"),
     path('activitys/list', ActivityList.as_view(), name="activitys-list"),
-    path('activity/detail/<int:pk>', ActivityDetail.as_view(), name="activity-detail"),
+    path('activity/detail/<slug:slug>', ActivityDetail.as_view(), name="activity-detail"),
  
 
     # Trip URLs
     path('trip/create', TripCreate.as_view(), name="trip-create"),
-    path('trip/detail/<int:pk>', TripDetail.as_view(), name="trip-detail"),
-    path('trip/delete/<int:pk>', TripDelete.as_view(), name="trip-delete"),
-    path('trip/update/<int:pk>', TripEdit.as_view(), name="trip-update"),
+    path('trip/detail/<slug:slug>', TripDetail.as_view(), name="trip-detail"),
+    path('trip/delete/<slug:slug>', TripDelete.as_view(), name="trip-delete"),
+    path('trip/update/<slug:slug>', TripEdit.as_view(), name="trip-update"),
     path('trip/lists', TripLists.as_view(), name="trip-lists"),
 
     #Location URLs
 
     path('location/create', LocationCreate.as_view(), name="location-create"),
     path('location/list', LocationList.as_view(), name="location-list"),
-    path('location/update/<int:pk>', LocationEdit.as_view(), name="location-update"),
+    path('location/update/<slug:slug>', LocationEdit.as_view(), name="location-update"),
 ]

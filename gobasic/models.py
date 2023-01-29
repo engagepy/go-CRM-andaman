@@ -2,7 +2,7 @@ from django.db import models
 from django.utils import timezone
 from django.urls import reverse
 from django.contrib.auth.models import AbstractUser
-
+from django.template.defaultfilters import slugify
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.core.mail import send_mail
 from django.conf import settings
@@ -41,7 +41,9 @@ class User(AbstractUser):
 #Base Data Models Here.
 class Locations(models.Model):
 
-    location = models.CharField(max_length=30, unique=True)
+    location = models.CharField(max_length=30, unique=True, primary_key=True)
+    slug = models.SlugField(null=True, blank=True)
+    
 
     def __repr__(self):
         return f"{self.location}"
@@ -50,7 +52,12 @@ class Locations(models.Model):
         return f"{self.location}"
 
     def get_absolute_url(self):
-        return reverse('location-list')
+        return reverse("location-list")
+    
+    def save(self, *args, **kwargs):  # new
+        if not self.slug:
+            self.slug = slugify(self.location)
+        return super().save(*args, **kwargs)
 
 class Hotel(models.Model):
 
@@ -76,6 +83,7 @@ class Hotel(models.Model):
 ] 
 
     hotel_name = models.CharField(max_length=25)
+    slug = models.SlugField(null=True, blank=True)
     customer_rating = models.CharField(max_length=1, choices = ratings, default='1' )
     room_name = models.CharField(max_length=15)
     room_categories = models.CharField(max_length=12, choices=room_categories, default='1')
@@ -98,6 +106,11 @@ class Hotel(models.Model):
 
     def get_absolute_url(self):
         return reverse('hotels-list')
+    
+    def save(self, *args, **kwargs):  # new
+        if not self.slug:
+            self.slug = slugify(self.hotel_name)
+        return super().save(*args, **kwargs)    
 
 class Activity(models.Model):
 
@@ -117,6 +130,7 @@ class Activity(models.Model):
     ('6D', '6 Day'),
 ] 
     activity_title = models.CharField(max_length=20, unique=True)
+    slug = models.SlugField(null=True, blank=True)
     acitivity_duration = models.CharField(max_length=2, choices = acitivity_duration )
     activity_location = models.ForeignKey(Locations, on_delete=models.PROTECT)
     description = models.CharField(max_length=250)
@@ -131,11 +145,16 @@ class Activity(models.Model):
         return f"{self.activity_title} - {self.activity_location} - {self.net_cost}"
         
     def __str__(self):
-        return f"Activity {self.activity_title}, Location {self.activity_location}, Duration {self.acitivity_duration}, Cost {self.net_cost}"
+        return f"{self.activity_title}, {self.activity_location}, {self.acitivity_duration}, {self.net_cost}"
 
     def get_absolute_url(self):
         return reverse('activitys-list')
-        #, kwargs={'pk' : self.pk})
+
+    def save(self, *args, **kwargs):  # new
+        if not self.slug:
+            self.slug = slugify(self.activity_title)
+        return super().save(*args, **kwargs) 
+
 
 # Customer Model Here
 
@@ -157,6 +176,7 @@ class Customer(models.Model):
 ] 
     
     name = models.CharField(max_length = 30)
+    slug = models.SlugField(null=True, blank=True)
     mobile = models.CharField(max_length=12, unique=True, help_text= '<em>10 digits</em>')
     email = models.EmailField(blank=True, unique=True)
     pax = models.PositiveSmallIntegerField(default=1)
@@ -181,7 +201,11 @@ class Customer(models.Model):
 
     def get_absolute_url(self):
         return reverse('customer-list')
-
+    
+    def save(self, *args, **kwargs):  # new
+        if not self.slug:
+            self.slug = slugify(self.name)
+        return super().save(*args, **kwargs) 
 # Trip Model Here
 
 class Trip(models.Model):
@@ -218,27 +242,28 @@ class Trip(models.Model):
     # ('net_map_kid', 'Child Breakfast + 1 Meal'),
 ]
 
-    customer = models.ForeignKey(Customer, on_delete=models.PROTECT, editable=False)
+    customer = models.ForeignKey(Customer, null=True, on_delete=models.PROTECT)
+    slug = models.SlugField(null=True, blank=True)
     lead = models.CharField(max_length=11, choices=lead_status, blank=True, null=True)
     start_date = models.DateTimeField(default= timezone.now, help_text='yyyy-mm-dd,hh--mm')
     end_date = models.DateTimeField(default = timezone.now)
 
     #destination 1 hotels related fields below
-    hotel_pb = models.ForeignKey(Hotel, verbose_name='Hotel Port Blair', related_name='pb_hotel_set', limit_choices_to={'location_id': 1}, on_delete=models.PROTECT, blank=True, null=True)
+    hotel_pb = models.ForeignKey(Hotel, verbose_name='Hotel Port Blair', related_name='pb_hotel_set', limit_choices_to={'location': 'Port Blair'}, on_delete=models.PROTECT, blank=True, null=True)
     plan_pb = models.CharField(max_length=11, verbose_name='Meal Plan', default='CP', choices=meal_plan)
     pb_rooms = models.PositiveSmallIntegerField(validators=[MaxValueValidator(30), MinValueValidator(0)],default=0, verbose_name='Port Blair Rooms', help_text='Number of Rooms')
     pb_nights = models.PositiveSmallIntegerField(validators=[MaxValueValidator(10), MinValueValidator(0)],default=0, verbose_name='Port Blair Nights', help_text='Port Blair Nights')
     pb_add_on = models.PositiveBigIntegerField(validators=[MaxValueValidator(100000), MinValueValidator(0)],default=0, verbose_name='Port Blair Add-On', help_text='Port Blair Hotel Add On')
 
     #destination 2 hotel related fields below
-    hotel_hv = models.ForeignKey(Hotel, verbose_name='Hotel Havelock', related_name='hv_hotel_set',limit_choices_to={'location_id': 2},  on_delete=models.PROTECT, blank=True, null=True)
+    hotel_hv = models.ForeignKey(Hotel, verbose_name='Hotel Havelock', related_name='hv_hotel_set',limit_choices_to={'location': 'Havelock Island'},  on_delete=models.PROTECT, blank=True, null=True)
     plan_hv = models.CharField(max_length=11, verbose_name='Meal Plan', default='CP', choices=meal_plan)
     hv_rooms = models.PositiveSmallIntegerField(validators=[MaxValueValidator(30), MinValueValidator(0)],default=0, verbose_name='Havelock Rooms', help_text='Number of Rooms')
     hv_nights = models.PositiveSmallIntegerField(validators=[MaxValueValidator(10), MinValueValidator(0)],default=0, verbose_name='Havelock Nights')
     hv_add_on = models.PositiveBigIntegerField(validators=[MaxValueValidator(100000), MinValueValidator(0)],default=0, verbose_name='Havelock Hotel Add-On', help_text='Havelock Hotel Add On')
 
     #destination 3 hotel related fields below
-    hotel_nl = models.ForeignKey(Hotel, verbose_name='Hotel Neil', related_name='nl_hotel_set',limit_choices_to={'location_id': 3},  on_delete=models.PROTECT, blank=True, null=True)
+    hotel_nl = models.ForeignKey(Hotel, verbose_name='Hotel Neil', related_name='nl_hotel_set',limit_choices_to={'location': 'Neil Island'},  on_delete=models.PROTECT, blank=True, null=True)
     plan_nl = models.CharField(max_length=11, verbose_name='Meal Plan', default='CP', choices=meal_plan)
     nl_rooms = models.PositiveSmallIntegerField(validators=[MaxValueValidator(30), MinValueValidator(0)],default=0, verbose_name='Neil Rooms', help_text='Number of Rooms')
     nl_nights = models.PositiveSmallIntegerField(validators=[MaxValueValidator(10), MinValueValidator(0)],default=0, verbose_name='Neil Nights')
@@ -274,3 +299,8 @@ class Trip(models.Model):
 
     def get_absolute_url(self):
         return reverse('trip-lists')
+
+    def save(self, *args, **kwargs):  # new
+        if not self.slug:
+            self.slug = slugify(self.customer.name)
+        return super().save(*args, **kwargs) 

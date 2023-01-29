@@ -22,19 +22,20 @@ import datetime
 
 
 
-def send(email):
+def send(email, username):
     #Calculating Time, and limiting decimals
     x = datetime.datetime.now()
     s = x.strftime('%Y-%m-%d %H:%M:%S.%f')
-    s = s[:-3]
-    y = f'Did you login at {s} ? If not, please report the incident, thanks.'
+    s = s[:-7]
+    y = f'{username} just logged in at {s} ? If not, please report the incident, thanks.'
     #using the send_mail import below
-    # send_mail(
-    #     subject='GoAndamans - Login Update',
-    #     message=y,
-    #     from_email=settings.EMAIL_HOST_USER,
-    #     recipient_list=[email]
-    #     )
+    print(s)
+    send_mail(
+        subject='GoAndamans - Login Update',
+        message=y,
+        from_email=settings.EMAIL_HOST_USER,
+        recipient_list=[email]
+        )
     pass
 
 # Create your views here.
@@ -51,15 +52,15 @@ def loginPage(request):
         try:
             user = User.objects.get(username=username)
         except:
-            messages.error(request, 'Something is off, No Records Found!')
+            messages.error(request, "oops")
 
         user = authenticate(request, username=username, password=password)
 
         if user is not None:
             login(request, user)
             #threaded function for async email sending
-            # email= user.email
-            # Thread(target=send, args=(email,)).start()
+            email= user.email
+            Thread(target=send, args=(email, username)).start()
             return redirect('index')
         else:
             messages.error(request, 'Some detail is incorrect, retry!')

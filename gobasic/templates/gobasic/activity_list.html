@@ -25,7 +25,7 @@
             <td>{{a.activity_location}}</td>
             <td>{{a.description}}</td>
             <td>{{a.net_cost}}</td>
-            <td><a href="{%url 'activity-edit' a.pk%}"><button class="btn">🖋️</button></a></td>
+            <td><a href="{%url 'activity-edit' a.slug%}"><button class="btn">🖋️</button></a></td>
         </tr>
     {% endfor %}
     </tbody>

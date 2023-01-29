@@ -12,7 +12,7 @@
 <table class="table">
     <thead>
       <tr>
-        <th scope="col"><strong>Name 🆔</strong></th>
+        <th scope="col"><strong>Name</strong></th>
         <th scope="col"><strong>Pax</strong></th>
         <th scope="col">PB</th>
         <th scope="col">HV</th>
@@ -38,7 +38,7 @@
             <td>{{t.total_trip_cost}}</td>
             <td>{{t.profit}}</td>
             <td>{{t.tax}}</td>
-            <td><a href="{%url 'trip-update' t.pk%}"><button class="btn">🖋️</button></a></td>
+            <td><a href="{%url 'trip-update' t.slug%}"><button class="btn">🖋️</button></a></td>
         </tr>
     {% endfor %}
     </tbody>
