@@ -1,19 +1,40 @@
 {%extends 'gobasic/base.html' %}
 {% block content %}
-<br>
-<br>
-<h2>Activity List - {{object_list.count}}</h2>
-<p><a href="{% url 'activity-create' %} "><button type="button" class="btn btn-info">Add Activity</button></a> 
-    <a href="{% url 'index' %}"> <button type="button" class="btn btn-info">Home</button>
-</a></p>
-<ol>
+<div class="d-sm-flex align-items-center justify-content-between mb-4">
+    <h1 class="h3 mb-0 text-gray-800">Activity List - {{object_list.count}}</h1>
+    <a href="{% url 'activity-create' %} ">
+        <button type="button" class="btn btn-primary">Add Activity</button>
+    </a>
+</div>
+
+{% if object_list %}
+<table class="table">
+    <thead>
+      <tr>
+        <th scope="col"><strong>Name 🆔</strong></th>
+        <th scope="col"><strong>Location 📍</strong></th>
+        <th scope="col">Description</th>
+        <th scope="col">Net Cost</th>
+        <th scope="col">Edit</th>
+      </tr>
+    </thead>
+    <tbody>
     {% for a in object_list %}
-        <li><strong>🆔:</strong> {{ a.activity_title }} <strong>Location:</strong> {{a.activity_location}} <strong>Description:</strong> {{a.description}} <strong>Net:</strong> {{a.net_cost}}  <a href="{%url 'activity-edit' a.pk%}"><button class="btn">🖋️</button></a> </li>
-        <br> 
-    {% empty %}
-        <p>No Entries Detected </p>    
+        <tr>
+            <th scope="row">{{a.activity_title}}</th>
+            <td>{{a.activity_location}}</td>
+            <td>{{a.description}}</td>
+            <td>{{a.net_cost}}</td>
+            <td><a href="{%url 'activity-edit' a.pk%}"><button class="btn">🖋️</button></a></td>
+        </tr>
     {% endfor %}
-</ol>
+    </tbody>
+</table>
+{% else %}
+    <p>No Entries Detected Yet !</p>
+{% endif %}
+
+
 <div class="pagination">
     <span class="step-links">
         {% if page_obj.has_previous %}

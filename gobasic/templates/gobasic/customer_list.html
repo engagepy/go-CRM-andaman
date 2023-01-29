@@ -1,19 +1,41 @@
 {%extends 'gobasic/base.html' %}
 {% block content %}
-<br>
-<br>
-<h2>Customer List - {{object_list.count}}</h2>
-<p><a href="{% url 'customer-create' %} "><button type="button" class="btn btn-info">Add Customer</button></a> 
-    <a href="{% url 'index' %}"> <button type="button" class="btn btn-info">Home</button>
-</a></p>
-<ol>
+<div class="d-sm-flex align-items-center justify-content-between mb-4">
+    <h1 class="h3 mb-0 text-gray-800">Customer List - {{object_list.count}}</h1>
+    <a href="{% url 'customer-create' %} ">
+        <button type="button" class="btn btn-primary">Add Customer</button>
+    </a>
+</div>
+
+{% if object_list %}
+<table class="table">
+    <thead>
+      <tr>
+        <th scope="col"><strong>Name 🆔</strong></th>
+        <th scope="col"><strong>Phone 📞</strong></th>
+        <th scope="col">Pax</th>
+        <th scope="col">Source</th>
+        <th scope="col">Edit</th>
+      </tr>
+    </thead>
+    <tbody>
     {% for c in object_list %}
-        <li><strong>🆔:</strong> {{ c.name }} <strong>📞:</strong> {{c.mobile}} <strong>Pax:</strong> {{c.pax}} <strong>Source:</strong> {{c.source}} <a href="{%url 'customer-update' c.pk%}"><button class="btn">🖋️</button></a> </li>
-        <br> 
-    {% empty %}
-        <p>No Entries Detected Yet !</p>    
+        <tr>
+            <th scope="row">{{c.name}}</th>
+            <td>{{c.mobile}}</td>
+            <td>{{c.pax}}</td>
+            <td>{{c.source}}</td>
+            <td><a href="{%url 'customer-update' c.pk%}"><button class="btn">🖋️</button></a></td>
+        </tr>
     {% endfor %}
-</ol>
+    </tbody>
+</table>
+{% else %}
+    <p>No Entries Detected Yet !</p>
+{% endif %}
+
+
+
 <div class="pagination">
     <span class="step-links">
         {% if page_obj.has_previous %}
