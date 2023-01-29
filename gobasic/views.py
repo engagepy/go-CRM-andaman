@@ -84,6 +84,7 @@ class IndexView(LoginRequiredMixin, TemplateView):
         # Add in extra QuerySets here
         #context['book_list'] = Book.objects.all()
         context['name'] = "Go CRM"
+        
         return context
 
 class ToolsView(LoginRequiredMixin, TemplateView):
