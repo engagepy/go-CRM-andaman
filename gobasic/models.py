@@ -6,7 +6,6 @@ from django.template.defaultfilters import slugify
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.core.mail import send_mail
 from django.conf import settings
-import asyncio
 from threading import Thread
 import datetime
 
@@ -14,20 +13,20 @@ import datetime
 Send mail function is defined below to assist with outgoing email communication. 
 '''
 
-def send(email):
-    #Calculating Time, and limiting decimals
-    x = datetime.datetime.now()
-    s = x.strftime('%Y-%m-%d %H:%M:%S.%f')
-    s = s[:-3]
-    y = f'Your trip interest has been registed at {s} ? You can reply to this email, while our team is preparing your itinerary options, thanks.'
-    #using the send_mail import below
-    send_mail(
-        subject='GoAndamans - Best Andaman Experiences',
-        message=y,
-        from_email=settings.EMAIL_HOST_USER,
-        recipient_list=[email]
-        )
-
+# def send(email):
+#     #Calculating Time, and limiting decimals
+#     x = datetime.datetime.now()
+#     s = x.strftime('%Y-%m-%d %H:%M:%S.%f')
+#     s = s[:-7]
+#     y = f'Your trip interest has been registed at {s} ? You can reply to this email, while our team is preparing your itinerary options, thanks.'
+#     #using the send_mail import below
+#     send_mail(
+#         subject='GoAndamans - Best Andaman Experiences',
+#         message=y,
+#         from_email=settings.EMAIL_HOST_USER,
+#         recipient_list=[email]
+#         )
+#     pass
 # Base User Models Here.
 
 class User(AbstractUser):
@@ -42,7 +41,7 @@ class User(AbstractUser):
 class Locations(models.Model):
 
     location = models.CharField(max_length=30, unique=True, primary_key=True)
-    slug = models.SlugField(null=True, blank=True)
+    slug = models.SlugField(null=True, blank=True, unique=True)
     
 
     def __repr__(self):
@@ -83,7 +82,7 @@ class Hotel(models.Model):
 ] 
 
     hotel_name = models.CharField(max_length=25)
-    slug = models.SlugField(null=True, blank=True)
+    slug = models.SlugField(null=True, blank=True, unique=True)
     customer_rating = models.CharField(max_length=1, choices = ratings, default='1' )
     room_name = models.CharField(max_length=15)
     room_categories = models.CharField(max_length=12, choices=room_categories, default='1')
@@ -130,7 +129,7 @@ class Activity(models.Model):
     ('6D', '6 Day'),
 ] 
     activity_title = models.CharField(max_length=20, unique=True)
-    slug = models.SlugField(null=True, blank=True)
+    slug = models.SlugField(null=True, blank=True, unique=True)
     acitivity_duration = models.CharField(max_length=2, choices = acitivity_duration )
     activity_location = models.ForeignKey(Locations, on_delete=models.PROTECT)
     description = models.CharField(max_length=250)
@@ -170,13 +169,13 @@ class Customer(models.Model):
     ('email', 'Email'),
     ('phone', 'Phone'),
     ('founder', 'Founder'),
-    ('socialm', 'Social Media'),
+    ('social', 'Social Media'),
     ('web', 'Website'),
     ('other', 'Other'),
 ] 
     
     name = models.CharField(max_length = 30)
-    slug = models.SlugField(null=True, blank=True)
+    slug = models.SlugField(null=True, blank=True, unique=True)
     mobile = models.CharField(max_length=12, unique=True, help_text= '<em>10 digits</em>')
     email = models.EmailField(blank=True, unique=True)
     pax = models.PositiveSmallIntegerField(default=1)
@@ -186,8 +185,7 @@ class Customer(models.Model):
 
     def save(self, *args, **kwargs):
         email= self.email
-        Thread(target=send, args=(email,)).start()      
-        
+        #Thread(target=send, args=(email)).start()     
         super(Customer, self).save(*args, **kwargs)
 
     class Meta:
@@ -243,7 +241,7 @@ class Trip(models.Model):
 ]
 
     customer = models.ForeignKey(Customer, null=True, on_delete=models.PROTECT)
-    slug = models.SlugField(null=True, blank=True)
+    slug = models.SlugField(null=True, blank=True, unique=True)
     lead = models.CharField(max_length=11, choices=lead_status, blank=True, null=True)
     start_date = models.DateTimeField(default= timezone.now, help_text='yyyy-mm-dd,hh--mm')
     end_date = models.DateTimeField(default = timezone.now)
