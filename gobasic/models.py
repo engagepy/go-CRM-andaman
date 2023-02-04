@@ -181,7 +181,7 @@ class Transfer(models.Model):
         return f"{self.transfer_title}, {self.net_cost}"
 
     def get_absolute_url(self):
-        return reverse('trip-lists')
+        return reverse('transfer-list')
 
     def save(self, *args, **kwargs):  # new
         if not self.slug:

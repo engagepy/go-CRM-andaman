@@ -120,6 +120,15 @@ class TransferCreate(LoginRequiredMixin, CreateView):
     template_name = 'gobasic/create_form.html'
 
 
+class TransferList(LoginRequiredMixin, ListView):
+    login_url = '/login/'
+    redirect_field_name = 'index'
+    login_required = True
+    model = Transfer
+    template_name = 'gobasic/transfer_list.html'
+    paginate_by = 10 
+
+
 class CustomerEdit(LoginRequiredMixin, UpdateView):
     login_url = '/login/'
     redirect_field_name = 'index'
