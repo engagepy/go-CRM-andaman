@@ -11,8 +11,8 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib import messages
 #import from within the app
-from .forms import CustomerCreateForm, TripCreateForm, HotelCreateForm,  ActivityCreateForm, LocationCreateForm
-from .models import  Trip, Customer, Hotel, Activity, Locations
+from .forms import CustomerCreateForm, TripCreateForm, HotelCreateForm,  ActivityCreateForm, LocationCreateForm, TransferCreateForm
+from .models import  Trip, Customer, Hotel, Activity, Locations, Transfer
 from django.contrib.auth.models import User, Group
 #imported for send mail
 from django.core.mail import send_mail
@@ -108,6 +108,15 @@ class CustomerCreate(LoginRequiredMixin, CreateView):
     redirect_field_name = 'index'
     model = Customer
     form_class = CustomerCreateForm
+    template_name = 'gobasic/create_form.html'
+
+# Transfer Create View Here : 
+
+class TransferCreate(LoginRequiredMixin, CreateView):
+    login_url = '/login/'
+    redirect_field_name = 'index'
+    model = Transfer
+    form_class = TransferCreateForm
     template_name = 'gobasic/create_form.html'
 
 

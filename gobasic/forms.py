@@ -1,4 +1,4 @@
-from .models import Hotel, Activity, Customer, Trip , Locations
+from .models import Hotel, Activity, Customer, Trip , Locations, Transfer
 from django import forms
 from django.forms import modelformset_factory
 
@@ -19,6 +19,13 @@ class CustomerCreateForm(forms.ModelForm):
         model = Customer
         fields = '__all__'
         exclude = ['timestamp','slug']
+
+
+class TransferCreateForm(forms.ModelForm):
+    class Meta:
+        model = Transfer
+        fields = '__all__'
+        exclude = ['slug']
 
 class LocationCreateForm(forms.ModelForm):
     class Meta:
