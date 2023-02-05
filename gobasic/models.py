@@ -154,41 +154,6 @@ class Activity(models.Model):
             self.slug = slugify(self.activity_title)
         return super().save(*args, **kwargs) 
 
-
-# Transfers model is here
-
-class Transfer(models.Model):
-
-    '''
-    This class aims to accumulate all transfer data that can be 
-    offered as add-on during trip creation. Cabs, Ferry, All Inclusive or Ala Carte.
-    '''
-
-
-    transfer_title = models.CharField(max_length=20, unique=True)
-    slug = models.SlugField(null=True, blank=True, unique=True)
-    description = models.CharField(max_length=250)
-    net_cost = models.PositiveIntegerField(validators=[MaxValueValidator(100000), MinValueValidator(1)], default=0)
-    entry_last_updated = models.DateTimeField(auto_now=True, editable=False)
-    entry_created = models.DateTimeField(auto_now_add=True, editable=False)
-    class Meta:
-        ordering = ['transfer_title']
-    
-    def __repr__(self):
-        return f"{self.transfer_title} - {self.net_cost}"
-        
-    def __str__(self):
-        return f"{self.transfer_title}, {self.net_cost}"
-
-    def get_absolute_url(self):
-        return reverse('transfer-list')
-
-    def save(self, *args, **kwargs):  # new
-        if not self.slug:
-            self.slug = slugify(self.transfer_title)
-        return super().save(*args, **kwargs) 
-
-
 # Customer Model Here
 
 class Customer(models.Model):
@@ -238,6 +203,41 @@ class Customer(models.Model):
         if not self.slug:
             self.slug = slugify(self.name)
         return super().save(*args, **kwargs) 
+
+# Transfers model is here
+
+class Transfer(models.Model):
+
+    '''
+    This class aims to accumulate all transfer data that can be 
+    offered as add-on during trip creation. Cabs, Ferry, All Inclusive or Ala Carte.
+    '''
+
+    customer_transfer = models.OneToOneField(Customer,on_delete=models.PROTECT, blank=True)
+    transfer_title = models.CharField(max_length=20, unique=True)
+    slug = models.SlugField(null=True, blank=True, unique=True)
+    description = models.CharField(max_length=250)
+    net_cost = models.PositiveIntegerField(validators=[MaxValueValidator(100000), MinValueValidator(1)], default=0)
+    entry_last_updated = models.DateTimeField(auto_now=True, editable=False)
+    entry_created = models.DateTimeField(auto_now_add=True, editable=False)
+    class Meta:
+        ordering = ['transfer_title']
+    
+    def __repr__(self):
+        return f"{self.transfer_title} - {self.net_cost}"
+        
+    def __str__(self):
+        return f"{self.transfer_title}, {self.net_cost}"
+
+    def get_absolute_url(self):
+        return reverse('transfer-list')
+
+    def save(self, *args, **kwargs):  # new
+        if not self.slug:
+            self.slug = slugify(self.transfer_title)
+        return super().save(*args, **kwargs)
+
+
 # Trip Model Here
 
 class Trip(models.Model):

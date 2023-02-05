@@ -49,19 +49,9 @@ def trip_final_cal(sender, instance, *args, **kwargs):
     improved shortly.
     '''
 
-    if instance.transfers == 'PB-HV-PB-ALL':
-        instance.transfer_cost += (10500 * instance.customer.pax)
-    elif instance.transfers == 'PB-HV-NL-PB-ALL':
-        instance.transfer_cost += (15000 * instance.customer.pax)
-    elif instance.transfers == 'PB-HV-PB-PnD':
-        instance.transfer_cost += (8000 * instance.customer.pax)
-    elif instance.transfers == 'PB-HV-NL-PB-PnD':
-        instance.transfer_cost += (12500 * instance.customer.pax)
-    elif instance.transfers == 'PB-HV-Ferry':
-        instance.transfer_cost += (3500 * instance.customer.pax)
-    elif instance.transfers == 'PB-HV-NL-Ferry':
-        instance.transfer_cost += (5000 * instance.customer.pax)
-
+    
+    instance.transfer_cost += (instance.transfers.net_cost * instance.customer.pax)
+    
     instance.duration = instance.pb_nights + instance.hv_nights + instance.nl_nights
     instance.end_date = instance.start_date + datetime.timedelta(days=instance.duration)
         
