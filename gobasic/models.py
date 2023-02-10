@@ -213,10 +213,17 @@ class Transfer(models.Model):
     offered as add-on during trip creation. Cabs, Ferry, All Inclusive or Ala Carte.
     '''
 
-    customer_transfer = models.OneToOneField(Customer,on_delete=models.PROTECT, blank=True)
-    transfer_title = models.CharField(max_length=20, unique=True)
+    transfer_type_choices = [
+        
+        ('All','All Inclusive'),
+        ('Part','Partial'),
+        ('Frac','Fractional')
+    ] 
+
+    customer_transfer = models.OneToOneField(Customer,on_delete=models.PROTECT, blank=True, verbose_name="Customer->Transfer")
+    transfer_title = models.CharField(max_length=20, unique=True, verbose_name="Type", choices=transfer_type_choices)
     slug = models.SlugField(null=True, blank=True, unique=True)
-    description = models.CharField(max_length=250)
+    Inclusions = models.CharField(max_length=250)
     net_cost = models.PositiveIntegerField(validators=[MaxValueValidator(100000), MinValueValidator(1)], default=0)
     entry_last_updated = models.DateTimeField(auto_now=True, editable=False)
     entry_created = models.DateTimeField(auto_now_add=True, editable=False)
@@ -224,10 +231,10 @@ class Transfer(models.Model):
         ordering = ['transfer_title']
     
     def __repr__(self):
-        return f"{self.transfer_title} - {self.net_cost}"
+        return f"{self.customer_transfer.name} - {self.net_cost}"
         
     def __str__(self):
-        return f"{self.transfer_title}, {self.net_cost}"
+        return f"{self.customer_transfer.name}, {self.net_cost}"
 
     def get_absolute_url(self):
         return reverse('transfer-list')

@@ -1,6 +1,6 @@
 from django.urls import path, include
 from rest_framework import routers
-from gobasic.views import IndexView, ToolsView, logoutUser, CustomerCreate, LocationCreate, TransferCreate, TransferList, LocationEdit, LocationList, CustomerDelete, CustomerList, CustomerEdit,CustomerDetail, TripCreate, TripEdit, TripLists, TripDelete, TripDetail, HotelCreate, HotelDelete, HotelDetail, HotelEdit, HotelList, ActivityCreate, ActivityDelete, ActivityEdit, ActivityList, ActivityDetail,  loginPage 
+from gobasic.views import IndexView, ToolsView, logoutUser, CustomerCreate, LocationCreate, TransferCreate,TransferEdit, TransferList, LocationEdit, LocationList, CustomerDelete, CustomerList, CustomerEdit,CustomerDetail, TripCreate, TripEdit, TripLists, TripDelete, TripDetail, HotelCreate, HotelDelete, HotelDetail, HotelEdit, HotelList, ActivityCreate, ActivityDelete, ActivityEdit, ActivityList, ActivityDetail,  loginPage 
 
 
 urlpatterns = [
@@ -51,4 +51,5 @@ urlpatterns = [
 
     path('transfer/create', TransferCreate.as_view(), name="transfer-create"),
     path('transfer/list', TransferList.as_view(), name="transfer-list"),
+    path('transfer/update/<slug:slug>', TransferEdit.as_view(), name="transfer-update"),
 ]

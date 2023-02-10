@@ -50,7 +50,7 @@ def trip_final_cal(sender, instance, *args, **kwargs):
     '''
 
     
-    instance.transfer_cost += (instance.transfers.net_cost * instance.customer.pax)
+    instance.transfer_cost = instance.transfers.net_cost
     
     instance.duration = instance.pb_nights + instance.hv_nights + instance.nl_nights
     instance.end_date = instance.start_date + datetime.timedelta(days=instance.duration)
