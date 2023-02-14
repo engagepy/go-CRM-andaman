@@ -27,7 +27,8 @@ Send mail function is defined below to assist with outgoing email communication.
 #         recipient_list=[email]
 #         )
 #     pass
-# Base User Models Here.
+
+# Base User Models Here & Groups Here
 
 class User(AbstractUser):
     is_owner = models.BooleanField(verbose_name='Is Owner ?', default=False)
