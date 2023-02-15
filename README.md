@@ -1,4 +1,4 @@
-# Go CRM - Travel Operator Specific CRM©
+# Go CRM - SMBs Travel Operator's CRM©
 ![Build Django](https://github.com/astratechz/travelco_crm/actions/workflows/django.yml/badge.svg)
 
 #### Create `.env` in your root project directory: `python3 -m venv env`
@@ -22,9 +22,10 @@
 - Store Hotels and Rates: 
 - Store Activities and Excursions
 - Store Customers 
-- Ensure Trip Forms Relay Destination(island) Specific Data
 - Create Trips
 - Create Login 
+- Manage Staff Leads and Sales
+- Output .pdf itineraries with images
 - Deploy for Go Team
 ```
 
