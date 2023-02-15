@@ -47,14 +47,15 @@
 - Market with Subscription Feature
 ```
 
+# Core Functionalities
+                                                                                                                
+<img width="837" alt="Screenshot 2023-01-10 at 03 08 50" src="https://user-images.githubusercontent.com/42845567/211651077-6c47bb6d-ee0a-4840-b11f-38435be120d5.png">
+
 # Road Map:
 
 <img width="1103" alt="Screenshot 2023-01-10 at 03 05 54" src="https://user-images.githubusercontent.com/42845567/211652883-8078aca4-fe9d-44a8-b3e1-c79ce4c0f7a1.png">
 
 
 
-# Core Functionalities
-                                                                                                                
-<img width="837" alt="Screenshot 2023-01-10 at 03 08 50" src="https://user-images.githubusercontent.com/42845567/211651077-6c47bb6d-ee0a-4840-b11f-38435be120d5.png">
 
 
