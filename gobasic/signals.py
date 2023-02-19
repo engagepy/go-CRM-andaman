@@ -8,10 +8,6 @@ from django.dispatch import receiver
 from .models import Trip, Customer
 import datetime
 
-
-
-
-
 '''
 Trip.Model 'pre-save' call --> def 'trip_final_cal'
 Objective: Aims to perform all neccessary logic to arrive at the
@@ -29,6 +25,7 @@ def trip_final_cal(sender, instance, *args, **kwargs):
 
     instance.hotel_cost = 0
     instance.transfer_cost = 0
+    
     if not instance.hotel_pb or instance.pb_rooms == 0 or instance.pb_nights == 0:
         instance.pb_rooms = 0
         instance.pb_nights = 0
@@ -49,15 +46,14 @@ def trip_final_cal(sender, instance, *args, **kwargs):
     improved shortly.
     '''
 
-    
     instance.transfer_cost = instance.transfers.net_cost
-    
     instance.duration = instance.pb_nights + instance.hv_nights + instance.nl_nights
     instance.end_date = instance.start_date + datetime.timedelta(days=instance.duration)
         
     '''
     Checks & Logic for "hotel room * nights = hotel_cost". 
     Ensure no null/zero value gets processed.
+    CP, MAP, AP meal plan business logic.
     '''
 
     if instance.hv_nights > 0 and instance.hv_rooms > 0:
@@ -80,7 +76,6 @@ def trip_final_cal(sender, instance, *args, **kwargs):
     instance.profit = (instance.total_trip_cost * 1.1) - instance.total_trip_cost
     instance.tax = (instance.profit * 1.18) - instance.profit
     instance.total_trip_cost += instance.profit + instance.tax
-
 
 '''
 Trip.Model 'm2m_changed' call --> def 'activity_final_cal'
@@ -105,7 +100,6 @@ def activity_final_cal(sender, instance, action,model,pk_set, *args, **kwargs):
 Need to add signal that factors -> Customer.pax changed during or post trip creation.
 Should auto-recalculate trip cost, when customer.pax is udpated/edited. 
 '''
-
 
 # @receiver(pre_save, sender=Customer)
 # def customer_final_cal(sender, instance, *args, **kwargs):

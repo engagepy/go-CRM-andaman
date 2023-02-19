@@ -1,4 +1,4 @@
-# Go CRM - SMBs Travel Operator's CRM©
+# GoCRM - Travel SMBs CRM ©
 ![Build Django](https://github.com/astratechz/travelco_crm/actions/workflows/django.yml/badge.svg)
 
 #### Create `.env` in your root project directory: `python3 -m venv env`
