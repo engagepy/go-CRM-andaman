@@ -20,8 +20,6 @@ from django.conf import settings
 from threading import Thread
 import datetime
 
-
-
 # def send(email, username):
 #     #Calculating Time, and limiting decimals
 #     x = datetime.datetime.now()
@@ -73,8 +71,7 @@ def logoutUser(request):
     return redirect('login')
 
 
-class IndexView(LoginRequiredMixin, PermissionRequiredMixin, TemplateView):
-    permission_required = 'gobasic.view_customer'
+class IndexView(LoginRequiredMixin, TemplateView):
     # permission_denied_message = 'Access Denied'
     login_url = 'login/'
     redirect_field_name = 'index'
@@ -100,6 +97,7 @@ class CustomerCreate(LoginRequiredMixin,PermissionRequiredMixin, CreateView):
     form_class = CustomerCreateForm
     template_name = 'gobasic/create_form.html'
 
+
 class CustomerEdit(LoginRequiredMixin,PermissionRequiredMixin, UpdateView):
     permission_required = 'gobasic.change_customer'
     login_url = '/login/'
@@ -119,7 +117,7 @@ class CustomerDelete(LoginRequiredMixin,PermissionRequiredMixin, DeleteView):
 
 
 class CustomerList(LoginRequiredMixin,PermissionRequiredMixin, ListView):
-    permission_required = 'gobasic.delete_customer'
+    permission_required = 'gobasic.view_customer'
     login_url = '/login/'
     redirect_field_name = 'index'
     login_required = True
@@ -128,10 +126,7 @@ class CustomerList(LoginRequiredMixin,PermissionRequiredMixin, ListView):
     paginate_by = 10 
 
 
-
-
-
-# Transfer Create View Here : 
+# Transfer Views Here : 
 
 class TransferCreate(LoginRequiredMixin, PermissionRequiredMixin, CreateView):
     permission_required = 'gobasic.add_transfer'
@@ -151,6 +146,7 @@ class TransferList(LoginRequiredMixin, PermissionRequiredMixin, ListView):
     template_name = 'gobasic/transfer_list.html'
     paginate_by = 10 
 
+
 class TransferEdit(LoginRequiredMixin,PermissionRequiredMixin, UpdateView):
     permission_required = 'gobasic.change_transfer'
     login_url = '/login/'
@@ -160,7 +156,7 @@ class TransferEdit(LoginRequiredMixin,PermissionRequiredMixin, UpdateView):
     template_name = 'gobasic/create_form.html'
 
 
-# Trip Views Below
+# Trip Views Here
 
 class TripCreate(LoginRequiredMixin, PermissionRequiredMixin, CreateView):
     permission_required = 'gobasic.add_trip'
@@ -207,9 +203,7 @@ class TripLists(LoginRequiredMixin,PermissionRequiredMixin, ListView):
         return context    
 
 
-  
-
-# Hotel PB Views Below    
+# Hotel Views Below    
 
 class HotelCreate(LoginRequiredMixin, PermissionRequiredMixin, CreateView):
     permission_required = 'gobasic.add_hotel'
@@ -219,28 +213,9 @@ class HotelCreate(LoginRequiredMixin, PermissionRequiredMixin, CreateView):
     form_class = HotelCreateForm
     template_name = 'gobasic/create_form.html'
 
-class LocationCreate(LoginRequiredMixin, CreateView):
-    login_url = '/login/'
-    redirect_field_name = 'index'
-    model = Locations
-    form_class = LocationCreateForm
-    template_name = 'gobasic/create_form.html'
 
-class LocationList(LoginRequiredMixin, ListView):
-    login_url = '/login/'
-    redirect_field_name = 'index'
-    model = Locations
-    template_name = 'gobasic/location_list.html'
-    paginate_by = 10 
-
-class LocationEdit(LoginRequiredMixin, UpdateView):
-    login_url = '/login/'
-    redirect_field_name = 'index'
-    model = Locations
-    form_class = LocationCreateForm
-    template_name = 'gobasic/create_form.html'
-
-class HotelEdit(LoginRequiredMixin, UpdateView):
+class HotelEdit(LoginRequiredMixin, PermissionRequiredMixin, UpdateView):
+    permission_required = 'gobasic.change_hotel'
     login_url = '/login/'
     redirect_field_name = 'index'
     model = Hotel
@@ -248,7 +223,8 @@ class HotelEdit(LoginRequiredMixin, UpdateView):
     template_name = 'gobasic/create_form.html'
 
 
-class HotelDelete(LoginRequiredMixin, DeleteView):
+class HotelDelete(LoginRequiredMixin, PermissionRequiredMixin, DeleteView):
+    permission_required = 'gobasic.delete_hotel'
     login_url = '/login/'
     redirect_field_name = 'index'
     model = Hotel
@@ -256,7 +232,8 @@ class HotelDelete(LoginRequiredMixin, DeleteView):
     success_url = reverse_lazy("index")
 
 
-class HotelList(LoginRequiredMixin, ListView):
+class HotelList(LoginRequiredMixin, PermissionRequiredMixin, ListView):
+    permission_required = 'gobasic.view_hotel'
     login_url = '/login/'
     redirect_field_name = 'index'
     model = Hotel
@@ -264,15 +241,38 @@ class HotelList(LoginRequiredMixin, ListView):
     paginate_by = 10 
 
 
-class HotelDetail(LoginRequiredMixin, DetailView):
+# Locations Views Here
+class LocationCreate(LoginRequiredMixin, PermissionRequiredMixin, CreateView):
+    permission_required = 'gobasic.add_location'
     login_url = '/login/'
     redirect_field_name = 'index'
-    model = Hotel
-    template_name = 'gobasic/hotel_detail.html'
+    model = Locations
+    form_class = LocationCreateForm
+    template_name = 'gobasic/create_form.html'
 
-# Activity PB Views Below  
 
-class ActivityCreate(LoginRequiredMixin, CreateView):
+class LocationList(LoginRequiredMixin, PermissionRequiredMixin, ListView):
+    permission_required = 'gobasic.view_location'
+    login_url = '/login/'
+    redirect_field_name = 'index'
+    model = Locations
+    template_name = 'gobasic/location_list.html'
+    paginate_by = 10 
+
+
+class LocationEdit(LoginRequiredMixin, PermissionRequiredMixin, UpdateView):
+    permission_required = 'gobasic.change_location'
+    login_url = '/login/'
+    redirect_field_name = 'index'
+    model = Locations
+    form_class = LocationCreateForm
+    template_name = 'gobasic/create_form.html'
+
+
+# Activity Views Below  
+
+class ActivityCreate(LoginRequiredMixin,PermissionRequiredMixin, CreateView):
+    permission_required = 'gobasic.add_activity'
     login_url = '/login/'
     redirect_field_name = 'index'
     model = Activity
@@ -280,29 +280,28 @@ class ActivityCreate(LoginRequiredMixin, CreateView):
     template_name = 'gobasic/create_form.html'
 
 
-class ActivityEdit(LoginRequiredMixin, UpdateView):
+class ActivityEdit(LoginRequiredMixin,PermissionRequiredMixin, UpdateView):
+    permission_required = 'gobasic.change_activity'
     login_url = '/login/'
     redirect_field_name = 'index'
     model = Activity
     form_class = ActivityCreateForm
     template_name = 'gobasic/activity_create_form.html'
 
-class ActivityDelete(LoginRequiredMixin, DeleteView):
+
+class ActivityDelete(LoginRequiredMixin, PermissionRequiredMixin, DeleteView):
+    permission_required = 'gobasic.delete_activity'
     login_url = '/login/'
     redirect_field_name = 'index'
     model = Activity
     template_name = 'gobasic/activity_delete.html'
     success_url = reverse_lazy("index")
 
-class ActivityList(LoginRequiredMixin, ListView):
+
+class ActivityList(LoginRequiredMixin, PermissionRequiredMixin, ListView):
+    permission_required = 'gobasic.view_activity'
     login_url = '/login/'
     redirect_field_name = 'index'
     model = Activity
     template_name = 'wheelio/activity_list.html'
     paginate_by = 10 
-
-class ActivityDetail(LoginRequiredMixin, DetailView):
-    login_url = '/login/'
-    redirect_field_name = 'index'   
-    model = Activity
-    template_name = 'gobasic/acitivity_detail.html'
