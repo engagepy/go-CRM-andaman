@@ -1,13 +1,19 @@
 from django.db import models
 from django.utils import timezone
 from django.urls import reverse
-from django.contrib.auth.models import AbstractUser
+from django.contrib.auth.models import AbstractUser, Group, Permission
+from django.contrib.contenttypes.models import ContentType
 from django.template.defaultfilters import slugify
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.core.mail import send_mail
 from django.conf import settings
 from threading import Thread
 import datetime
+
+owner_group, created = Group.objects.get_or_create(name="Owner")
+manager_group, created = Group.objects.get_or_create(name="Manager")
+employee_group, created = Group.objects.get_or_create(name="Employee")
+
 
 '''
 Send mail function is defined below to assist with outgoing email communication. 
@@ -34,8 +40,6 @@ class User(AbstractUser):
     is_owner = models.BooleanField(verbose_name='Is Owner ?', default=False)
     is_manager = models.BooleanField(verbose_name='Is Manager ?', default=False)
     is_employee = models.BooleanField(verbose_name='Is Employee ?', default=False)
-    is_intern = models.BooleanField(verbose_name='Is Intern ?', default=False)
-    is_customer = models.BooleanField(verbose_name='Is Customer ?', default=False)
 
 
 #Base Data Models Here.
