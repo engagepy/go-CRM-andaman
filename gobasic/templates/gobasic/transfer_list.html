@@ -20,8 +20,8 @@
     <tbody>
     {% for c in object_list %}
         <tr>
-            <th scope="row">{{c.transfer_title}}</th>
-            <td>{{c.description}}</td>
+            <th scope="row">{{c.customer_transfer}}</th>
+            <td>{{c.transfer_title}}</td>
             <td>{{c.net_cost}}</td>
             <td><a href="{%url 'transfer-update' c.slug%}"><button class="btn">🖋️</button></a></td>
         </tr>

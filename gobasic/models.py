@@ -41,6 +41,7 @@ class User(AbstractUser):
     is_manager = models.BooleanField(verbose_name='Is Manager ?', default=False)
     is_employee = models.BooleanField(verbose_name='Is Employee ?', default=False)
 
+
 #Base Data Models Here.
 class Locations(models.Model):
 

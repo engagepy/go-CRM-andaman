@@ -31,7 +31,7 @@ SECRET_KEY = os.environ['APP_PASSWORD']
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['astratechz.pagekite.me','127.0.0.1', 'localhost']
 
 
 # Application definition
@@ -122,6 +122,7 @@ USE_I18N = True
 
 USE_TZ = True
 
+
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.0/howto/static-files/
 
@@ -134,7 +135,7 @@ AUTH_USER_MODEL = 'gobasic.User'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 CORS_ALLOW_ALL_ORIGINS = True
-CSRF_TRUSTED_ORIGINS = []
+CSRF_TRUSTED_ORIGINS = ['https://astratechz.pagekite.me']
 
 # REST_FRAMEWORK = {
 
