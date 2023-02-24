@@ -10,9 +10,7 @@ from django.conf import settings
 from threading import Thread
 import datetime
 
-owner_group, created = Group.objects.get_or_create(name="Owner")
-manager_group, created = Group.objects.get_or_create(name="Manager")
-employee_group, created = Group.objects.get_or_create(name="Employee")
+
 
 
 '''
@@ -348,3 +346,4 @@ class Trip(models.Model):
         if not self.slug:
             self.slug = slugify(self.customer.name)
         return super().save(*args, **kwargs) 
+
