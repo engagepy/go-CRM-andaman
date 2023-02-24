@@ -1,6 +1,5 @@
 from .models import Hotel, Activity, Customer, Trip , Locations, Transfer
 from django import forms
-from django.forms import modelformset_factory
 
 class HotelCreateForm(forms.ModelForm):
     class Meta:
