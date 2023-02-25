@@ -31,7 +31,7 @@ SECRET_KEY = os.environ['APP_PASSWORD']
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['astratechz.pagekite.me','127.0.0.1', 'localhost']
+ALLOWED_HOSTS = ['crm']
 
 
 # Application definition
