@@ -45,10 +45,13 @@ def trip_final_cal(sender, instance, *args, **kwargs):
     integer assignment. Hard codes product values are a strict No. To be 
     improved shortly.
     '''
-
-    instance.transfer_cost = instance.transfers.net_cost
-    instance.duration = instance.pb_nights + instance.hv_nights + instance.nl_nights
-    instance.end_date = instance.start_date + datetime.timedelta(days=instance.duration)
+    if instance.transfers != None:
+        instance.transfer_cost = instance.transfers.net_cost
+        instance.duration = instance.pb_nights + instance.hv_nights + instance.nl_nights
+        instance.end_date = instance.start_date + datetime.timedelta(days=instance.duration)
+    else:
+        instance.duration = instance.pb_nights + instance.hv_nights + instance.nl_nights
+        instance.end_date = instance.start_date + datetime.timedelta(days=instance.duration)
         
     '''
     Checks & Logic for "hotel room * nights = hotel_cost". 
