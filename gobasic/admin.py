@@ -3,7 +3,7 @@ from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 from django.contrib.auth.models import User
 from .models import Customer, Hotel, Activity, Trip, User, Locations, Profile
 
-
+# So this is the second users comments, lets see where they fit in ! 
 class ProfileInline(admin.StackedInline):
     model = Profile
     can_delete = False
