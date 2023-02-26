@@ -3,7 +3,7 @@ from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 from django.contrib.auth.models import User
 from .models import Customer, Hotel, Activity, Trip, User, Locations, Profile
 
-
+# Connecting one-to-one relationship of User model to Profile model -> for Admin Panel display
 class ProfileInline(admin.StackedInline):
     model = Profile
     can_delete = False
@@ -12,10 +12,12 @@ class ProfileInline(admin.StackedInline):
 class UserAdmin(BaseUserAdmin):
     inlines = (ProfileInline, )
 
+# Important Step is to unregister User model from Admin Panel
+
 admin.site.unregister(User)
 
+# Register your models as usual here.
 
-# Register your models here.
 admin.site.register(User, UserAdmin)
 admin.site.register(Customer)
 admin.site.register(Trip)
