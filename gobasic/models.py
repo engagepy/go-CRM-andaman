@@ -1,8 +1,7 @@
 from django.db import models
 from django.utils import timezone
 from django.urls import reverse
-from django.contrib.auth.models import AbstractUser, Group, Permission
-from django.contrib.contenttypes.models import ContentType
+from django.contrib.auth.models import User
 from django.template.defaultfilters import slugify
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.core.mail import send_mail
@@ -34,10 +33,19 @@ Send mail function is defined below to assist with outgoing email communication.
 
 # Base User Models Here & Groups Here
 
-class User(AbstractUser):
-    is_owner = models.BooleanField(verbose_name='Is Owner ?', default=False)
-    is_manager = models.BooleanField(verbose_name='Is Manager ?', default=False)
-    is_employee = models.BooleanField(verbose_name='Is Employee ?', default=False)
+class Profile(models.Model):
+    role_choices = [
+    ('int', 'Intern'),
+    ('emp', 'Employee'),
+    ('man', 'Manager'),
+    ('vp', 'Vice President'),
+    ('dir', 'Director'),
+] 
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    role = models.CharField(max_length=3, choices=role_choices, default='emp')
+    phone = models.CharField(max_length=10, null=True, blank=True)
+
+
 
 
 #Base Data Models Here.
