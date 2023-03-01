@@ -1,8 +1,8 @@
 from django.db import models
 from django.utils import timezone
 from django.urls import reverse
-from django.contrib.auth.models import User
-from django.template.defaultfilters import slugify
+from django.contrib.auth.models import User, Group
+from django_extensions.db.fields import AutoSlugField
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.core.mail import send_mail
 from django.conf import settings
@@ -48,11 +48,12 @@ class Profile(models.Model):
 
 
 
+
 #Base Data Models Here.
 class Locations(models.Model):
 
     location = models.CharField(max_length=30, unique=True, primary_key=True)
-    slug = models.SlugField(null=True, blank=True, unique=True)
+    slug = AutoSlugField(populate_from='location', unique=True)
     
 
     def __repr__(self):
@@ -64,10 +65,6 @@ class Locations(models.Model):
     def get_absolute_url(self):
         return reverse("location-list")
     
-    def save(self, *args, **kwargs):  # new
-        if not self.slug:
-            self.slug = slugify(self.location)
-        return super().save(*args, **kwargs)
 
 class Hotel(models.Model):
 
@@ -93,7 +90,7 @@ class Hotel(models.Model):
 ] 
 
     hotel_name = models.CharField(max_length=25)
-    slug = models.SlugField(null=True, blank=True, unique=True)
+    slug = AutoSlugField(populate_from='hotel_name', unique=True)
     customer_rating = models.CharField(max_length=1, choices = ratings, default='1' )
     room_name = models.CharField(max_length=15)
     room_categories = models.CharField(max_length=12, choices=room_categories, default='1')
@@ -116,11 +113,6 @@ class Hotel(models.Model):
 
     def get_absolute_url(self):
         return reverse('hotels-list')
-    
-    def save(self, *args, **kwargs):  # new
-        if not self.slug:
-            self.slug = slugify(self.hotel_name)
-        return super().save(*args, **kwargs)    
 
 class Activity(models.Model):
 
@@ -140,7 +132,7 @@ class Activity(models.Model):
     ('6D', '6 Day'),
 ] 
     activity_title = models.CharField(max_length=20, unique=True)
-    slug = models.SlugField(null=True, blank=True, unique=True)
+    slug = AutoSlugField(populate_from='activity_title', unique=True)
     acitivity_duration = models.CharField(max_length=2, choices = acitivity_duration )
     activity_location = models.ForeignKey(Locations, on_delete=models.PROTECT)
     description = models.CharField(max_length=250)
@@ -159,11 +151,6 @@ class Activity(models.Model):
 
     def get_absolute_url(self):
         return reverse('activitys-list')
-
-    def save(self, *args, **kwargs):  # new
-        if not self.slug:
-            self.slug = slugify(self.activity_title)
-        return super().save(*args, **kwargs) 
 
 # Customer Model Here
 
@@ -185,7 +172,7 @@ class Customer(models.Model):
 ] 
     
     name = models.CharField(max_length = 30)
-    slug = models.SlugField(null=True, blank=True, unique=True)
+    slug = AutoSlugField(populate_from='name', unique=True, editable=True)
     mobile = models.CharField(max_length=12, unique=True, help_text= '<em>10 digits</em>')
     email = models.EmailField(blank=True, unique=True)
     pax = models.PositiveSmallIntegerField(default=1)
@@ -210,10 +197,6 @@ class Customer(models.Model):
     def get_absolute_url(self):
         return reverse('customer-list')
     
-    def save(self, *args, **kwargs):  # new
-        if not self.slug:
-            self.slug = slugify(self.name)
-        return super().save(*args, **kwargs) 
 
 # Transfers model is here
 
@@ -233,7 +216,7 @@ class Transfer(models.Model):
 
     customer_transfer = models.OneToOneField(Customer,on_delete=models.PROTECT, blank=True, verbose_name="Customer->Transfer")
     transfer_title = models.CharField(max_length=20, unique=True, verbose_name="Type", choices=transfer_type_choices)
-    slug = models.SlugField(null=True, blank=True, unique=True)
+    slug = AutoSlugField(populate_from='transfer_title', unique=True, editable=True)
     Inclusions = models.CharField(max_length=250)
     net_cost = models.PositiveIntegerField(validators=[MaxValueValidator(100000), MinValueValidator(1)], default=0)
     entry_last_updated = models.DateTimeField(auto_now=True, editable=False)
@@ -250,10 +233,6 @@ class Transfer(models.Model):
     def get_absolute_url(self):
         return reverse('transfer-list')
 
-    def save(self, *args, **kwargs):  # new
-        if not self.slug:
-            self.slug = slugify(self.transfer_title)
-        return super().save(*args, **kwargs)
 
 
 # Trip Model Here
@@ -350,8 +329,6 @@ class Trip(models.Model):
     def get_absolute_url(self):
         return reverse('trip-lists')
 
-    def save(self, *args, **kwargs):  # new
-        if not self.slug:
-            self.slug = slugify(self.customer.name)
-        return super().save(*args, **kwargs) 
+
+
 
