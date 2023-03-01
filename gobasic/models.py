@@ -1,16 +1,12 @@
 from django.db import models
 from django.utils import timezone
 from django.urls import reverse
-from django.contrib.auth.models import User, Group
 from django_extensions.db.fields import AutoSlugField
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.core.mail import send_mail
 from django.conf import settings
 from threading import Thread
 import datetime
-
-
-
 
 '''
 Send mail function is defined below to assist with outgoing email communication. 
@@ -30,23 +26,6 @@ Send mail function is defined below to assist with outgoing email communication.
 #         recipient_list=[email]
 #         )
 #     pass
-
-# Base User Models Here & Groups Here
-
-class Profile(models.Model):
-    role_choices = [
-    ('int', 'Intern'),
-    ('emp', 'Employee'),
-    ('man', 'Manager'),
-    ('vp', 'Vice President'),
-    ('dir', 'Director'),
-] 
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
-    role = models.CharField(max_length=3, choices=role_choices, default='emp')
-    phone = models.CharField(max_length=10, null=True, blank=True)
-
-
-
 
 
 #Base Data Models Here.
