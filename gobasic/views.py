@@ -43,7 +43,7 @@ def loginPage(request):
         return redirect('index')
 
     if request.method == "POST":
-        username = request.POST.get('username')
+        username = request.POST.get('email')
         password = request.POST.get('password')
 
         try:
