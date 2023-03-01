@@ -2,10 +2,10 @@
 This document contains signal functions, attached via 
 @decorator. 
 '''
-
+from django.contrib.auth.models import User, Group
 from django.db.models.signals import pre_save, post_save, m2m_changed
 from django.dispatch import receiver
-from .models import Trip, Customer
+from .models import Trip
 import datetime
 
 '''
@@ -99,12 +99,5 @@ def activity_final_cal(sender, instance, action,model,pk_set, *args, **kwargs):
     instance.activity_cost = total
     instance.save()
 
-'''
-Need to add signal that factors -> Customer.pax changed during or post trip creation.
-Should auto-recalculate trip cost, when customer.pax is udpated/edited. 
-'''
 
-# @receiver(pre_save, sender=Customer)
-# def customer_final_cal(sender, instance, *args, **kwargs):
-#     activity_final_cal(sender, instance, action,model,pk_set, *args, **kwargs)
-    
+#If Customer.pax changes during or post trip creation. Auto-recalculate trip.activity_cost 
