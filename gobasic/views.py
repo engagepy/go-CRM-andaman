@@ -1,5 +1,7 @@
 #django imports
 from django.shortcuts import render, redirect
+#import request
+from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render, HttpResponse
 from django.views.generic.base import TemplateView
 from django.views.generic.list import ListView 
@@ -243,7 +245,7 @@ class HotelList(LoginRequiredMixin, PermissionRequiredMixin, ListView):
 
 # Locations Views Here
 class LocationCreate(LoginRequiredMixin, PermissionRequiredMixin, CreateView):
-    permission_required = 'gobasic.add_location'
+    permission_required = 'gobasic.add_locations'
     login_url = '/login/'
     redirect_field_name = 'index'
     model = Locations
@@ -252,7 +254,7 @@ class LocationCreate(LoginRequiredMixin, PermissionRequiredMixin, CreateView):
 
 
 class LocationList(LoginRequiredMixin, PermissionRequiredMixin, ListView):
-    permission_required = 'gobasic.view_location'
+    permission_required = 'gobasic.view_locations'
     login_url = '/login/'
     redirect_field_name = 'index'
     model = Locations
@@ -261,7 +263,7 @@ class LocationList(LoginRequiredMixin, PermissionRequiredMixin, ListView):
 
 
 class LocationEdit(LoginRequiredMixin, PermissionRequiredMixin, UpdateView):
-    permission_required = 'gobasic.change_location'
+    permission_required = 'gobasic.change_locations'
     login_url = '/login/'
     redirect_field_name = 'index'
     model = Locations
@@ -273,6 +275,7 @@ class LocationEdit(LoginRequiredMixin, PermissionRequiredMixin, UpdateView):
 
 class ActivityCreate(LoginRequiredMixin,PermissionRequiredMixin, CreateView):
     permission_required = 'gobasic.add_activity'
+    permission_denied_message = HttpResponseRedirect(redirect_to='gobasic/403.html')
     login_url = '/login/'
     redirect_field_name = 'index'
     model = Activity
