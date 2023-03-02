@@ -3,6 +3,7 @@ db.sqlite3
 gobasic/__pycache__/
 crm/__pycache__/
 venv
+profile_pics/
 gobasic/migrations
 pagekite.py 
 .env

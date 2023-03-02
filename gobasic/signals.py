@@ -5,7 +5,7 @@ This document contains signal functions, attached via
 from django.contrib.auth.models import User, Group
 from django.db.models.signals import pre_save, post_save, m2m_changed
 from django.dispatch import receiver
-from .models import Trip
+from .models import Trip, Customer
 import datetime
 
 '''
@@ -76,7 +76,7 @@ def trip_final_cal(sender, instance, *args, **kwargs):
             instance.hotel_cost += instance.nl_nights * (instance.hotel_nl.net_map * instance.nl_rooms) + instance.nl_add_on 
 
     instance.total_trip_cost = instance.activity_cost + instance.hotel_cost + instance.transfer_cost
-    instance.profit = (instance.total_trip_cost * 1.1) - instance.total_trip_cost
+    instance.profit = instance.total_trip_cost * float(instance.profit_percentage / 100)
     instance.tax = (instance.profit * 1.18) - instance.profit
     instance.total_trip_cost += instance.profit + instance.tax
 
@@ -98,6 +98,24 @@ def activity_final_cal(sender, instance, action,model,pk_set, *args, **kwargs):
     print(f"Activity Total Updated: {total}")
     instance.activity_cost = total
     instance.save()
+
+# write a receiver for customer.pax changes, recalculates trip.activity_cost
+
+@receiver(post_save, sender=Customer)
+def customer_pax_update(sender, instance, *args, **kwargs):
+    print('Customer pax updated')
+    trip = Trip.objects.filter(customer=instance)
+    for i in trip:
+        i.activity_cost = 0
+        i.save()
+        activity_selected = i.activities.all()
+        for j in activity_selected:
+            i.activity_cost += j.net_cost * instance.pax
+        i.save()
+
+
+        
+
 
 
 #If Customer.pax changes during or post trip creation. Auto-recalculate trip.activity_cost 
