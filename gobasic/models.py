@@ -168,7 +168,7 @@ class Customer(models.Model):
         ordering = []
 
     def __repr__(self):
-        return self.name
+        return f"{self.name} - {self.pax}"
 
     def __str__(self):
         return f"{self.name} - {self.pax}"
@@ -204,10 +204,10 @@ class Transfer(models.Model):
         ordering = ['transfer_title']
     
     def __repr__(self):
-        return f"{self.customer_transfer.name} - {self.net_cost}"
+        return f"{self.customer_transfer.name} - {self.customer_transfer.pax} - {self.net_cost}"
         
     def __str__(self):
-        return f"{self.customer_transfer.name}, {self.net_cost}"
+         return f"{self.customer_transfer.name} - {self.customer_transfer.pax} - {self.net_cost}"
 
     def get_absolute_url(self):
         return reverse('transfer-list')
@@ -251,10 +251,11 @@ class Trip(models.Model):
 ]
 
     customer = models.ForeignKey(Customer, null=True, on_delete=models.PROTECT)
-    slug = models.SlugField(null=True, blank=True, unique=True)
+    slug = AutoSlugField(populate_from='customer', unique=True, editable=True)
     lead = models.CharField(max_length=11, choices=lead_status, blank=True, null=True)
     start_date = models.DateTimeField(default= timezone.now, help_text='yyyy-mm-dd,hh--mm')
     end_date = models.DateTimeField(default = timezone.now)
+    profit_percentage = models.PositiveSmallIntegerField(validators=[MaxValueValidator(25), MinValueValidator(7)],default=11, verbose_name='Profit %', help_text='Profit %')
 
     #destination 1 hotels related fields below
     hotel_pb = models.ForeignKey(Hotel, verbose_name='Hotel Port Blair', related_name='pb_hotel_set', limit_choices_to={'location': 'Port Blair'}, on_delete=models.PROTECT, blank=True, null=True)
