@@ -194,14 +194,14 @@ class Transfer(models.Model):
     ] 
 
     customer_transfer = models.OneToOneField(Customer,on_delete=models.PROTECT, blank=True, verbose_name="Customer->Transfer")
-    transfer_title = models.CharField(max_length=20, unique=True, verbose_name="Type", choices=transfer_type_choices)
-    slug = AutoSlugField(populate_from='transfer_title', unique=True, editable=True)
+    transfer_type = models.CharField(max_length=20, verbose_name="Type", default="All Inclusive", choices=transfer_type_choices)
+    slug = AutoSlugField(populate_from='customer_transfer', unique=True, editable=True)
     Inclusions = models.CharField(max_length=250)
     net_cost = models.PositiveIntegerField(validators=[MaxValueValidator(100000), MinValueValidator(1)], default=0)
     entry_last_updated = models.DateTimeField(auto_now=True, editable=False)
     entry_created = models.DateTimeField(auto_now_add=True, editable=False)
     class Meta:
-        ordering = ['transfer_title']
+        ordering = ['transfer_type']
     
     def __repr__(self):
         return f"{self.customer_transfer.name} - {self.customer_transfer.pax} - {self.net_cost}"
