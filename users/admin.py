@@ -42,7 +42,7 @@ class CustomUserAdmin(UserAdmin):
     
 admin.site.register(User, CustomUserAdmin)
 
-## ------> Comment out the below code if you are creating a fresh db. Figure how not have to do this each time.
+# ------> Comment out the below code if you are creating a fresh db. Figure how not have to do this each time.
 
 intern, created = Group.objects.get_or_create(name='Intern')
 employee, created = Group.objects.get_or_create(name='Employee')
@@ -95,4 +95,3 @@ delete_transfer, created = Permission.objects.get_or_create(codename='delete_tra
 intern.permissions.add(view_customer, view_trip, view_activity, view_hotel, view_locations, view_transfer)
 employee.permissions.add(view_customer, view_trip, view_activity, view_hotel, view_locations, view_transfer, add_customer, add_trip, add_activity, add_hotel, add_transfer, change_customer, change_trip, change_activity, change_hotel, change_transfer)
 owner.permissions.add(view_customer, view_trip, view_activity, view_hotel, view_locations, view_transfer, add_customer, add_trip, add_activity, add_hotel, add_locations, add_transfer, change_customer, change_trip, change_activity, change_hotel, change_locations, change_transfer, delete_customer, delete_trip, delete_activity, delete_hotel, delete_locations, delete_transfer)
-
