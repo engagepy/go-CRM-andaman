@@ -7,6 +7,7 @@ from django.core.mail import send_mail
 from django.conf import settings
 from threading import Thread
 import datetime
+from users import models as usermodels
 
 '''
 Send mail function is defined below to assist with outgoing email communication. 
@@ -251,6 +252,7 @@ class Trip(models.Model):
 ]
 
     customer = models.ForeignKey(Customer, null=True, on_delete=models.PROTECT)
+    agent = models.ForeignKey(usermodels.User, null=True, on_delete=models.PROTECT)
     slug = AutoSlugField(populate_from='customer', unique=True, editable=True)
     lead = models.CharField(max_length=11, choices=lead_status, blank=True, null=True)
     start_date = models.DateTimeField(default= timezone.now, help_text='yyyy-mm-dd,hh--mm')
