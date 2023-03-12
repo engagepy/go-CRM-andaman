@@ -5,8 +5,6 @@ from django_extensions.db.fields import AutoSlugField
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.core.mail import send_mail
 from django.conf import settings
-from threading import Thread
-import datetime
 from users import models as usermodels
 
 '''
@@ -300,7 +298,7 @@ class Trip(models.Model):
     entry_last_updated = models.DateTimeField(auto_now=True, editable=False)
     entry_created = models.DateTimeField(auto_now_add=True, editable=False)
     class Meta:
-        ordering = []
+        ordering = ['entry_created']
 
     def __repr__(self):
         return f'{self.customer.name} for {self.duration} day/s'
