@@ -74,7 +74,7 @@ def logoutUser(request):
     return redirect('login')
 
 
-class IndexView(LoginRequiredMixin, TemplateView):
+class IndexView(TemplateView, LoginRequiredMixin):
     # permission_denied_message = 'Access Denied'
     login_url = 'login/'
     redirect_field_name = 'index'
@@ -85,7 +85,7 @@ class IndexView(LoginRequiredMixin, TemplateView):
         # Call the base implementation first to get a context
         context = super().get_context_data(**kwargs)
         # Add in extra QuerySets here
-        user = User.objects.filter(email=self.request.user).values('user_type').first()
+        user = User.objects.filter(email=self.request.user).first()
         all_trips = Trip.objects.all()
         all_trips_revenue = 0
         for trip in all_trips:
@@ -94,21 +94,19 @@ class IndexView(LoginRequiredMixin, TemplateView):
         context['all_trips_revenue'] = all_trips_revenue
         context['target_due_company'] = 1500000 - all_trips_revenue
 
-        user_type = user['user_type']
+        user_type = user.user_type
 
+        context['trips'] = all_trips
         if user_type != 1:
-            user_trips = Trip.objects.filter(agent=user)
+            user_trips = Trip.objects.filter(agent=user.user_type)
             user_revenue = 0
             for trip in user_trips:
                 if trip.booked:
                     user_revenue += trip.total_trip_cost
             context['user_revenue'] = user_revenue
             context['target_due_user'] = 1000000 - user_revenue
-            print(user_revenue)
             context['trips'] = user_trips
 
-        print(all_trips_revenue)
-        context['trips'] = all_trips
         context['name'] = "Go CRM"
         context['user_type'] = user_type
 
