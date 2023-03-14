@@ -22,10 +22,7 @@ from django.conf import settings
 from threading import Thread
 import datetime
 from users.models import User
-<<<<<<< HEAD
 from django.db.models import Count
-=======
->>>>>>> 1dce4eb3104170790a0986af96193d05ae7109d9
 
 # def send(email, username):
 #     #Calculating Time, and limiting decimals
@@ -107,7 +104,7 @@ class IndexView(TemplateView, LoginRequiredMixin):
 
         context['trips'] = all_trips
         if user_type != 1:
-            user_trips = Trip.objects.filter(agent=user.user_type)
+            user_trips = Trip.objects.filter(agent=user)
             user_revenue = 0
             for trip in user_trips:
                 if trip.booked:
