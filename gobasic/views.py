@@ -22,6 +22,7 @@ from django.conf import settings
 from threading import Thread
 import datetime
 from users.models import User
+from django.db.models import Count
 
 # def send(email, username):
 #     #Calculating Time, and limiting decimals
@@ -95,6 +96,11 @@ class IndexView(TemplateView, LoginRequiredMixin):
         context['target_due_company'] = 1500000 - all_trips_revenue
 
         user_type = user.user_type
+        all_sources = Customer.objects.values('source').annotate(count=Count('id'))
+        for source in all_sources:
+            src = source['source']
+            context[src] = source['count']
+        print(context)
 
         context['trips'] = all_trips
         if user_type != 1:
