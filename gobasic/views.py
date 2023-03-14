@@ -22,7 +22,10 @@ from django.conf import settings
 from threading import Thread
 import datetime
 from users.models import User
+<<<<<<< HEAD
 from django.db.models import Count
+=======
+>>>>>>> 1dce4eb3104170790a0986af96193d05ae7109d9
 
 # def send(email, username):
 #     #Calculating Time, and limiting decimals
