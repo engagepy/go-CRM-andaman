@@ -81,7 +81,7 @@ class Hotel(models.Model):
     entry_created = models.DateTimeField(auto_now_add=True, editable=False)
 
     class Meta:
-        ordering = ['customer_rating']
+        ordering = ['-entry_last_updated']
     
     def __repr__(self):
         return f"Hotel {self.hotel}, Location {self.location}, Room {self.room_categories} - {self.room.name}"
@@ -119,7 +119,7 @@ class Activity(models.Model):
     entry_last_updated = models.DateTimeField(auto_now=True, editable=False)
     entry_created = models.DateTimeField(auto_now_add=True, editable=False)
     class Meta:
-        ordering = ['activity_title']
+        ordering = ['-entry_last_updated']
     
     def __repr__(self):
         return f"{self.activity_title} - {self.activity_location} - {self.net_cost}"
@@ -164,7 +164,7 @@ class Customer(models.Model):
         super(Customer, self).save(*args, **kwargs)
 
     class Meta:
-        ordering = []
+        ordering = ['-entry_created']
 
     def __repr__(self):
         return f"{self.name} - {self.pax}"
@@ -200,7 +200,7 @@ class Transfer(models.Model):
     entry_last_updated = models.DateTimeField(auto_now=True, editable=False)
     entry_created = models.DateTimeField(auto_now_add=True, editable=False)
     class Meta:
-        ordering = ['transfer_type']
+        ordering = ['-transfer_type']
     
     def __repr__(self):
         return f"{self.customer_transfer.name} - {self.customer_transfer.pax} - {self.net_cost}"
@@ -298,7 +298,7 @@ class Trip(models.Model):
     entry_last_updated = models.DateTimeField(auto_now=True, editable=False)
     entry_created = models.DateTimeField(auto_now_add=True, editable=False)
     class Meta:
-        ordering = ['entry_created']
+        ordering = ['-entry_created']
 
     def __repr__(self):
         return f'{self.customer.name} for {self.duration} day/s'
