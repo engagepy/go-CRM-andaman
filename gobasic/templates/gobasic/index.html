@@ -169,13 +169,25 @@
             </div>
             <div class="mt-4 text-center small">
                 <span class="mr-2">
-                    <i class="fas fa-circle text-primary"></i> Direct
+                    <i class="fas fa-circle" style="color: #4e73df;"></i> WhatsApp
                 </span>
                 <span class="mr-2">
-                    <i class="fas fa-circle text-success"></i> Social
+                    <i class="fas fa-circle" style="color: #1cc88a;"></i> Email
                 </span>
                 <span class="mr-2">
-                    <i class="fas fa-circle text-info"></i> Referral
+                    <i class="fas fa-circle" style="color: #36b9cc;"></i> Phone
+                </span>
+                <span class="mr-2">
+                    <i class="fas fa-circle" style="color: #8B008B;"></i> Founder
+                </span>
+                <span class="mr-2">
+                    <i class="fas fa-circle" style="color: #FF8C00;"></i> Social Media
+                </span>
+                <span class="mr-2">
+                    <i class="fas fa-circle" style="color: #DC143C;"></i> Website
+                </span>
+                <span class="mr-2">
+                    <i class="fas fa-circle" style="color: #00FF7F;"></i> Other
                 </span>
             </div>
         </div>
@@ -230,5 +242,48 @@
 
 <!-- Page level custom scripts -->
 <script src="{% static 'gobasic/js/demo/chart-area-demo.js' %}"></script>
-<script src="{% static 'gobasic/js/demo/chart-pie-demo.js' %}"></script>
+<!-- <script src="{% static 'gobasic/js/demo/chart-pie-demo.js' %}"></script> -->
+<script>
+    // Set new default font family and font color to mimic Bootstrap's default styling
+Chart.defaults.global.defaultFontFamily = 'Nunito', '-apple-system,system-ui,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif';
+Chart.defaults.global.defaultFontColor = '#858796';
+var whatsapp = "{{whatsapp}}"
+var email = "{{email}}"
+var phone = "{{phone}}"
+var social = "{{social}}"
+var founder = "{{founder}}"
+var web = "{{website}}"
+var other = "{{other}}"
+// Pie Chart Example
+var ctx = document.getElementById("myPieChart");
+var myPieChart = new Chart(ctx, {
+  type: 'doughnut',
+  data: {
+    labels: ["WhatsApp", "Email", "Phone", "Founder", "Social Media", "Website", "Other"],
+    datasets: [{
+      data: [whatsapp, email, phone, founder, social, web, other],
+      backgroundColor: ['#4e73df', '#1cc88a', '#36b9cc', '#8B008B', '#FF8C00', '#DC143C', '#00FF7F'],
+      hoverBackgroundColor: ['#2e59d9', '#17a673', '#2c9faf', '#00CED1', '#FFD700', '#808000', '#FFA07A'],
+      hoverBorderColor: "rgba(234, 236, 244, 1)",
+    }],
+  },
+  options: {
+    maintainAspectRatio: false,
+    tooltips: {
+      backgroundColor: "rgb(255,255,255)",
+      bodyFontColor: "#858796",
+      borderColor: '#dddfeb',
+      borderWidth: 1,
+      xPadding: 15,
+      yPadding: 15,
+      displayColors: false,
+      caretPadding: 10,
+    },
+    legend: {
+      display: false
+    },
+    cutoutPercentage: 80,
+  },
+});
+</script>
 {% endblock %}
