@@ -75,7 +75,7 @@ def logoutUser(request):
     return redirect('login')
 
 
-class IndexView(TemplateView, LoginRequiredMixin):
+class IndexView(LoginRequiredMixin, TemplateView):
     # permission_denied_message = 'Access Denied'
     login_url = 'login/'
     redirect_field_name = 'index'
