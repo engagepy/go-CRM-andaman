@@ -20,9 +20,9 @@
 - Navigate to manage.py in terminal. Once in correct directory:
 
         python manage.py makemigrations
-        python manage.py migrate --run-syncdb #check if default sqlite3.db is created in project folder
-        python manage.py createsuper -> follow instructions
-        python manage.py runserver -> User credentials created in browser
+        python manage.py migrate --run-syncdb 
+        python manage.py createsuper 
+        python manage.py runserver 
         Do try 127.0.0.1:8000/admin
         
 [Gmail App Password Support](https://support.google.com/mail/answer/185833?hl=en-GB) 
