@@ -5,8 +5,7 @@ from django_extensions.db.fields import AutoSlugField
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.core.mail import send_mail
 from django.conf import settings
-from threading import Thread
-import datetime
+from users import models as usermodels
 
 '''
 Send mail function is defined below to assist with outgoing email communication. 
@@ -82,7 +81,7 @@ class Hotel(models.Model):
     entry_created = models.DateTimeField(auto_now_add=True, editable=False)
 
     class Meta:
-        ordering = ['customer_rating']
+        ordering = ['-entry_last_updated']
     
     def __repr__(self):
         return f"Hotel {self.hotel}, Location {self.location}, Room {self.room_categories} - {self.room.name}"
@@ -120,7 +119,7 @@ class Activity(models.Model):
     entry_last_updated = models.DateTimeField(auto_now=True, editable=False)
     entry_created = models.DateTimeField(auto_now_add=True, editable=False)
     class Meta:
-        ordering = ['activity_title']
+        ordering = ['-entry_last_updated']
     
     def __repr__(self):
         return f"{self.activity_title} - {self.activity_location} - {self.net_cost}"
@@ -165,7 +164,7 @@ class Customer(models.Model):
         super(Customer, self).save(*args, **kwargs)
 
     class Meta:
-        ordering = []
+        ordering = ['-entry_created']
 
     def __repr__(self):
         return f"{self.name} - {self.pax}"
@@ -201,7 +200,7 @@ class Transfer(models.Model):
     entry_last_updated = models.DateTimeField(auto_now=True, editable=False)
     entry_created = models.DateTimeField(auto_now_add=True, editable=False)
     class Meta:
-        ordering = ['transfer_type']
+        ordering = ['-transfer_type']
     
     def __repr__(self):
         return f"{self.customer_transfer.name} - {self.customer_transfer.pax} - {self.net_cost}"
@@ -251,6 +250,7 @@ class Trip(models.Model):
 ]
 
     customer = models.ForeignKey(Customer, null=True, on_delete=models.PROTECT)
+    agent = models.ForeignKey(usermodels.User, null=True, on_delete=models.PROTECT)
     slug = AutoSlugField(populate_from='customer', unique=True, editable=True)
     lead = models.CharField(max_length=11, choices=lead_status, blank=True, null=True)
     start_date = models.DateTimeField(default= timezone.now, help_text='yyyy-mm-dd,hh--mm')
@@ -298,7 +298,7 @@ class Trip(models.Model):
     entry_last_updated = models.DateTimeField(auto_now=True, editable=False)
     entry_created = models.DateTimeField(auto_now_add=True, editable=False)
     class Meta:
-        ordering = []
+        ordering = ['-entry_created']
 
     def __repr__(self):
         return f'{self.customer.name} for {self.duration} day/s'
@@ -308,7 +308,3 @@ class Trip(models.Model):
 
     def get_absolute_url(self):
         return reverse('trip-lists')
-
-
-
-

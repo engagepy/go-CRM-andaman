@@ -31,7 +31,7 @@
               <div class="col mr-2">
                   <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
                       Earnings (Monthly)</div>
-                  <div class="h5 mb-0 font-weight-bold text-gray-800">₹2,00,000</div>
+                  <div class="h5 mb-0 font-weight-bold text-gray-800">₹{{all_trips_revenue}}</div>
               </div>
               <div class="col-auto">
                   <i class="fas fa-dollar-sign fa-2x text-gray-300"></i>
@@ -50,7 +50,7 @@
                   <div class="text-xs font-weight-bold text-info text-uppercase mb-1">Target Due (monthly)</div>
                   <div class="row no-gutters align-items-center">
                       <div class="col-auto">
-                          <div class="h5 mb-0 mr-3 font-weight-bold text-gray-800">₹13,00,000</div>
+                          <div class="h5 mb-0 mr-3 font-weight-bold text-gray-800">₹{{target_due_company}}</div>
                       </div>
                       <div class="col">
                           <div class="progress progress-sm mr-2">
@@ -70,6 +70,7 @@
 </div>
 </div>
 
+{% if user_type != 1 %}
 <div class="d-sm-flex align-items-center justify-content-between mb-4">
   <h1 class="h3 mb-0 text-gray-800">Your stats</h1>
 </div>
@@ -81,8 +82,8 @@
         <div class="card-body">
             <div class="row no-gutters align-items-center">
                 <div class="col mr-2">
-                    <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">Total trips</div>
-                    <div class="h5 mb-0 font-weight-bold text-gray-800">₹15,00,000</div>
+                    <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">Your Monthly Target</div>
+                    <div class="h5 mb-0 font-weight-bold text-gray-800">₹10,00,000</div>
                 </div>
                 <div class="col-auto">
                     <i class="fas fa-calendar fa-2x text-gray-300"></i>
@@ -99,7 +100,7 @@
             <div class="row no-gutters align-items-center">
                 <div class="col mr-2">
                     <div class="text-xs font-weight-bold text-success text-uppercase mb-1">Total Booked</div>
-                    <div class="h5 mb-0 font-weight-bold text-gray-800">₹2,00,000</div>
+                    <div class="h5 mb-0 font-weight-bold text-gray-800">₹{{user_revenue}}</div>
                 </div>
                 <div class="col-auto">
                     <i class="fas fa-dollar-sign fa-2x text-gray-300"></i>
@@ -115,10 +116,10 @@
         <div class="card-body">
             <div class="row no-gutters align-items-center">
                 <div class="col mr-2">
-                    <div class="text-xs font-weight-bold text-info text-uppercase mb-1">Amount</div>
+                    <div class="text-xs font-weight-bold text-info text-uppercase mb-1">Amount Due</div>
                     <div class="row no-gutters align-items-center">
                         <div class="col-auto">
-                            <div class="h5 mb-0 mr-3 font-weight-bold text-gray-800">₹13,00,000</div>
+                            <div class="h5 mb-0 mr-3 font-weight-bold text-gray-800">₹{{target_due_user}}</div>
                         </div>
                         <div class="col">
                             <div class="progress progress-sm mr-2">
@@ -137,6 +138,7 @@
     </div>
   </div>
 </div>
+{% endif %}
 
 <div class="row">
   <div class="col-xl-4 col-lg-5">
@@ -144,7 +146,7 @@
         <!-- Card Header - Dropdown -->
         <div
             class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-            <h6 class="m-0 font-weight-bold text-primary">Revenue Sources</h6>
+            <h6 class="m-0 font-weight-bold text-primary">Customer Sources</h6>
             <div class="dropdown no-arrow">
                 <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink"
                     data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -167,13 +169,25 @@
             </div>
             <div class="mt-4 text-center small">
                 <span class="mr-2">
-                    <i class="fas fa-circle text-primary"></i> Direct
+                    <i class="fas fa-circle" style="color: #4e73df;"></i> WhatsApp
                 </span>
                 <span class="mr-2">
-                    <i class="fas fa-circle text-success"></i> Social
+                    <i class="fas fa-circle" style="color: #1cc88a;"></i> Email
                 </span>
                 <span class="mr-2">
-                    <i class="fas fa-circle text-info"></i> Referral
+                    <i class="fas fa-circle" style="color: #36b9cc;"></i> Phone
+                </span>
+                <span class="mr-2">
+                    <i class="fas fa-circle" style="color: #8B008B;"></i> Founder
+                </span>
+                <span class="mr-2">
+                    <i class="fas fa-circle" style="color: #FF8C00;"></i> Social Media
+                </span>
+                <span class="mr-2">
+                    <i class="fas fa-circle" style="color: #DC143C;"></i> Website
+                </span>
+                <span class="mr-2">
+                    <i class="fas fa-circle" style="color: #00FF7F;"></i> Other
                 </span>
             </div>
         </div>
@@ -183,26 +197,93 @@
 
 <div class="card shadow mb-4">
   <div class="card-header py-3">
-      <h6 class="m-0 font-weight-bold text-primary">Table</h6>
+      <h6 class="m-0 font-weight-bold text-primary">Trips Data</h6>
   </div>
   <div class="card-body">
       <div class="table-responsive">
           <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
               <thead>
                   <tr>
-                      <th>Name</th>
-                      <th>Position</th>
-                      <th>Office</th>
-                      <th>Age</th>
-                      <th>Start date</th>
-                      <th>Salary</th>
+                    <th><strong>Name</strong></th>
+                    <th><strong>Pax</strong></th>
+                    <th>PB</th>
+                    <th>HV</th>
+                    <th>NL</th>
+                    <th>Start</th>
+                    <th>Nights</th>
+                    <th>Total</th>
+                    <th>Profit</th>
+                    <th>Tax</th>
                   </tr>
               </thead>
               <tbody>
+                {% for trip in trips %}
+                <tr>
+                    <th>{{trip}}</th>
+                    <td>{{trip.customer.pax}}</td>
+                    <td>{{trip.hotel_pb.hotel_name}}</td>
+                    <td>{{trip.hotel_hv.hotel_name}}</td>
+                    <td>{{trip.hotel_nl.hotel_name}}</td>
+                    <td>{{trip.start_date}}</td>
+                    <td>{{trip.duration}}</td>
+                    <td>{{trip.total_trip_cost}}</td>
+                    <td>{{trip.profit}}</td>
+                    <td>{{trip.tax}}</td>
+                </tr>
+                {% endfor %}
               </tbody>
           </table>
       </div>
   </div>
 </div>
 
+<!-- Page level plugins -->
+<script src="{% static 'gobasic/vendor/chart.js/Chart.min.js' %}"></script>
+
+<!-- Page level custom scripts -->
+<script src="{% static 'gobasic/js/demo/chart-area-demo.js' %}"></script>
+<!-- <script src="{% static 'gobasic/js/demo/chart-pie-demo.js' %}"></script> -->
+<script>
+    // Set new default font family and font color to mimic Bootstrap's default styling
+Chart.defaults.global.defaultFontFamily = 'Nunito', '-apple-system,system-ui,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif';
+Chart.defaults.global.defaultFontColor = '#858796';
+var whatsapp = "{{whatsapp}}"
+var email = "{{email}}"
+var phone = "{{phone}}"
+var social = "{{social}}"
+var founder = "{{founder}}"
+var web = "{{website}}"
+var other = "{{other}}"
+// Pie Chart Example
+var ctx = document.getElementById("myPieChart");
+var myPieChart = new Chart(ctx, {
+  type: 'doughnut',
+  data: {
+    labels: ["WhatsApp", "Email", "Phone", "Founder", "Social Media", "Website", "Other"],
+    datasets: [{
+      data: [whatsapp, email, phone, founder, social, web, other],
+      backgroundColor: ['#4e73df', '#1cc88a', '#36b9cc', '#8B008B', '#FF8C00', '#DC143C', '#00FF7F'],
+      hoverBackgroundColor: ['#2e59d9', '#17a673', '#2c9faf', '#00CED1', '#FFD700', '#808000', '#FFA07A'],
+      hoverBorderColor: "rgba(234, 236, 244, 1)",
+    }],
+  },
+  options: {
+    maintainAspectRatio: false,
+    tooltips: {
+      backgroundColor: "rgb(255,255,255)",
+      bodyFontColor: "#858796",
+      borderColor: '#dddfeb',
+      borderWidth: 1,
+      xPadding: 15,
+      yPadding: 15,
+      displayColors: false,
+      caretPadding: 10,
+    },
+    legend: {
+      display: false
+    },
+    cutoutPercentage: 80,
+  },
+});
+</script>
 {% endblock %}
