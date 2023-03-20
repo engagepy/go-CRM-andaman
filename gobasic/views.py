@@ -100,7 +100,7 @@ class IndexView(LoginRequiredMixin, TemplateView):
         for source in all_sources:
             src = source['source']
             context[src] = source['count']
-        print(context)
+   
 
         context['trips'] = all_trips
         if user_type != 1:
