@@ -70,7 +70,7 @@
 </div>
 </div>
 
-{% if user_type != 1 and user_type != 7 %}
+{% if user_type != 1 %}
 <div class="d-sm-flex align-items-center justify-content-between mb-4">
   <h1 class="h3 mb-0 text-gray-800">Your stats</h1>
 </div>
@@ -99,7 +99,7 @@
         <div class="card-body">
             <div class="row no-gutters align-items-center">
                 <div class="col mr-2">
-                    <div class="text-xs font-weight-bold text-success text-uppercase mb-1">Total Booked</div>
+                    <div class="text-xs font-weight-bold text-success text-uppercase mb-1">Target Achieved</div>
                     <div class="h5 mb-0 font-weight-bold text-gray-800">₹{{user_revenue}}</div>
                 </div>
                 <div class="col-auto">
@@ -116,7 +116,7 @@
         <div class="card-body">
             <div class="row no-gutters align-items-center">
                 <div class="col mr-2">
-                    <div class="text-xs font-weight-bold text-info text-uppercase mb-1">Amount Due</div>
+                    <div class="text-xs font-weight-bold text-info text-uppercase mb-1">Target Due</div>
                     <div class="row no-gutters align-items-center">
                         <div class="col-auto">
                             <div class="h5 mb-0 mr-3 font-weight-bold text-gray-800">₹{{target_due_user}}</div>
@@ -141,8 +141,27 @@
 {% endif %}
 
 <div class="row">
+
+    <div class="col-xl-8 col-lg-7">
+
+        <!-- Area Chart -->
+        <div class="card shadow mb-4">
+            <div class="card-header py-3">
+                <h6 class="m-0 font-weight-bold text-primary">Performance Graph</h6>
+            </div>
+            <div class="card-body">
+                <div class="chart-area">
+                    <canvas id="myAreaChart"></canvas>
+
+
+                </div>
+            </div>
+        </div>
+    </div>    
+
   <div class="col-xl-4 col-lg-5">
     <div class="card shadow mb-4">
+
         <!-- Card Header - Dropdown -->
         <div
             class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
