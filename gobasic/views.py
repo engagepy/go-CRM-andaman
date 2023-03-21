@@ -93,7 +93,7 @@ class IndexView(LoginRequiredMixin, TemplateView):
             if trip.booked:
                 all_trips_revenue += trip.total_trip_cost
         context['all_trips_revenue'] = all_trips_revenue
-        context['target_due_company'] = 1500000 - all_trips_revenue
+        context['target_due_company'] = 3000000 - all_trips_revenue
 
         user_type = user.user_type
         all_sources = Customer.objects.values('source').annotate(count=Count('id'))
@@ -108,12 +108,13 @@ class IndexView(LoginRequiredMixin, TemplateView):
 
             user_revenue_monthly = {}
             for trip in user_trips:
-                trip_created_month = trip.entry_created.month
-                if trip_created_month in user_revenue_monthly:
-                    user_revenue_monthly[trip_created_month] += trip.total_trip_cost
-                else:
-                    user_revenue_monthly[trip_created_month] = 0
-                    user_revenue_monthly[trip_created_month] += trip.total_trip_cost
+                if trip.booked:
+                    trip_created_month = trip.entry_created.month
+                    if trip_created_month in user_revenue_monthly:
+                        user_revenue_monthly[trip_created_month] += trip.total_trip_cost
+                    else:
+                        user_revenue_monthly[trip_created_month] = 0
+                        user_revenue_monthly[trip_created_month] += trip.total_trip_cost
 
             context['user_revenue_monthly'] = user_revenue_monthly
 
