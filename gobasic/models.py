@@ -6,6 +6,7 @@ from django.core.validators import MaxValueValidator, MinValueValidator
 from django.core.mail import send_mail
 from django.conf import settings
 from users import models as usermodels
+from .managers import TripManager
 
 '''
 Send mail function is defined below to assist with outgoing email communication. 
@@ -299,6 +300,8 @@ class Trip(models.Model):
 
     entry_last_updated = models.DateTimeField(auto_now=True, editable=False)
     entry_created = models.DateTimeField(auto_now_add=True, editable=False)
+    
+    objects = TripManager()
     class Meta:
         ordering = ['-entry_created']
 
