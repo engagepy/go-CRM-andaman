@@ -86,7 +86,7 @@ class IndexView(LoginRequiredMixin, TemplateView):
         # Call the base implementation first to get a context
         context = super().get_context_data(**kwargs)
         # Add in extra QuerySets here
-        user = User.objects.filter(email=self.request.user).first()
+        user = User.objects.filter(first_name=self.request.user.first_name).first()
         all_trips = Trip.objects.all()
         all_trips_revenue = 0
         for trip in all_trips:
@@ -213,6 +213,8 @@ class TripCreate(LoginRequiredMixin, PermissionRequiredMixin, CreateView):
     template_name = 'gobasic/create_form.html'
 
 
+
+
 class TripEdit(LoginRequiredMixin, PermissionRequiredMixin, UpdateView):
     permission_required = 'gobasic.change_trip'
     login_url = '/login/'
@@ -220,8 +222,9 @@ class TripEdit(LoginRequiredMixin, PermissionRequiredMixin, UpdateView):
     model = Trip
     form_class = TripCreateForm
     template_name = 'gobasic/create_form.html'
+    context_object_name = 'trip'
 
-
+  
 class TripDelete(LoginRequiredMixin,PermissionRequiredMixin, DeleteView):
     permission_required = 'gobasic.delete_trip'
     login_url = '/login/'
