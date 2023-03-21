@@ -23,6 +23,7 @@ from threading import Thread
 import datetime
 from users.models import User
 from django.db.models import Count
+from django.db.models import Q
 
 # def send(email, username):
 #     #Calculating Time, and limiting decimals
@@ -100,21 +101,36 @@ class IndexView(LoginRequiredMixin, TemplateView):
         for source in all_sources:
             src = source['source']
             context[src] = source['count']
-   
 
         context['trips'] = all_trips
-        if user_type != 1:
+        if user_type != 1 and user_type != 7:
             user_trips = Trip.objects.filter(agent=user)
             user_revenue = 0
+
+            user_revenue_monthly = {}
             for trip in user_trips:
-                if trip.booked:
+                trip_created_month = trip.entry_created.month
+                if trip_created_month in user_revenue_monthly:
+                    user_revenue_monthly[trip_created_month] += trip.total_trip_cost
+                else:
+                    user_revenue_monthly[trip_created_month] = 0
+                    user_revenue_monthly[trip_created_month] += trip.total_trip_cost
+
+            context['user_revenue_monthly'] = user_revenue_monthly
+
+            for trip in user_trips:
+                curr_month = datetime.datetime.now().month
+                trip_created_month = trip.entry_created.month
+                if trip.booked and curr_month == trip_created_month:
                     user_revenue += trip.total_trip_cost
+
             context['user_revenue'] = user_revenue
             context['target_due_user'] = 1000000 - user_revenue
             context['trips'] = user_trips
 
         context['name'] = "Go CRM"
         context['user_type'] = user_type
+        print(user_revenue_monthly)
 
         return context
 
