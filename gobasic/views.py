@@ -95,24 +95,27 @@ class IndexView(LoginRequiredMixin, TemplateView):
         context['all_trips_revenue'] = all_trips_revenue
         context['target_due_company'] = 1500000 - all_trips_revenue
 
-        try:
-            user_type = user.user_type
+        user_type = user.user_type
+        all_sources = Customer.objects.values('source').annotate(count=Count('id'))
+        for source in all_sources:
+            src = source['source']
+            context[src] = source['count']
+   
 
-            context['trips'] = all_trips
-            if user_type != 1 or user_type != 7:
-                user_trips = Trip.objects.filter(agent=user)
-                user_revenue = 0
-                for trip in user_trips:
-                    if trip.booked:
-                        user_revenue += trip.total_trip_cost
-                context['user_revenue'] = user_revenue
-                context['target_due_user'] = 1000000 - user_revenue
-                context['trips'] = user_trips
+        context['trips'] = all_trips
+        if user_type != 1:
+            user_trips = Trip.objects.filter(agent=user)
+            user_revenue = 0
+            for trip in user_trips:
+                if trip.booked:
+                    user_revenue += trip.total_trip_cost
+            context['user_revenue'] = user_revenue
+            context['target_due_user'] = 1000000 - user_revenue
+            context['trips'] = user_trips
 
-            context['name'] = "Go CRM"
-            context['user_type'] = user_type
-        except:
-            pass
+        context['name'] = "Go CRM"
+        context['user_type'] = user_type
+
         return context
 
 
