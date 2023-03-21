@@ -23,7 +23,6 @@ from threading import Thread
 import datetime
 from users.models import User
 from django.db.models import Count
-from django.db.models import Q
 
 # def send(email, username):
 #     #Calculating Time, and limiting decimals
@@ -130,7 +129,6 @@ class IndexView(LoginRequiredMixin, TemplateView):
 
         context['name'] = "Go CRM"
         context['user_type'] = user_type
-        print(user_revenue_monthly)
 
         return context
 
