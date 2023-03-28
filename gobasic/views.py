@@ -86,14 +86,14 @@ class IndexView(LoginRequiredMixin, TemplateView):
         # Call the base implementation first to get a context
         context = super().get_context_data(**kwargs)
         # Add in extra QuerySets here
-        user = User.objects.filter(email=self.request.user).first()
+        user = User.objects.filter(first_name=self.request.user.first_name).first()
         all_trips = Trip.objects.all()
         all_trips_revenue = 0
         for trip in all_trips:
             if trip.booked:
                 all_trips_revenue += trip.total_trip_cost
         context['all_trips_revenue'] = all_trips_revenue
-        context['target_due_company'] = 1500000 - all_trips_revenue
+        context['target_due_company'] = 3000000 - all_trips_revenue
 
         user_type = user.user_type
         all_sources = Customer.objects.values('source').annotate(count=Count('id'))
@@ -105,22 +105,8 @@ class IndexView(LoginRequiredMixin, TemplateView):
         if user_type != 1 and user_type != 7:
             user_trips = Trip.objects.filter(agent=user)
             user_revenue = 0
-
-            user_revenue_monthly = {}
             for trip in user_trips:
-                trip_created_month = trip.entry_created.month
-                if trip_created_month in user_revenue_monthly:
-                    user_revenue_monthly[trip_created_month] += trip.total_trip_cost
-                else:
-                    user_revenue_monthly[trip_created_month] = 0
-                    user_revenue_monthly[trip_created_month] += trip.total_trip_cost
-
-            context['user_revenue_monthly'] = user_revenue_monthly
-
-            for trip in user_trips:
-                curr_month = datetime.datetime.now().month
-                trip_created_month = trip.entry_created.month
-                if trip.booked and curr_month == trip_created_month:
+                if trip.booked:
                     user_revenue += trip.total_trip_cost
 
             context['user_revenue'] = user_revenue
@@ -212,6 +198,8 @@ class TripCreate(LoginRequiredMixin, PermissionRequiredMixin, CreateView):
     template_name = 'gobasic/create_form.html'
 
 
+
+
 class TripEdit(LoginRequiredMixin, PermissionRequiredMixin, UpdateView):
     permission_required = 'gobasic.change_trip'
     login_url = '/login/'
@@ -219,8 +207,9 @@ class TripEdit(LoginRequiredMixin, PermissionRequiredMixin, UpdateView):
     model = Trip
     form_class = TripCreateForm
     template_name = 'gobasic/create_form.html'
+    context_object_name = 'trip'
 
-
+  
 class TripDelete(LoginRequiredMixin,PermissionRequiredMixin, DeleteView):
     permission_required = 'gobasic.delete_trip'
     login_url = '/login/'

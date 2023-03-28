@@ -20,12 +20,12 @@ class User(AbstractUser):
     user_type = models.PositiveSmallIntegerField(choices=user_constants.USER_TYPE_CHOICES, default=user_constants.INTERN)
 
     USERNAME_FIELD = 'email'
-    REQUIRED_FIELDS = []
+    REQUIRED_FIELDS = ['first_name', 'last_name']
 
     objects = UserManager()
 
     def __str__(self):
-        return self.email
+        return self.first_name + ' ' + self.last_name
     
     def get_full_name(self):
         return self.first_name + ' ' + self.last_name
