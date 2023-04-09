@@ -80,6 +80,7 @@ class Hotel(models.Model):
     net_cp_kid = models.PositiveIntegerField(validators=[MaxValueValidator(1000000),  MinValueValidator(1)], verbose_name ='CP Kid', default=0, help_text = 'Per Day for 1pax')
     net_map_kid = models.PositiveIntegerField(validators=[MaxValueValidator(1000000),  MinValueValidator(1)],verbose_name ='MAP Kid', default=0, help_text = 'Per Day for 1pax')
     net_ap_kid = models.PositiveIntegerField(validators=[MaxValueValidator(1000000),  MinValueValidator(1)],verbose_name ='AP Kid', default=0, help_text = 'Per Day for 1pax')
+    hotel_email = models.CharField(max_length=50, blank=True, null=True)
     entry_last_updated = models.DateTimeField(auto_now=True, editable=False)
     entry_created = models.DateTimeField(auto_now_add=True, editable=False)
 
