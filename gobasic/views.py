@@ -20,7 +20,7 @@ from django.contrib.auth.models import User, Group
 from django.core.mail import send_mail
 from django.conf import settings
 from threading import Thread
-import datetime
+from datetime import datetime
 from users.models import User
 from django.db.models import Count
 from pypdf import PdfWriter
@@ -97,7 +97,9 @@ class IndexView(LoginRequiredMixin, TemplateView):
         context = super().get_context_data(**kwargs)
         # Add in extra QuerySets here
         user = User.objects.filter(first_name=self.request.user.first_name).first()
-        all_trips = Trip.objects.all()
+        current_month = datetime.now().month
+        all_trips = Trip.objects.filter(entry_created__month=current_month)
+        #all_trips = Trip.objects.all()
         all_trips_revenue = 0
         for trip in all_trips:
             if trip.booked:
@@ -113,8 +115,24 @@ class IndexView(LoginRequiredMixin, TemplateView):
 
         context['trips'] = all_trips
         if user_type != 1 and user_type != 7:
-            user_trips = Trip.objects.filter(agent=user)
+            user_trips = Trip.objects.filter(agent=user, entry_created__month=current_month)
             user_revenue = 0
+
+            user_revenue_monthly = {}
+            for trip in user_trips:
+                if trip.booked:
+                    trip_created_month = trip.entry_created.month
+                    if trip_created_month in user_revenue_monthly:
+                        user_revenue_monthly[trip_created_month] += trip.total_trip_cost
+                    else:
+                        user_revenue_monthly[trip_created_month] = 0
+                        user_revenue_monthly[trip_created_month] += trip.total_trip_cost
+
+            context['user_revenue_monthly'] = user_revenue_monthly
+
+
+
+            
             for trip in user_trips:
                 if trip.booked:
                     user_revenue += trip.total_trip_cost
@@ -358,7 +376,7 @@ class TripPdf(LoginRequiredMixin, PermissionRequiredMixin, ListView):
         self.middle_page(c)
 
         x = 60
-        y = self.height - 200.0
+        y = self.height - 110.0
         if trip.hotel_pb is not None:
             pb = trip.hotel_pb
             y = self.print_hotel_details(x, y, c, trip, pb, "Port Blair Hotel", 1)
@@ -384,11 +402,11 @@ class TripPdf(LoginRequiredMixin, PermissionRequiredMixin, ListView):
         )
 
         c.setFont("Helvetica-BoldOblique", 16)
-        c.drawCentredString(self.width / 2.0, self.height - 130.0, "Activity Details")
+        c.drawCentredString(self.width / 2.0, self.height - 110.0, "Activity Details")
         if trip.activities.exists():
-            self.print_headings(c, 60, self.height - 160.0, self.activity_headings)
+            self.print_headings(c, 60, self.height - 140.0, self.activity_headings)
 
-            y = self.height - 190.0
+            y = self.height - 160.0
             activities = trip.activities.all()
             for activity in activities:
                 self.print_activity_details(c, activity, x, y)
@@ -398,7 +416,7 @@ class TripPdf(LoginRequiredMixin, PermissionRequiredMixin, ListView):
         c.setFont("Helvetica-BoldOblique", 16)
         c.drawCentredString(self.width / 2.0, y - 40.0, "Trip Details")
         self.print_headings(c, 40, y - 70.0, self.trip_headings)
-        self.print_trip_details(c, trip, 40, y - (no_of_activities * 20.0) - 70.0)
+        self.print_trip_details(c, trip, 40, y - (no_of_activities * 20.0) - 50.0)
 
 
         c.showPage()
