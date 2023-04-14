@@ -298,14 +298,15 @@ class TripPdf(LoginRequiredMixin, PermissionRequiredMixin, ListView):
             canvas.drawString(x, y, str(heading))
             x += 110
 
-
     def print_hotel_details(self, x, y, canvas, trip, location, heading, dest_no):
         canvas.setFont("Helvetica-BoldOblique", 16)
         canvas.drawCentredString(self.width / 2.0, y, heading)
+        
         self.print_headings(canvas, 60, y - 30.0, self.hotel_headings)
+        
         canvas.setFont("Helvetica", 9)
-
         y -= 60.0
+
         if dest_no == 1:
             rooms = trip.pb_rooms
             nights = trip.pb_nights
@@ -323,6 +324,8 @@ class TripPdf(LoginRequiredMixin, PermissionRequiredMixin, ListView):
         for detail in details:
             canvas.drawString(x, y, str(detail))
             x += 110
+
+        return y - 30.0
 
 
     def print_activity_details(self, canvas, activity, x, y):
@@ -358,17 +361,15 @@ class TripPdf(LoginRequiredMixin, PermissionRequiredMixin, ListView):
         y = self.height - 110.0
         if trip.hotel_pb is not None:
             pb = trip.hotel_pb
-            self.print_hotel_details(x, y, c, trip, pb, "Port Blair Hotel details", 1)
+            y = self.print_hotel_details(x, y, c, trip, pb, "Port Blair Hotel", 1)
 
         if trip.hotel_hv is not None:
-            y -= 30.0
             hv = trip.hotel_hv
-            self.print_hotel_details(x, y, c, trip, hv, "Havelock Hotel Details", 2)
+            y = self.print_hotel_details(x, y, c, trip, hv, "Havelock Island Hotel", 2)
 
         if trip.hotel_nl is not None:
-            y -= 30.0
             nl = trip.hotel_nl
-            self.print_hotel_details(x, y, c, trip, nl, "Neil Hotel details", 3)
+            y = self.print_hotel_details(x, y, c, trip, nl, "Neil Island Hotel", 3)
 
         c.showPage()
 
