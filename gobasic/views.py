@@ -376,7 +376,7 @@ class TripPdf(LoginRequiredMixin, PermissionRequiredMixin, ListView):
         self.middle_page(c)
 
         x = 60
-        y = self.height - 110.0
+        y = self.height - 130.0
         if trip.hotel_pb is not None:
             pb = trip.hotel_pb
             y = self.print_hotel_details(x, y, c, trip, pb, "Port Blair Hotel", 1)
@@ -416,7 +416,7 @@ class TripPdf(LoginRequiredMixin, PermissionRequiredMixin, ListView):
         c.setFont("Helvetica-BoldOblique", 16)
         c.drawCentredString(self.width / 2.0, y - 40.0, "Trip Details")
         self.print_headings(c, 40, y - 70.0, self.trip_headings)
-        self.print_trip_details(c, trip, 40, y - (no_of_activities * 20.0) - 50.0)
+        self.print_trip_details(c, trip, 40, y - (no_of_activities * 20.0) - 70.0)
 
 
         c.showPage()
