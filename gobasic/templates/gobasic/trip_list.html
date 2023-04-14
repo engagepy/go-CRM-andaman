@@ -23,7 +23,8 @@
         <th>Profit</th>
         <th>Tax</th>
         <th>Edit</th>
-      </tr>
+        <th>Download</th>
+    </tr>
     </thead>
     <tbody>
     {% for t in object_list %}
@@ -38,7 +39,8 @@
             <td>{{t.total_trip_cost}}</td>
             <td>{{t.profit}}</td>
             <td>{{t.tax}}</td>
-            <td><a href="{%url 'trip-update' t.slug %}"><button class="btn">🖋️</button></a></td>
+            <td><a href="{% url 'trip-update' t.slug %}"><button class="btn">🖋️</button></a></td>
+            <td><a href="{% url 'trip-pdf' t.slug %}"><button class="btn"><i class="fa fa-download"></i></button></a></td>
         </tr>
     {% endfor %}
     </tbody>

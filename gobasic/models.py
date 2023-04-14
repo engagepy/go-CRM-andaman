@@ -210,7 +210,7 @@ class Transfer(models.Model):
         return f"{self.customer_transfer.name} - {self.customer_transfer.pax} - {self.net_cost}"
         
     def __str__(self):
-         return f"{self.customer_transfer.name} - {self.customer_transfer.pax} - {self.net_cost}"
+        return f"{self.customer_transfer.name} - {self.customer_transfer.pax} - {self.net_cost}"
 
     def get_absolute_url(self):
         return reverse('transfer-list')
@@ -301,7 +301,7 @@ class Trip(models.Model):
 
     entry_last_updated = models.DateTimeField(auto_now=True, editable=False)
     entry_created = models.DateTimeField(auto_now_add=True, editable=False)
-    
+
     objects = TripManager()
     class Meta:
         ordering = ['-entry_created']
