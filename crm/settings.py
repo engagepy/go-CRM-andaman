@@ -31,7 +31,7 @@ SECRET_KEY = os.environ['APP_PASSWORD']
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['crm', '127.0.0.1', 'localhost']
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -86,8 +86,13 @@ WSGI_APPLICATION = 'crm.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'gocrmdb',
+        'USER': 'postgres',
+        'PASSWORD': os.environ['PASSWORD'],
+        'HOST': os.environ['DB_ENDPOINT'],
+        'PORT': 5432
+
     }
 }
 
@@ -128,7 +133,18 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.0/howto/static-files/
 
-STATIC_URL = 'static/'
+STATIC_ROOT = os.path.join (BASE_DIR, 'static')
+MEDIA_ROOT = os.path.join (BASE_DIR, 'static/images/')#BASE_DIR / 'static/images'
+
+STATICFILES_LOCATION = 'static'
+MEDIAFILES_LOCATION = 'media'
+
+
+# Security & HTTPS settings
+
+SESSION_COOKIE_SECURE = True
+CSRF_COOKIE_SECURE = True
+SECURE_SSL_REDIRECT = True
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field
@@ -137,7 +153,20 @@ AUTH_USER_MODEL = 'users.User'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 CORS_ALLOW_ALL_ORIGINS = True
-CSRF_TRUSTED_ORIGINS = ['https://astratechz.pagekite.me']
+CSRF_TRUSTED_ORIGINS = []
+
+AWS_S3_CUSTOM_DOMAIN = '%s.s3.amazonaws.com' % os.environ['BUCKET_NAME']
+AWS_ACCESS_KEY_ID = os.environ['AWS_KEY']
+AWS_SECRET_ACCESS_KEY = os.environ['AWS_ACC_KEY']
+AWS_STORAGE_BUCKET_NAME = os.environ['BUCKET_NAME']
+AWS_S3_FILE_OVERWRITE = False
+AWS_DEFAULT_ACL = None
+DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
+STATICFILES_STORAGE = 'storages.backends.s3boto3.S3StaticStorage'
+
+STATIC_URL = "https://%s/%s/" % (AWS_S3_CUSTOM_DOMAIN, STATICFILES_LOCATION)
+MEDIA_URL = "https://%s/%s/" % (AWS_S3_CUSTOM_DOMAIN, MEDIAFILES_LOCATION)
+
 
 # REST_FRAMEWORK = {
 
@@ -149,9 +178,10 @@ CSRF_TRUSTED_ORIGINS = ['https://astratechz.pagekite.me']
 #         'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly'
 #     ]
 # }
-# EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-# EMAIL_HOST = 'smtp.gmail.com'
-# EMAIL_PORT = 587
-# EMAIL_USE_TLS = True
-# EMAIL_HOST_USER = os.environ['gmail_host']
-# EMAIL_HOST_PASSWORD = os.environ['gmail_password']
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = os.environ['gmail_host']
+EMAIL_HOST_PASSWORD = os.environ['gmail_password']
