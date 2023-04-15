@@ -87,7 +87,7 @@ WSGI_APPLICATION = 'crm.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'gocrmdb',
+        'NAME': 'gocrmdb1',
         'USER': 'postgres',
         'PASSWORD': os.environ['PASSWORD'],
         'HOST': os.environ['DB_ENDPOINT'],
