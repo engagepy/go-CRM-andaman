@@ -132,10 +132,12 @@ class IndexView(LoginRequiredMixin, TemplateView):
 
 
 
-            
-            for trip in user_trips:
-                if trip.booked:
-                    user_revenue += trip.total_trip_cost
+            try:
+                for trip in user_trips:
+                    if trip.booked:
+                        user_revenue += trip.total_trip_cost
+            except:
+                pass
 
             context['user_revenue'] = user_revenue
             context['target_due_user'] = 1000000 - user_revenue
