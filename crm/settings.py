@@ -88,17 +88,24 @@ WSGI_APPLICATION = 'crm.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.0/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'mydb',
-        'USER': 'postgres',
-        'PASSWORD': os.environ['PASSWORD'],
-        'HOST': os.environ['DB_ENDPOINT'],
-        'PORT': 5432
+if DEBUG == True:
 
+
+
+else:
+
+
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql',
+            'NAME': 'mydb',
+            'USER': 'postgres',
+            'PASSWORD': os.environ['PASSWORD'],
+            'HOST': os.environ['DB_ENDPOINT'],
+            'PORT': 5432
+
+        }
     }
-}
 
 
 # Password validation
