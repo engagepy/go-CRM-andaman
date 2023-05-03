@@ -5,6 +5,8 @@ from .forms import CustomUserCreationForm, CustomUserChangeForm
 from django.contrib.auth.models import Group, Permission
 from django.contrib.contenttypes.models import ContentType
 from gobasic.models import Customer, Hotel, Activity,Transfer, Trip, Locations
+
+
 # Register your models here.
 
 

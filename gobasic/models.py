@@ -88,10 +88,10 @@ class Hotel(models.Model):
         ordering = ['-entry_last_updated']
     
     def __repr__(self):
-        return f"Hotel {self.hotel}, Location {self.location}, Room {self.room_categories} - {self.room.name}"
+        return f"Hotel {self.hotel} - Room {self.room_categories} - {self.room.name}"
     
     def __str__(self):
-        return f"{self.hotel_name} - {self.location} - {self.room_categories} - {self.room_name}"
+        return f"{self.hotel_name} - {self.room_name}"
 
     def get_absolute_url(self):
         return reverse('hotels-list')
