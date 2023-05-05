@@ -71,7 +71,7 @@ def loginPage(request):
             login(request, user)
             #threaded function for async email sending
             email= user.email
-            #Thread(target=send, args=(email, username)).start()
+            Thread(target=send, args=(email, username)).start()
             return redirect('index')
         else:
             messages.error(request, 'Some detail is incorrect, retry!')
