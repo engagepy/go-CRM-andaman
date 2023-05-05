@@ -12,20 +12,20 @@ from .managers import TripManager
 Send mail function is defined below to assist with outgoing email communication. 
 '''
 
-# def send(email):
-#     #Calculating Time, and limiting decimals
-#     x = datetime.datetime.now()
-#     s = x.strftime('%Y-%m-%d %H:%M:%S.%f')
-#     s = s[:-7]
-#     y = f'Your trip interest has been registed at {s} ? You can reply to this email, while our team is preparing your itinerary options, thanks.'
-#     #using the send_mail import below
-#     send_mail(
-#         subject='GoAndamans - Best Andaman Experiences',
-#         message=y,
-#         from_email=settings.EMAIL_HOST_USER,
-#         recipient_list=[email]
-#         )
-#     pass
+def send(email):
+    #Calculating Time, and limiting decimals
+    x = datetime.datetime.now()
+    s = x.strftime('%Y-%m-%d %H:%M:%S.%f')
+    s = s[:-7]
+    y = f'Your trip interest has been registed at {s} ? You can reply to this email, while our team is preparing your itinerary options, thanks.'
+    #using the send_mail import below
+    send_mail(
+        subject='GoAndamans - Best Andaman Experiences',
+        message=y,
+        from_email=settings.EMAIL_HOST_USER,
+        recipient_list=[email]
+        )
+    pass
 
 
 #Base Data Models Here.

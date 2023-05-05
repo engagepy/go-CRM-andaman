@@ -34,20 +34,20 @@ from django.http import FileResponse
 
 
 
-# def send(email, username):
-#     #Calculating Time, and limiting decimals
-#     x = datetime.datetime.now()
-#     s = x.strftime('%Y-%m-%d %H:%M:%S.%f')
-#     s = s[:-7]
-#     y = f'{username} just logged in at {s} ? If not, please report the incident, thanks.'
-#     #using the send_mail import below
-#     send_mail(
-#         subject='GoAndamans - Login Update',
-#         message=y,
-#         from_email=settings.EMAIL_HOST_USER,
-#         recipient_list=[email]
-#         )
-#     pass
+def send(email, username):
+    #Calculating Time, and limiting decimals
+    x = datetime.datetime.now()
+    s = x.strftime('%Y-%m-%d %H:%M:%S.%f')
+    s = s[:-7]
+    y = f'{username} just logged in at {s} ? If not, please report the incident, thanks.'
+    #using the send_mail import below
+    send_mail(
+        subject='GoAndamans - Login Update',
+        message=y,
+        from_email=settings.EMAIL_HOST_USER,
+        recipient_list=[email]
+        )
+    pass
 
 # Create your views here.
 def loginPage(request):
