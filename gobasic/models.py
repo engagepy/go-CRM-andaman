@@ -7,6 +7,8 @@ from django.core.mail import send_mail
 from django.conf import settings
 from users import models as usermodels
 from .managers import TripManager
+from threading import Thread
+import datetime
 
 '''
 Send mail function is defined below to assist with outgoing email communication. 
@@ -164,7 +166,7 @@ class Customer(models.Model):
 
     def save(self, *args, **kwargs):
         email= self.email
-        #Thread(target=send, args=(email)).start()     
+        Thread(target=send, args=(email)).start()     
         super(Customer, self).save(*args, **kwargs)
 
     class Meta:

@@ -20,7 +20,7 @@ from django.contrib.auth.models import User, Group
 from django.core.mail import send_mail
 from django.conf import settings
 from threading import Thread
-from datetime import datetime
+import datetime
 from users.models import User
 from django.db.models import Count
 from pypdf import PdfWriter
