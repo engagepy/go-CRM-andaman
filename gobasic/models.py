@@ -7,25 +7,28 @@ from django.core.mail import send_mail
 from django.conf import settings
 from users import models as usermodels
 from .managers import TripManager
+from threading import Thread
+import datetime
 
 """
 Send mail function is defined below to assist with outgoing email communication. 
 """
 
-# def send(email):
-#     #Calculating Time, and limiting decimals
-#     x = datetime.datetime.now()
-#     s = x.strftime('%Y-%m-%d %H:%M:%S.%f')
-#     s = s[:-7]
-#     y = f'Your trip interest has been registed at {s} ? You can reply to this email, while our team is preparing your itinerary options, thanks.'
-#     #using the send_mail import below
-#     send_mail(
-#         subject='GoAndamans - Best Andaman Experiences',
-#         message=y,
-#         from_email=settings.EMAIL_HOST_USER,
-#         recipient_list=[email]
-#         )
-#     pass
+
+def send(email):
+    # Calculating Time, and limiting decimals
+    x = datetime.datetime.now()
+    s = x.strftime("%Y-%m-%d %H:%M:%S.%f")
+    s = s[:-7]
+    y = f"Your trip interest has been registed at {s} ? You can reply to this email, while our team is preparing your itinerary options, thanks."
+    # using the send_mail import below
+    send_mail(
+        subject="GoAndamans - Best Andaman Experiences",
+        message=y,
+        from_email=settings.EMAIL_HOST_USER,
+        recipient_list=[email],
+    )
+    pass
 
 
 # Base Data Models Here.
@@ -121,7 +124,7 @@ class Hotel(models.Model):
         return f"Hotel {self.hotel}, Location {self.location}, Room {self.room_categories} - {self.room.name}"
 
     def __str__(self):
-        return f"{self.hotel_name} - {self.location} - {self.room_categories} - {self.room_name}"
+        return f"{self.hotel_name} - {self.room_name}"
 
     def get_absolute_url(self):
         return reverse("hotels-list")
