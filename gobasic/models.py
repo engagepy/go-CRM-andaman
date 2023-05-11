@@ -14,7 +14,6 @@ import datetime
 Send mail function is defined below to assist with outgoing email communication. 
 """
 
-
 def send(email):
     # Calculating Time, and limiting decimals
     x = datetime.datetime.now()
