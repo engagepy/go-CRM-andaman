@@ -107,27 +107,24 @@ class IndexView(LoginRequiredMixin, TemplateView):
         context = super().get_context_data(**kwargs)
         # Add in extra QuerySets here
         user = User.objects.filter(first_name=self.request.user.first_name).first()
-        current_month = datetime.now().month
+        current_month = datetime.datetime.now().month
         all_trips = Trip.objects.filter(entry_created__month=current_month)
-        # all_trips = Trip.objects.all()
         all_trips_revenue = 0
         for trip in all_trips:
             if trip.booked:
                 all_trips_revenue += trip.total_trip_cost
-        context["all_trips_revenue"] = all_trips_revenue
-        context["target_due_company"] = 3000000 - all_trips_revenue
+        context['all_trips_revenue'] = all_trips_revenue
+        context['target_due_company'] = 3000000 - all_trips_revenue
 
         user_type = user.user_type
-        all_sources = Customer.objects.values("source").annotate(count=Count("id"))
+        all_sources = Customer.objects.values('source').annotate(count=Count('id'))
         for source in all_sources:
-            src = source["source"]
-            context[src] = source["count"]
+            src = source['source']
+            context[src] = source['count']
 
-        context["trips"] = all_trips
+        context['trips'] = all_trips
         if user_type != 1 and user_type != 7:
-            user_trips = Trip.objects.filter(
-                agent=user, entry_created__month=current_month
-            )
+            user_trips = Trip.objects.filter(agent=user, entry_created__month=current_month)
             user_revenue = 0
 
             user_revenue_monthly = {}
@@ -140,19 +137,18 @@ class IndexView(LoginRequiredMixin, TemplateView):
                         user_revenue_monthly[trip_created_month] = 0
                         user_revenue_monthly[trip_created_month] += trip.total_trip_cost
 
-            context["user_revenue_monthly"] = user_revenue_monthly
+            context['user_revenue_monthly'] = user_revenue_monthly
 
             for trip in user_trips:
                 if trip.booked:
                     user_revenue += trip.total_trip_cost
 
-            context["user_revenue"] = user_revenue
-            context["target_due_user"] = 1000000 - user_revenue
-            context["trips"] = user_trips
+            context['user_revenue'] = user_revenue
+            context['target_due_user'] = 1000000 - user_revenue
+            context['trips'] = user_trips
 
-        context["name"] = "Go CRM"
-        context["user_type"] = user_type
-
+        context['name'] = "Go CRM"
+        context['user_type'] = user_type
         return context
 
 
