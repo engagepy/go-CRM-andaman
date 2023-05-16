@@ -45,7 +45,6 @@ class CustomUserAdmin(UserAdmin):
 admin.site.register(User, CustomUserAdmin)
 
 # ------> Comment out the below code if you are creating a fresh db. Figure how not have to do this each time.
-
 intern, created = Group.objects.get_or_create(name='Intern')
 employee, created = Group.objects.get_or_create(name='Employee')
 owner, created = Group.objects.get_or_create(name='Owner')

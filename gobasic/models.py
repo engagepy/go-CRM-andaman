@@ -69,12 +69,12 @@ class Hotel(models.Model):
         ("Ultra Luxury", "Ultra Luxury"),
     ]
 
-    hotel_name = models.CharField(max_length=25)
+    hotel_name = models.CharField(max_length=60)
     slug = AutoSlugField(populate_from="hotel_name", unique=True)
     customer_rating = models.CharField(max_length=1, choices=ratings, default="1")
-    room_name = models.CharField(max_length=15)
+    room_name = models.CharField(max_length=60)
     room_categories = models.CharField(
-        max_length=12, choices=room_categories, default="1"
+        max_length=100, choices=room_categories, default="1"
     )
     location = models.ForeignKey(Locations, on_delete=models.PROTECT)
     net_cp = models.PositiveIntegerField(
