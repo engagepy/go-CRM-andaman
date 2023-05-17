@@ -6,7 +6,6 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render, HttpResponse
 from django.views.generic.base import TemplateView
 from django.views.generic.list import ListView
-from django.views.generic.detail import DetailView
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.urls import reverse_lazy
 from django.contrib.auth import authenticate, login, logout
@@ -29,11 +28,9 @@ from django.contrib.auth.models import User, Group
 # imported for send mail
 from django.core.mail import send_mail
 from django.conf import settings
-from threading import Thread
-import datetime
+from datetime import datetime
 from users.models import User
 from django.db.models import Count
-from pypdf import PdfWriter
 
 from reportlab.pdfgen import canvas
 from reportlab.lib.styles import getSampleStyleSheet
@@ -84,7 +81,7 @@ def loginPage(request):
             # Thread(target=send, args=(email, username)).start()
             return redirect("index")
         else:
-            messages.error(request, "Some detail is incorrect, retry!")
+            print("Some detail is incorrect, retry!")
 
     loginPage_data = {"page": page}
     return render(request, "gobasic/login.html", loginPage_data)
@@ -97,7 +94,7 @@ def logoutUser(request):
 
 class IndexView(LoginRequiredMixin, TemplateView):
     # permission_denied_message = 'Access Denied'
-    login_url = "login/"
+    login_url = "login"
     redirect_field_name = "index"
     template_name = "gobasic/index.html"
     context_object_name = "user"
@@ -107,27 +104,30 @@ class IndexView(LoginRequiredMixin, TemplateView):
         context = super().get_context_data(**kwargs)
         # Add in extra QuerySets here
         user = User.objects.filter(first_name=self.request.user.first_name).first()
-        current_month = datetime.datetime.now().month
+        current_month = datetime.now().month
         all_trips = Trip.objects.filter(entry_created__month=current_month)
+        # all_trips = Trip.objects.all()
         all_trips_revenue = 0
         for trip in all_trips:
             if trip.booked:
                 all_trips_revenue += trip.total_trip_cost
-        context['all_trips_revenue'] = all_trips_revenue
-        context['target_due_company'] = 3000000 - all_trips_revenue
+        context["all_trips_revenue"] = all_trips_revenue
+        context["target_due_company"] = 3000000 - all_trips_revenue
 
         user_type = user.user_type
-        all_sources = Customer.objects.values('source').annotate(count=Count('id'))
+        all_sources = Customer.objects.values("source").annotate(count=Count("id"))
         for source in all_sources:
-            src = source['source']
-            context[src] = source['count']
+            src = source["source"]
+            context[src] = source["count"]
 
-        context['trips'] = all_trips
+        context["trips"] = all_trips
         if user_type != 1 and user_type != 7:
-            user_trips = Trip.objects.filter(agent=user, entry_created__month=current_month)
+            user_trips = Trip.objects.filter(
+                agent=user, entry_created__month=current_month
+            )
             user_revenue = 0
-
             user_revenue_monthly = {}
+
             for trip in user_trips:
                 if trip.booked:
                     trip_created_month = trip.entry_created.month
@@ -137,18 +137,19 @@ class IndexView(LoginRequiredMixin, TemplateView):
                         user_revenue_monthly[trip_created_month] = 0
                         user_revenue_monthly[trip_created_month] += trip.total_trip_cost
 
-            context['user_revenue_monthly'] = user_revenue_monthly
+            context["user_revenue_monthly"] = user_revenue_monthly
 
             for trip in user_trips:
                 if trip.booked:
                     user_revenue += trip.total_trip_cost
 
-            context['user_revenue'] = user_revenue
-            context['target_due_user'] = 1000000 - user_revenue
-            context['trips'] = user_trips
+            context["user_revenue"] = user_revenue
+            context["target_due_user"] = 1000000 - user_revenue
+            context["trips"] = user_trips
 
-        context['name'] = "Go CRM"
-        context['user_type'] = user_type
+        context["name"] = "Go CRM"
+        context["user_type"] = user_type
+
         return context
 
 
@@ -294,6 +295,7 @@ class TripPdf(LoginRequiredMixin, PermissionRequiredMixin, ListView):
         "Trip Duration",
         "Total Trip Cost",
     ]
+    transfer_headings = ["Customer Name", "Inclusions", "Transfer Type", "Cost"]
 
     def front_page(self, canvas, trip):
         canvas.drawImage(
@@ -311,6 +313,65 @@ class TripPdf(LoginRequiredMixin, PermissionRequiredMixin, ListView):
             self.width / 2.0, self.height / 2.0, trip.customer.name
         )
         canvas.showPage()
+
+    def greeting_page(self, canvas, trip):
+        canvas.drawImage(
+            "gobasic/static/gobasic/images/3.jpg",
+            0,
+            0,
+            preserveAspectRatio=True,
+            anchor="sw",
+            width=self.width,
+            height=self.height,
+        )
+        canvas.setFont("Helvetica", 24)
+        canvas.setFillColorRGB(255, 255, 255)  # White
+
+        x = 100
+        y = self.height - 140.0
+        canvas.drawString(x, y, "Welcome to your Exciting Itinerary!!")
+        x = 10
+        y -= 20
+
+        company = "GoAndamans"
+
+        welcome_text = f"""
+        Dear {trip.customer.name},
+        We are thrilled to have you on board and excited to present your personalized itinerary,
+        carefully crafted just for you! Our team at {company} has put together a fantastic plan
+        designed to fit your travel preferences, ensuring you get the most out of your upcoming adventure.
+        Please find your itinerary attached below, highlighting each day's activities,destinations,
+        and recommendations. We have made sure to consider every detail, providing you
+        with a seamless and memorable experience from start-to-finish.
+
+        We encourage you to review the document and let us know if you have
+        any questions or special requests. Our goal is to make this trip unforgettable
+        and tailored to your desires. Feel free to reach out to us
+        at any time, as our team is here to support you throughout your journey.
+        Thank you for choosing {company} and allowing us to create the perfect travel experience for you.
+        Happy travels, and we wish you an incredible time!
+
+        Warm regards, 
+        {trip.agent.get_full_name()}
+        [Your Title]
+        {company}
+        [Contact Information]
+        """
+
+        canvas.setFont("Helvetica", 12)
+        canvas.setFillColor("black")  # White
+
+        lines = welcome_text.split("\n")
+        for line in lines:
+            if trip.customer.name in line:
+                canvas.setFillColor("white")
+            elif line in lines[-5:-1]:
+                canvas.setFillColor("white")
+            else:
+                canvas.setFillColor("black")
+
+            canvas.drawString(x, y, line)
+            y -= 20
 
     def middle_page(self, canvas):
         # middle page
@@ -331,6 +392,26 @@ class TripPdf(LoginRequiredMixin, PermissionRequiredMixin, ListView):
             if heading == "Cost":
                 x += 40
             canvas.drawString(x, y, str(heading))
+            x += 110
+
+    def print_transfer_details(self, x, y, canvas, trip, heading):
+        canvas.setFont("Helvetica-BoldOblique", 16)
+        canvas.drawCentredString(self.width / 2.0, y, heading)
+
+        self.print_headings(canvas, 60, y - 30.0, self.transfer_headings)
+        canvas.setFont("Helvetica", 9)
+        y -= 60.0
+
+        details = [
+            trip.customer.name,
+            trip.transfers.Inclusions,
+            trip.transfers.transfer_type,
+            trip.transfer_cost,
+        ]
+        for detail in details:
+            if detail == details[-1]:
+                x += 40
+            canvas.drawString(x, y, str(detail))
             x += 110
 
     def print_hotel_details(self, x, y, canvas, trip, location, heading, dest_no):
@@ -406,6 +487,7 @@ class TripPdf(LoginRequiredMixin, PermissionRequiredMixin, ListView):
         c = canvas.Canvas(response, pagesize=A4)
 
         self.front_page(c, trip)
+        self.greeting_page(c, trip)
         self.middle_page(c)
 
         x = 60
@@ -450,6 +532,21 @@ class TripPdf(LoginRequiredMixin, PermissionRequiredMixin, ListView):
         c.drawCentredString(self.width / 2.0, y - 40.0, "Trip Details")
         self.print_headings(c, 40, y - 70.0, self.trip_headings)
         self.print_trip_details(c, trip, 40, y - (no_of_activities * 20.0) - 70.0)
+
+        c.showPage()
+        c.drawImage(
+            "gobasic/static/gobasic/images/3.jpg",
+            0,
+            0,
+            preserveAspectRatio=True,
+            anchor="sw",
+            width=self.width,
+            height=self.height,
+        )
+
+        x = 60
+        y = self.height - 130.0
+        self.print_transfer_details(x, y, c, trip, "Transfer Details")
 
         c.showPage()
 
