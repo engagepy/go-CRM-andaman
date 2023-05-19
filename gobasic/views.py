@@ -404,7 +404,7 @@ class TripPdf(LoginRequiredMixin, PermissionRequiredMixin, ListView):
 
         details = [
             trip.customer.name,
-            trip.transfer.Inclusions if trip.transfers.Inclusions else "",
+            trip.transfers.Inclusions if trip.transfers.Inclusions else "",
             trip.transfers.transfer_type,
             trip.transfer_cost,
         ]
@@ -544,7 +544,7 @@ class TripPdf(LoginRequiredMixin, PermissionRequiredMixin, ListView):
             height=self.height,
         )
 
-        if trip.transfers.exists():
+        if trip.transfers:
             x = 60
             y = self.height - 130.0
             self.print_transfer_details(x, y, c, trip, "Transfer Details")
