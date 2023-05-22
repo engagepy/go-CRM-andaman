@@ -653,7 +653,7 @@ class ActivityEdit(LoginRequiredMixin, PermissionRequiredMixin, UpdateView):
     redirect_field_name = "index"
     model = Activity
     form_class = ActivityCreateForm
-    template_name = "gobasic/activity_create_form.html"
+    template_name = "gobasic/create_form.html"
 
 
 class ActivityDelete(LoginRequiredMixin, PermissionRequiredMixin, DeleteView):
