@@ -12,6 +12,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 from django.contrib import messages
+from crm.settings import FONT_ROOT
 
 # import from within the app
 from .forms import (
@@ -33,11 +34,10 @@ from users.models import User
 from django.db.models import Count
 
 from reportlab.pdfgen import canvas
-from reportlab.lib.styles import getSampleStyleSheet
 from reportlab.lib.pagesizes import A4
-from reportlab.platypus import Paragraph, SimpleDocTemplate, Spacer, PageBreak
-from reportlab.lib.units import inch
-from django.http import FileResponse
+from reportlab.pdfbase import pdfmetrics
+from reportlab.pdfbase.ttfonts import TTFont
+import reportlab
 
 
 # def send(email, username):
@@ -307,7 +307,7 @@ class TripPdf(LoginRequiredMixin, PermissionRequiredMixin, ListView):
             width=self.width,
             height=self.height,
         )
-        canvas.setFont("Helvetica", 32)
+        canvas.setFont("CornerOne-Bold", 32)
         canvas.setFillColorRGB(255, 255, 255)  # White
         canvas.drawCentredString(
             self.width / 2.0, self.height / 2.0, trip.customer.name
@@ -324,8 +324,8 @@ class TripPdf(LoginRequiredMixin, PermissionRequiredMixin, ListView):
             width=self.width,
             height=self.height,
         )
-        canvas.setFont("Helvetica", 24)
-        canvas.setFillColorRGB(255, 255, 255)  # White
+        canvas.setFont("CornerOne-Bold", 24)
+        # canvas.setFillColorRGB(255, 255, 255)  # White
 
         x = 100
         y = self.height - 140.0
@@ -358,7 +358,7 @@ class TripPdf(LoginRequiredMixin, PermissionRequiredMixin, ListView):
         [Contact Information]
         """
 
-        canvas.setFont("Helvetica", 12)
+        canvas.setFont("CornerOne-Bold", 12)
         canvas.setFillColor("black")  # White
 
         lines = welcome_text.split("\n")
@@ -386,7 +386,7 @@ class TripPdf(LoginRequiredMixin, PermissionRequiredMixin, ListView):
         )
 
     def print_headings(self, canvas, x, y, headings):
-        canvas.setFont("Helvetica-Bold", 12)
+        canvas.setFont("mbf-nanomaton", 12)
 
         for heading in headings:
             if heading == "Cost":
@@ -395,11 +395,11 @@ class TripPdf(LoginRequiredMixin, PermissionRequiredMixin, ListView):
             x += 110
 
     def print_transfer_details(self, x, y, canvas, trip, heading):
-        canvas.setFont("Helvetica-BoldOblique", 16)
+        canvas.setFont("mbf-nanomaton", 16)
         canvas.drawCentredString(self.width / 2.0, y, heading)
 
         self.print_headings(canvas, 60, y - 30.0, self.transfer_headings)
-        canvas.setFont("Helvetica", 9)
+        canvas.setFont("CornerOne-Bold", 9)
         y -= 60.0
 
         details = [
@@ -415,12 +415,12 @@ class TripPdf(LoginRequiredMixin, PermissionRequiredMixin, ListView):
             x += 110
 
     def print_hotel_details(self, x, y, canvas, trip, location, heading, dest_no):
-        canvas.setFont("Helvetica-BoldOblique", 16)
+        canvas.setFont("mbf-nanomaton", 16)
         canvas.drawCentredString(self.width / 2.0, y, heading)
 
         self.print_headings(canvas, 60, y - 30.0, self.hotel_headings)
 
-        canvas.setFont("Helvetica", 9)
+        canvas.setFont("CornerOne-Bold", 9)
         y -= 60.0
 
         if dest_no == 1:
@@ -450,7 +450,7 @@ class TripPdf(LoginRequiredMixin, PermissionRequiredMixin, ListView):
         return y - 30.0
 
     def print_activity_details(self, canvas, activity, x, y):
-        canvas.setFont("Helvetica", 9)
+        canvas.setFont("CornerOne-Bold", 9)
 
         details = [
             activity.activity_title,
@@ -465,7 +465,7 @@ class TripPdf(LoginRequiredMixin, PermissionRequiredMixin, ListView):
             x += 110
 
     def print_trip_details(self, canvas, trip, x, y):
-        canvas.setFont("Helvetica", 9)
+        canvas.setFont("CornerOne-Bold", 9)
         details = [
             trip.customer.name,
             trip.start_date.strftime("%d/%m/%Y"),
@@ -478,6 +478,11 @@ class TripPdf(LoginRequiredMixin, PermissionRequiredMixin, ListView):
             x += 110
 
     def get(self, request, slug):
+        reportlab.rl_config.TTFSearchPath.append(FONT_ROOT)
+        pdfmetrics.registerFont(TTFont("mbf-nanomaton", "MBF-Nanomaton.ttf"))
+        pdfmetrics.registerFont(TTFont("CornerOne-Bold", "CornerOne-Bold.ttf"))
+        pdfmetrics.registerFont(TTFont("CornerOne-Regular", "CornerOne-Regular.ttf"))
+
         trip = Trip.objects.filter(slug=slug).first()
 
         response = HttpResponse(content_type="application/pdf")
@@ -516,7 +521,7 @@ class TripPdf(LoginRequiredMixin, PermissionRequiredMixin, ListView):
             height=self.height,
         )
 
-        c.setFont("Helvetica-BoldOblique", 16)
+        c.setFont("mbf-nanomaton", 16)
         c.drawCentredString(self.width / 2.0, self.height - 110.0, "Activity Details")
         if trip.activities.exists():
             self.print_headings(c, 60, self.height - 140.0, self.activity_headings)
@@ -527,11 +532,10 @@ class TripPdf(LoginRequiredMixin, PermissionRequiredMixin, ListView):
                 self.print_activity_details(c, activity, x, y)
                 y -= 20
 
-        no_of_activities = len(trip.activities.all()) if trip.activities.exists() else 1
-        c.setFont("Helvetica-BoldOblique", 16)
-        c.drawCentredString(self.width / 2.0, y - 40.0, "Trip Details")
-        self.print_headings(c, 40, y - 70.0, self.trip_headings)
-        self.print_trip_details(c, trip, 40, y - (no_of_activities * 20.0) - 70.0)
+        c.setFont("mbf-nanomaton", 16)
+        if trip.transfers.exists():
+            c.drawCentredString(self.width / 2.0, y - 40.0, "Transfer Details")
+            self.print_transfer_details(40, y - 70.0, c, trip, "Transfer Details")
 
         c.showPage()
         c.drawImage(
@@ -544,10 +548,9 @@ class TripPdf(LoginRequiredMixin, PermissionRequiredMixin, ListView):
             height=self.height,
         )
 
-        if trip.transfers:
-            x = 60
-            y = self.height - 130.0
-            self.print_transfer_details(x, y, c, trip, "Transfer Details")
+        c.drawCentredString(self.width / 2.0, y - 40.0, "Trip Details")
+        self.print_headings(c, 40, y - 70.0, self.trip_headings)
+        self.print_trip_details(c, trip, 40, y - 70.0)
 
         c.showPage()
 
