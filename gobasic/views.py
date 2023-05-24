@@ -289,13 +289,13 @@ class TripPdf(LoginRequiredMixin, PermissionRequiredMixin, ListView):
     ]
     activity_headings = ["Activity Name", "Location", "Description", "Cost"]
     trip_headings = [
-        "Customer Name",
+        "Name",
         "Start Date",
         "End Date",
         "Trip Duration",
         "Total Trip Cost",
     ]
-    transfer_headings = ["Customer Name", "Inclusions", "Transfer Type", "Cost"]
+    transfer_headings = ["Name", "Inclusions", "Transfer Type", "Cost"]
 
     def front_page(self, canvas, trip):
         canvas.drawImage(
@@ -310,7 +310,7 @@ class TripPdf(LoginRequiredMixin, PermissionRequiredMixin, ListView):
         canvas.setFont("CornerOne-Bold", 32)
         canvas.setFillColorRGB(255, 255, 255)  # White
         canvas.drawCentredString(
-            self.width / 2.0, self.height / 2.0, trip.customer.name
+            self.width / 2.0, self.height / 2.0, trip.customer.name.capitalize()
         )
         canvas.showPage()
 
@@ -325,7 +325,7 @@ class TripPdf(LoginRequiredMixin, PermissionRequiredMixin, ListView):
             height=self.height,
         )
         canvas.setFont("CornerOne-Bold", 24)
-        # canvas.setFillColorRGB(255, 255, 255)  # White
+        canvas.setFillColorRGB(255, 255, 255)  # White
 
         x = 100
         y = self.height - 140.0
@@ -336,10 +336,11 @@ class TripPdf(LoginRequiredMixin, PermissionRequiredMixin, ListView):
         company = "GoAndamans"
 
         welcome_text = f"""
-        Dear {trip.customer.name},
+        Dear {trip.customer.name.capitalize()},
         We are thrilled to have you on board and excited to present your personalized itinerary,
         carefully crafted just for you! Our team at {company} has put together a fantastic plan
-        designed to fit your travel preferences, ensuring you get the most out of your upcoming adventure.
+        designed to fit your travel preferences, ensuring you get the most out
+        of your upcoming adventure.
         Please find your itinerary attached below, highlighting each day's activities,destinations,
         and recommendations. We have made sure to consider every detail, providing you
         with a seamless and memorable experience from start-to-finish.
@@ -348,30 +349,32 @@ class TripPdf(LoginRequiredMixin, PermissionRequiredMixin, ListView):
         any questions or special requests. Our goal is to make this trip unforgettable
         and tailored to your desires. Feel free to reach out to us
         at any time, as our team is here to support you throughout your journey.
-        Thank you for choosing {company} and allowing us to create the perfect travel experience for you.
+        
+        Thank you for choosing {company} and allowing us to create
+        the perfect travel experience for you.
         Happy travels, and we wish you an incredible time!
 
-        Warm regards, 
+        Warm regards,
         {trip.agent.get_full_name()}
         [Your Title]
         {company}
         [Contact Information]
         """
 
-        canvas.setFont("CornerOne-Bold", 12)
+        canvas.setFont("CornerOne-Regular", 12)
         canvas.setFillColor("black")  # White
 
         lines = welcome_text.split("\n")
         for line in lines:
-            if trip.customer.name in line:
-                canvas.setFillColor("white")
-            elif line in lines[-5:-1]:
+            if line == lines[0] or line == lines[-6]:
                 canvas.setFillColor("white")
             else:
                 canvas.setFillColor("black")
 
             canvas.drawString(x, y, line)
             y -= 20
+
+        canvas.showPage()
 
     def middle_page(self, canvas):
         # middle page
@@ -386,7 +389,8 @@ class TripPdf(LoginRequiredMixin, PermissionRequiredMixin, ListView):
         )
 
     def print_headings(self, canvas, x, y, headings):
-        canvas.setFont("mbf-nanomaton", 12)
+        canvas.setFont("CornerOne-Regular", 14)
+        canvas.setFillColor("black")
 
         for heading in headings:
             if heading == "Cost":
@@ -395,15 +399,17 @@ class TripPdf(LoginRequiredMixin, PermissionRequiredMixin, ListView):
             x += 110
 
     def print_transfer_details(self, x, y, canvas, trip, heading):
-        canvas.setFont("mbf-nanomaton", 16)
+        canvas.setFont("CornerOne-Bold", 24)
+        canvas.setFillColor("white")
         canvas.drawCentredString(self.width / 2.0, y, heading)
 
-        self.print_headings(canvas, 60, y - 30.0, self.transfer_headings)
-        canvas.setFont("CornerOne-Bold", 9)
+        self.print_headings(canvas, 40, y - 30.0, self.transfer_headings)
+        canvas.setFillColor("black")
+        canvas.setFont("CornerOne-Regular", 12)
         y -= 60.0
 
         details = [
-            trip.customer.name,
+            trip.customer.name.capitalize(),
             trip.transfers.Inclusions if trip.transfers.Inclusions else "",
             trip.transfers.transfer_type,
             trip.transfer_cost,
@@ -415,12 +421,14 @@ class TripPdf(LoginRequiredMixin, PermissionRequiredMixin, ListView):
             x += 110
 
     def print_hotel_details(self, x, y, canvas, trip, location, heading, dest_no):
-        canvas.setFont("mbf-nanomaton", 16)
+        canvas.setFont("CornerOne-Bold", 24)
+        canvas.setFillColor("white")
         canvas.drawCentredString(self.width / 2.0, y, heading)
 
-        self.print_headings(canvas, 60, y - 30.0, self.hotel_headings)
+        self.print_headings(canvas, 40, y - 30.0, self.hotel_headings)
 
-        canvas.setFont("CornerOne-Bold", 9)
+        canvas.setFont("CornerOne-Regular", 12)
+        canvas.setFillColor("black")
         y -= 60.0
 
         if dest_no == 1:
@@ -447,10 +455,11 @@ class TripPdf(LoginRequiredMixin, PermissionRequiredMixin, ListView):
             canvas.drawString(x, y, str(detail))
             x += 110
 
-        return y - 30.0
+        return y - 70.0
 
     def print_activity_details(self, canvas, activity, x, y):
-        canvas.setFont("CornerOne-Bold", 9)
+        canvas.setFont("CornerOne-Regular", 12)
+        canvas.setFillColor("black")
 
         details = [
             activity.activity_title,
@@ -465,9 +474,11 @@ class TripPdf(LoginRequiredMixin, PermissionRequiredMixin, ListView):
             x += 110
 
     def print_trip_details(self, canvas, trip, x, y):
-        canvas.setFont("CornerOne-Bold", 9)
+        canvas.setFont("CornerOne-Regular", 12)
+        canvas.setFillColor("black")
+
         details = [
-            trip.customer.name,
+            trip.customer.name.capitalize(),
             trip.start_date.strftime("%d/%m/%Y"),
             trip.end_date.strftime("%d/%m/%Y"),
             trip.duration,
@@ -478,8 +489,10 @@ class TripPdf(LoginRequiredMixin, PermissionRequiredMixin, ListView):
             x += 110
 
     def get(self, request, slug):
-        reportlab.rl_config.TTFSearchPath.append("/home/ubuntu/go-CRM-andaman/gobasic/static/gobasic/fonts")
-        pdfmetrics.registerFont(TTFont("mbf-nanomaton", "MBF-Nanomaton.ttf"))
+        reportlab.rl_config.TTFSearchPath.append(
+            "/home/ubuntu/go-CRM-andaman/gobasic/static/gobasic/fonts"
+        )
+        pdfmetrics.registerFont(TTFont("CornerOne-Regular", "CornerOne-Regular.ttf"))
         pdfmetrics.registerFont(TTFont("CornerOne-Bold", "CornerOne-Bold.ttf"))
         pdfmetrics.registerFont(TTFont("CornerOne-Regular", "CornerOne-Regular.ttf"))
 
@@ -488,15 +501,15 @@ class TripPdf(LoginRequiredMixin, PermissionRequiredMixin, ListView):
         response = HttpResponse(content_type="application/pdf")
         response[
             "Content-Disposition"
-        ] = f'attachment; filename="{trip.customer.name}-itinerary.pdf"'
+        ] = f'attachment; filename="{trip.customer.name.capitalize()}-itinerary.pdf"'
         c = canvas.Canvas(response, pagesize=A4)
 
         self.front_page(c, trip)
         self.greeting_page(c, trip)
         self.middle_page(c)
 
-        x = 60
-        y = self.height - 130.0
+        x = 40
+        y = self.height - 150.0
         if trip.hotel_pb is not None:
             pb = trip.hotel_pb
             y = self.print_hotel_details(x, y, c, trip, pb, "Port Blair Hotel", 1)
@@ -521,21 +534,24 @@ class TripPdf(LoginRequiredMixin, PermissionRequiredMixin, ListView):
             height=self.height,
         )
 
-        c.setFont("mbf-nanomaton", 16)
-        c.drawCentredString(self.width / 2.0, self.height - 110.0, "Activity Details")
         if trip.activities.exists():
-            self.print_headings(c, 60, self.height - 140.0, self.activity_headings)
+            c.setFont("CornerOne-Bold", 24)
+            c.setFillColor("white")
+            c.drawCentredString(
+                self.width / 2.0, self.height - 110.0, "Activity Details"
+            )
 
-            y = self.height - 160.0
+            self.print_headings(c, 40, self.height - 140.0, self.activity_headings)
+
+            c.setFont("CornerOne-Regular", 12)
+            y = self.height - 170.0
             activities = trip.activities.all()
             for activity in activities:
                 self.print_activity_details(c, activity, x, y)
                 y -= 20
 
-        c.setFont("mbf-nanomaton", 16)
         if trip.transfers:
-            c.drawCentredString(self.width / 2.0, y - 40.0, "Transfer Details")
-            self.print_transfer_details(40, y - 70.0, c, trip, "Transfer Details")
+            self.print_transfer_details(x, y - 70.0, c, trip, "Transfer Details")
 
         c.showPage()
         c.drawImage(
@@ -548,9 +564,12 @@ class TripPdf(LoginRequiredMixin, PermissionRequiredMixin, ListView):
             height=self.height,
         )
 
-        c.drawCentredString(self.width / 2.0, y - 40.0, "Trip Details")
-        self.print_headings(c, 40, y - 70.0, self.trip_headings)
-        self.print_trip_details(c, trip, 40, y - 70.0)
+        c.setFont("CornerOne-Bold", 24)
+        c.setFillColor("white")
+        c.drawCentredString(self.width / 2.0, self.height - 150.0, "Trip Details")
+        self.print_headings(c, 40, self.height - 180.0, self.trip_headings)
+        c.setFillColor("black")
+        self.print_trip_details(c, trip, 40, self.height - 220.0)
 
         c.showPage()
 
