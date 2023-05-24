@@ -478,7 +478,7 @@ class TripPdf(LoginRequiredMixin, PermissionRequiredMixin, ListView):
             x += 110
 
     def get(self, request, slug):
-        reportlab.rl_config.TTFSearchPath.append(FONT_ROOT)
+        reportlab.rl_config.TTFSearchPath.append("/home/ubuntu/go-CRM-andaman/gobasic/static/gobasic/fonts")
         pdfmetrics.registerFont(TTFont("mbf-nanomaton", "MBF-Nanomaton.ttf"))
         pdfmetrics.registerFont(TTFont("CornerOne-Bold", "CornerOne-Bold.ttf"))
         pdfmetrics.registerFont(TTFont("CornerOne-Regular", "CornerOne-Regular.ttf"))
@@ -533,7 +533,7 @@ class TripPdf(LoginRequiredMixin, PermissionRequiredMixin, ListView):
                 y -= 20
 
         c.setFont("mbf-nanomaton", 16)
-        if trip.transfers.exists():
+        if trip.transfers:
             c.drawCentredString(self.width / 2.0, y - 40.0, "Transfer Details")
             self.print_transfer_details(40, y - 70.0, c, trip, "Transfer Details")
 
