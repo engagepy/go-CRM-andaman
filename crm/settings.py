@@ -136,6 +136,7 @@ USE_TZ = True
 
 STATIC_ROOT = os.path.join(BASE_DIR, "static")
 MEDIA_ROOT = os.path.join(BASE_DIR, "static/images/")  # BASE_DIR / 'static/images'
+FONT_ROOT = os.path.join(BASE_DIR, "static/fonts/")
 
 STATICFILES_LOCATION = "static"
 MEDIAFILES_LOCATION = "media"
