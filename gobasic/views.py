@@ -337,6 +337,7 @@ class TripPdf(LoginRequiredMixin, PermissionRequiredMixin, ListView):
 
         welcome_text = f"""
         Dear {trip.customer.name.capitalize()},
+
         We are thrilled to have you on board and excited to present your personalized itinerary,
         carefully crafted just for you! Our team at {company} has put together a fantastic plan
         designed to fit your travel preferences, ensuring you get the most out
@@ -356,9 +357,6 @@ class TripPdf(LoginRequiredMixin, PermissionRequiredMixin, ListView):
 
         Warm regards,
         {trip.agent.get_full_name()}
-        [Your Title]
-        {company}
-        [Contact Information]
         """
 
         canvas.setFont("CornerOne-Regular", 12)
@@ -565,8 +563,8 @@ class TripPdf(LoginRequiredMixin, PermissionRequiredMixin, ListView):
         )
 
         c.setFont("CornerOne-Bold", 24)
-        c.setFillColor("white")
-        c.drawCentredString(self.width / 2.0, self.height - 150.0, "Trip Details")
+        c.setFillColor("LightSeaGreen")
+        c.drawCentredString(self.width / 2.0, self.height - 150.0, "Complete Itinerary Cost")
         self.print_headings(c, 40, self.height - 180.0, self.trip_headings)
         c.setFillColor("black")
         self.print_trip_details(c, trip, 40, self.height - 220.0)
